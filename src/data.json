@@ -1,0 +1,36 @@
+{
+  "students": [
+    {
+      "id": "3nöas",
+      "name": "Adam Ries",
+      "position": [
+        0,
+        1
+      ]
+    },
+    {
+      "id": "ipwnrp",
+      "name": "Marie Curie",
+      "position": [
+        3,
+        5
+      ]
+    },
+    {
+      "id": "espak2",
+      "name": "Albert Einstein",
+      "position": [
+        6,
+        7
+      ]
+    },
+    {
+      "id": "5apektgn",
+      "name": "Wolfgang Pauli",
+      "position": [
+        2,
+        3
+      ]
+    }
+  ]
+}
