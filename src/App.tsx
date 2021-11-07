@@ -10,7 +10,7 @@ export default function App() {
   const room = useMemo(() => new Room(students as Student[]), []);
 
   return (
-    <div style={{ maxWidth: "700px", margin: "1rem auto" }}>
+    <div style={{ maxWidth: "900px", margin: "1rem auto" }}>
       <DndProvider backend={HTML5Backend}>
         <Classroom room={room} />
       </DndProvider>

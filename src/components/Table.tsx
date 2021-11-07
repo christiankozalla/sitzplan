@@ -1,35 +1,54 @@
-import { CSSProperties, FC } from "react";
+import { CSSProperties, FC, ReactNode } from "react";
+import { useDrop } from "react-dnd";
+import { ItemTypes } from "../lib/Constants";
+import { Room } from "../lib/Room";
 import { Student } from "../lib/Types";
 
-import { useDrag } from "react-dnd";
-import { ItemTypes } from "../lib/Constants";
-
-interface TableProps {
-  student?: Student;
+export interface TableSquareProps {
+  isTable: boolean;
+  x: number;
+  y: number;
+  children?: ReactNode;
+  room: Room;
 }
 
-const tableStyles: CSSProperties = {
-  cursor: "move",
-  height: "100%",
-  width: "100%",
-  textAlign: "center",
-};
+export const Table: FC<TableSquareProps> = ({
+  x,
+  y,
+  isTable,
+  children,
+  room,
+}) => {
+  const tableStyles: CSSProperties = {
+    width: "100%",
+    aspectRatio: "1 / 1",
+    margin: 0,
+    border: "1px solid white",
+    background: isTable ? "coral" : "lightgrey",
+  };
 
-export const Table: FC<TableProps> = ({ student }) => {
-  const [_, drag] = useDrag({
-    type: ItemTypes.STUDENT,
-    item: {
-      ...student,
-    },
-  });
+  const [{ isOver, canDrop }, drop] = useDrop(
+    () => ({
+      accept: ItemTypes.STUDENT,
+      drop: (student: Student) => room.moveStudent(student, x, y),
+      collect: (monitor) => ({
+        isOver: !!monitor.isOver(),
+        canDrop: !!monitor.canDrop(),
+      }),
+    }),
+    [room]
+  );
 
-  if (student) {
-    return (
-      <div ref={drag} style={tableStyles}>
-        {student.name}
-      </div>
-    );
-  } else {
-    return null;
-  }
+  return (
+    <div
+      ref={drop}
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      <div style={tableStyles}>{children}</div>
+    </div>
+  );
 };
