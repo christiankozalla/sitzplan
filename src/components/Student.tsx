@@ -1,11 +1,11 @@
 import { CSSProperties, FC } from "react";
-import { Student } from "../lib/Types";
+import { Field } from "../lib/Types";
 
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
 
 interface StudentCompProps {
-  student?: Student;
+  field: Field;
 }
 
 const tableStyles: CSSProperties = {
@@ -15,18 +15,18 @@ const tableStyles: CSSProperties = {
   textAlign: "center",
 };
 
-export const StudentComp: FC<StudentCompProps> = ({ student }) => {
+export const StudentComp: FC<StudentCompProps> = ({ field }) => {
   const [_, drag] = useDrag({
     type: ItemTypes.STUDENT,
     item: {
-      ...student,
+      id: field.id,
     },
   });
 
-  if (student) {
+  if (field.student) {
     return (
       <div ref={drag} style={tableStyles}>
-        {student.name}
+        {field.student.name}
       </div>
     );
   } else {
