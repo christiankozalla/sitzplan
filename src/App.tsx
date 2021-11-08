@@ -7,12 +7,10 @@ import { students, fields } from "./data.json";
 import { Student, Position } from "./lib/Types";
 
 export default function App() {
-  // const room = useMemo(
-  //   () => new Room(fields as Position[], students as Student[]),
-  //   []
-  // );
-
-  const room = new Room(fields as Position[], students as Student[]);
+  const room = useMemo(
+    () => new Room(fields as Position[], students as Student[]),
+    []
+  );
 
   return (
     <div style={{ maxWidth: "900px", margin: "1rem auto" }}>
