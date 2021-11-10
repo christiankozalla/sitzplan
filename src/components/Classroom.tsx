@@ -1,5 +1,5 @@
 import { FC, CSSProperties } from "react";
-import { Table } from "./Table";
+import { Square } from "./Square";
 import { Room } from "../lib/Room";
 
 export interface ClassroomProps {
@@ -35,7 +35,7 @@ export const Classroom: FC<ClassroomProps> = ({ room }) => {
         {Object.values(room.getFields()).map((field) => {
           return (
             <div key={field.id} style={squareStyles}>
-              <Table field={field} room={room}></Table>
+              <Square field={field} room={room} />
             </div>
           );
         })}
