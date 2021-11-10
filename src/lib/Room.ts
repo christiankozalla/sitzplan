@@ -37,10 +37,7 @@ export class Room {
   }
 
   public moveStudent(originId: Field["id"], destinationId: Field["id"]): void {
-    if (originId === destinationId) {
-      console.error("MoveStudent: Field IDs must not be the same!");
-      return;
-    }
+    const destinationStudent = this.room[destinationId].student;
 
     if (this.room[originId].student) {
       this.room[destinationId] = {
@@ -50,7 +47,7 @@ export class Room {
 
       this.room[originId] = {
         ...this.room[originId],
-        student: undefined,
+        student: destinationStudent,
       };
       this.emitChange(this.room[originId]);
       this.emitChange(this.room[destinationId]);
