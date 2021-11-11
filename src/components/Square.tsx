@@ -49,7 +49,12 @@ export const Square: FC<SquareProps> = ({ field, room }) => {
 
   return (
     <div ref={drop} style={squareStyles}>
-      <div style={tableStyles}>
+      <div
+        style={tableStyles}
+        onDoubleClick={() =>
+          !localField.isTable && room.createTable(localField.id)
+        }
+      >
         <StudentComp key={localField.id} field={localField} />
       </div>
     </div>

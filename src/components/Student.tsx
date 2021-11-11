@@ -11,9 +11,7 @@ interface StudentCompProps {
 export const StudentComp: FC<StudentCompProps> = ({ field }) => {
   const [_, drag] = useDrag({
     type: ItemTypes.FIELD,
-    item: {
-      ...field,
-    },
+    item: field,
   });
 
   const tableStyles: CSSProperties = {

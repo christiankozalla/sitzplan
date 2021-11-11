@@ -65,6 +65,12 @@ export class Room {
     this.emitChange(this.room[destinationId]);
   }
 
+  public createTable(id: Field["id"]) {
+    const field = { ...this.room[id], isTable: true };
+    this.room[id] = { ...field };
+    this.emitChange(field);
+  }
+
   private emitChange(updatedField: Field): void {
     const { id } = updatedField;
 
