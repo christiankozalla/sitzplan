@@ -16,9 +16,14 @@ export const Square: FC<SquareProps> = ({ field, room }) => {
   useEffect(() => room.observeRoom(localField.id, setLocalField), []);
 
   const [{ isOver }, drop] = useDrop(() => ({
-    accept: ItemTypes.STUDENT,
-    drop: (originField: { id: Field["id"] }) =>
-      room.moveStudent(originField.id, localField.id),
+    accept: ItemTypes.FIELD,
+    drop: (originField: Field) => {
+      if (originField.isTable && originField.student === undefined) {
+        room.moveStudent(originField.id, localField.id, true);
+      } else {
+        room.moveStudent(originField.id, localField.id, false);
+      }
+    },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),
@@ -29,11 +34,7 @@ export const Square: FC<SquareProps> = ({ field, room }) => {
     aspectRatio: "1 / 1",
     margin: 0,
     border: "1px solid white",
-    background: localField.isTable
-      ? "coral"
-      : isOver
-      ? "darkgrey"
-      : "lightgrey",
+    background: isOver ? "darkgrey" : "lightgrey",
   };
 
   return (

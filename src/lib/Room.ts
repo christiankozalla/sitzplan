@@ -36,22 +36,33 @@ export class Room {
     };
   }
 
-  public moveStudent(originId: Field["id"], destinationId: Field["id"]): void {
-    const destinationStudent = this.room[destinationId].student;
+  public moveStudent(
+    originId: Field["id"],
+    destinationId: Field["id"],
+    moveTable = false
+  ): void {
+    const destinationField = {
+      ...this.room[destinationId],
+    };
 
-    if (this.room[originId].student) {
-      this.room[destinationId] = {
-        ...this.room[destinationId],
-        student: this.room[originId].student,
-      };
+    this.room[destinationId] = {
+      ...this.room[destinationId],
+      student: this.room[originId].student,
+      isTable: moveTable
+        ? this.room[originId].isTable
+        : this.room[destinationId].isTable,
+    };
 
-      this.room[originId] = {
-        ...this.room[originId],
-        student: destinationStudent,
-      };
-      this.emitChange(this.room[originId]);
-      this.emitChange(this.room[destinationId]);
-    }
+    this.room[originId] = {
+      ...this.room[originId],
+      student: destinationField?.student,
+      isTable: moveTable
+        ? destinationField.isTable
+        : this.room[originId].isTable,
+    };
+
+    this.emitChange(this.room[originId]);
+    this.emitChange(this.room[destinationId]);
   }
 
   private emitChange(updatedField: Field): void {

@@ -8,25 +8,25 @@ interface StudentCompProps {
   field: Field;
 }
 
-const tableStyles: CSSProperties = {
-  cursor: "move",
-  height: "100%",
-  width: "100%",
-  textAlign: "center",
-};
-
 export const StudentComp: FC<StudentCompProps> = ({ field }) => {
   const [_, drag] = useDrag({
-    type: ItemTypes.STUDENT,
+    type: ItemTypes.FIELD,
     item: {
-      id: field.id,
+      ...field,
     },
   });
 
-  if (field.student) {
+  const tableStyles: CSSProperties = {
+    cursor: "move",
+    height: "100%",
+    width: "100%",
+    textAlign: "center",
+    background: field.isTable ? "coral" : "lightgrey",
+  };
+  if (field.student || field.isTable) {
     return (
       <div ref={drag} style={tableStyles}>
-        {field.student.name}
+        {field.student?.name || null}
       </div>
     );
   } else {
