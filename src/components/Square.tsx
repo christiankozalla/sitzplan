@@ -29,29 +29,26 @@ export const Square: FC<SquareProps> = ({ field, room }) => {
     }),
   }));
 
-  let tableStyles: CSSProperties = {
+  const squareStyles: CSSProperties = {
+    position: "relative",
+    background: isOver ? "darkgrey" : "lightgrey",
+    boxShadow: isOver
+      ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
+      : "",
+    transform: isOver ? "translate(4px, -4px)" : "",
+    transition: "all 300ms ease",
+    zIndex: isOver ? 2 : 1,
+  };
+
+  const tableStyles: CSSProperties = {
     width: "100%",
     aspectRatio: "1 / 1",
     margin: 0,
     border: "1px solid white",
-    background: isOver ? "darkgrey" : "lightgrey",
   };
 
   return (
-    <div
-      ref={drop}
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-        boxShadow: isOver
-          ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
-          : "",
-        transform: isOver ? "translate(4px, -4px)" : "",
-        transition: "all 300ms ease",
-        zIndex: isOver ? 2 : 1,
-      }}
-    >
+    <div ref={drop} style={squareStyles}>
       <div style={tableStyles}>
         <StudentComp key={localField.id} field={localField} />
       </div>
