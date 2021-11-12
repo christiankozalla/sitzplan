@@ -1,4 +1,4 @@
-import { FC, CSSProperties } from "react";
+import { FC, CSSProperties, useState } from "react";
 import { Square } from "./Square";
 import { Room } from "../lib/Room";
 
@@ -22,11 +22,18 @@ const asideStyles: CSSProperties = {
 };
 
 export const Classroom: FC<ClassroomProps> = ({ room }) => {
+  const [studentName, setStudentName] = useState("");
+
   const numberOfSquares = 100;
   const rootNumberOfSquares = Math.sqrt(numberOfSquares);
   const squareStyles: CSSProperties = {
     width: `${rootNumberOfSquares}%`,
     height: `${rootNumberOfSquares}%`,
+  };
+
+  const addStudent = () => {
+    room.assignNewStudent(studentName);
+    setStudentName("");
   };
 
   return (
@@ -47,7 +54,13 @@ export const Classroom: FC<ClassroomProps> = ({ room }) => {
           Parallele Reihen
         </button>
         <label htmlFor="add-student">Neuer Schüler</label>
-        <input id="add-student" type="text" />
+        <input
+          id="add-student"
+          type="text"
+          value={studentName}
+          onChange={(e) => setStudentName(e.target.value)}
+        />
+        <button onClick={addStudent}>+</button>
       </aside>
     </div>
   );

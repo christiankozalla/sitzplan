@@ -71,6 +71,37 @@ export class Room {
     this.emitChange(field);
   }
 
+  public assignNewStudent(name: string): void {
+    const emptyField = this.findEmptyTable();
+
+    if (emptyField) {
+      const newField = {
+        ...emptyField,
+        student: {
+          id: this.generateId(),
+          name,
+          position: emptyField.position,
+        },
+      };
+
+      this.room[emptyField.id] = newField;
+      this.emitChange(newField);
+    } else {
+    }
+  }
+
+  private findEmptyTable(): Field {
+    const allFields = Object.values(this.room);
+    const emptyTable = allFields.find(
+      (firstField) => firstField.isTable && !firstField.student
+    );
+    if (emptyTable) {
+      return emptyTable;
+    } else {
+      return allFields.find((firstField) => !firstField.student)!;
+    }
+  }
+
   private emitChange(updatedField: Field): void {
     const { id } = updatedField;
 
