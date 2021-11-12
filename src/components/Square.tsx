@@ -1,4 +1,4 @@
-import { CSSProperties, FC, ReactNode, useState, useEffect } from "react";
+import { CSSProperties, FC, useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
 import { Room } from "../lib/Room";
