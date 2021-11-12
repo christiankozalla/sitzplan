@@ -5,6 +5,7 @@ import { Classroom } from "./components/Classroom";
 import { Room } from "./lib/Room";
 import { students, fields } from "./data.json";
 import { Student, Position } from "./lib/Types";
+import "./global.css";
 
 export default function App() {
   const room = useMemo(
