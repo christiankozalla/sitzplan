@@ -1,17 +1,116 @@
-import { Position, Student } from "./Types";
-import { Dispatch, SetStateAction } from "react";
-
-export type PositionObserver<T> = Dispatch<SetStateAction<T>> | null;
-export type ObserverTypes = "students" | "tables";
+import { Position, Student, Field, PositionObserver } from "./Types";
 
 export class Room {
-  public tables: Position[] = [];
-  constructor(public students: Student[] = []) {
-    this.students = students;
+  private room: { [id: Field["id"]]: Field } = {};
+
+  constructor(room: Position[] = [], students: Student[] = []) {
+    const data = room.map((p) => ({
+      id: this.generateId(),
+      student: students.find(
+        ({ position }) => position[0] === p[0] && position[1] === p[1]
+      ),
+      isTable: false,
+      position: p,
+    }));
+
+    data.forEach((field) => {
+      Object.assign(this.room, { [field.id]: field });
+    });
   }
 
-  private studentObservers: PositionObserver<Student[]>[] = [];
-  private tableObservers: PositionObserver<Position[]>[] = [];
+  public roomObservers: { id: string; action: PositionObserver<Field> }[] = [];
+
+  private generateId() {
+    return "_" + (Math.random() * 30).toString(36).slice(4, 16);
+  }
+
+  public getFields() {
+    return this.room;
+  }
+
+  public observeRoom(id: string, o: PositionObserver<Field>): () => void {
+    this.roomObservers.push({ id, action: o });
+
+    return (): void => {
+      this.roomObservers = this.roomObservers.filter((t) => t.id !== id);
+    };
+  }
+
+  public moveStudent(
+    originId: Field["id"],
+    destinationId: Field["id"],
+    moveTable = false
+  ): void {
+    const destinationField = {
+      ...this.room[destinationId],
+    };
+
+    this.room[destinationId] = {
+      ...this.room[destinationId],
+      student: this.room[originId].student,
+      isTable: moveTable
+        ? this.room[originId].isTable
+        : this.room[destinationId].isTable,
+    };
+
+    this.room[originId] = {
+      ...this.room[originId],
+      student: destinationField?.student,
+      isTable: moveTable
+        ? destinationField.isTable
+        : this.room[originId].isTable,
+    };
+
+    this.emitChange(this.room[originId]);
+    this.emitChange(this.room[destinationId]);
+  }
+
+  public createTable(id: Field["id"]) {
+    const field = { ...this.room[id], isTable: true };
+    this.room[id] = { ...field };
+    this.emitChange(field);
+  }
+
+  public assignNewStudent(name: string): void {
+    const emptyField = this.findEmptyTable();
+
+    if (emptyField) {
+      const newField = {
+        ...emptyField,
+        student: {
+          id: this.generateId(),
+          name,
+          position: emptyField.position,
+        },
+      };
+
+      this.room[emptyField.id] = newField;
+      this.emitChange(newField);
+    } else {
+    }
+  }
+
+  private findEmptyTable(): Field {
+    const allFields = Object.values(this.room);
+    const emptyTable = allFields.find(
+      (firstField) => firstField.isTable && !firstField.student
+    );
+    if (emptyTable) {
+      return emptyTable;
+    } else {
+      return allFields.find((firstField) => !firstField.student)!;
+    }
+  }
+
+  private emitChange(updatedField: Field): void {
+    const { id } = updatedField;
+
+    this.roomObservers.forEach((observer) => {
+      if (observer.id === id) {
+        observer.action && observer.action(updatedField);
+      }
+    });
+  }
 
   public generateTablePreset(rows: number, numberOfTables: number = 24): void {
     const width = Math.ceil(numberOfTables / rows);
@@ -23,57 +122,27 @@ export class Room {
     let y = 0 + offsetY;
 
     for (let i = 0; i < numberOfTables; i++) {
-      this.tables.push([x, y]);
-      this.emitChange([x, y]);
+      let field = Object.values(this.room).find(
+        ({ position }) => position[0] === x && position[1] === y
+      );
+
+      if (field) {
+        let newField = {
+          ...field,
+          isTable: true,
+        };
+        this.room[field.id] = newField;
+        this.emitChange(newField);
+      } else {
+        throw new Error("Field not found");
+      }
+
       x++;
 
       if (x === width) {
         x = 0 + offsetX;
         y += 2;
       }
-    }
-  }
-
-  public observeStudents(o: PositionObserver<Student[]>): () => void {
-    this.studentObservers.push(o);
-
-    return (): void => {
-      this.studentObservers = this.studentObservers.filter((t) => t !== o);
-    };
-  }
-
-  public observeTables(o: PositionObserver<Position[]>): () => void {
-    this.tableObservers.push(o);
-
-    return (): void => {
-      this.tableObservers = this.tableObservers.filter((t) => t !== o);
-    };
-  }
-
-  public moveStudent(student: Student, toX: number, toY: number): void {
-    this.emitChange([toX, toY], student);
-  }
-
-  public moveTable(toX: number, toY: number): void {
-    this.emitChange([toX, toY]);
-  }
-
-  private emitChange(newPosition: Position, student?: Student): void {
-    if (student) {
-      this.students = this.students.filter(({ id }) => id !== student.id);
-      this.students.push({ ...student, position: newPosition });
-
-      this.studentObservers.forEach((o) => {
-        if (typeof o === "function") {
-          o(this.students);
-        }
-      });
-    } else {
-      this.tableObservers.forEach((o) => {
-        if (typeof o === "function") {
-          o((prevState: Position[]) => [...prevState, newPosition]);
-        }
-      });
     }
   }
 }

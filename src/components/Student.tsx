@@ -1,32 +1,30 @@
 import { CSSProperties, FC } from "react";
-import { Student } from "../lib/Types";
+import { Field } from "../lib/Types";
 
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
 
 interface StudentCompProps {
-  student?: Student;
+  field: Field;
 }
 
-const tableStyles: CSSProperties = {
-  cursor: "move",
-  height: "100%",
-  width: "100%",
-  textAlign: "center",
-};
-
-export const StudentComp: FC<StudentCompProps> = ({ student }) => {
+export const StudentComp: FC<StudentCompProps> = ({ field }) => {
   const [_, drag] = useDrag({
-    type: ItemTypes.STUDENT,
-    item: {
-      ...student,
-    },
+    type: ItemTypes.FIELD,
+    item: field,
   });
 
-  if (student) {
+  const tableStyles: CSSProperties = {
+    cursor: "move",
+    height: "100%",
+    width: "100%",
+    textAlign: "center",
+    background: field.isTable ? "coral" : "lightgrey",
+  };
+  if (field.student || field.isTable) {
     return (
       <div ref={drag} style={tableStyles}>
-        {student.name}
+        {field.student?.name || null}
       </div>
     );
   } else {
