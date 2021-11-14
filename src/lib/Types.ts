@@ -15,4 +15,10 @@ export type Field = {
   student?: Student;
 };
 
+export type Trashed = {
+  trashed: boolean;
+};
+
+export type TrashedField = Field & Trashed;
+
 export type PositionObserver<T> = Dispatch<SetStateAction<T>> | null;
