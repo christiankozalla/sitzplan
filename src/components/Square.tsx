@@ -8,20 +8,20 @@ import { StudentComp } from "./Student";
 
 export interface SquareProps {
   room: Room;
-  field: Field;
+  initialField: Field;
 }
 
-export const Square: FC<SquareProps> = ({ field, room }) => {
-  const [localField, setLocalField] = useState<Field>(field);
-  useEffect(() => room.observeRoom(localField.id, setLocalField), []);
+export const Square: FC<SquareProps> = ({ initialField, room }) => {
+  const [field, setField] = useState<Field>(initialField);
+  useEffect(() => room.observeRoom(field.id, setField), []);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.FIELD,
     drop: (originField: Field) => {
       if (originField.isTable && originField.student === undefined) {
-        room.moveStudent(originField.id, localField.id, true);
+        room.moveStudent(originField.id, field.id, true);
       } else {
-        room.moveStudent(originField.id, localField.id, false);
+        room.moveStudent(originField.id, field.id, false);
       }
     },
     collect: (monitor) => ({
@@ -51,11 +51,9 @@ export const Square: FC<SquareProps> = ({ field, room }) => {
     <div ref={drop} style={squareStyles}>
       <div
         style={tableStyles}
-        onDoubleClick={() =>
-          !localField.isTable && room.createTable(localField.id)
-        }
+        onDoubleClick={() => !field.isTable && room.createTable(field.id)}
       >
-        <StudentComp key={localField.id} field={localField} />
+        <StudentComp key={field.id} field={field} />
       </div>
     </div>
   );
