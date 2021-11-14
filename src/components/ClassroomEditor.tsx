@@ -63,10 +63,7 @@ export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
         </p>
       </div>
       <div style={asideBlockStyles}>
-        <h3>Platz leeren</h3>
-        <p style={{ marginBottom: "8px" }}>
-          Zum Recyclen hier einen Platz fallen lassen
-        </p>
+        <h3>Platz löschen</h3>
         <RecycleBin room={room} />
       </div>
     </aside>

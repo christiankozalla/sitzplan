@@ -2,7 +2,7 @@ import { CSSProperties, FC, useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
 import { Room } from "../lib/Room";
-import { Field } from "../lib/Types";
+import { Field, TrashedField } from "../lib/Types";
 
 import { StudentComp } from "./Student";
 
@@ -17,8 +17,10 @@ export const Square: FC<SquareProps> = ({ initialField, room }) => {
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.FIELD,
-    drop: (originField: Field) => {
-      if (originField.isTable && originField.student === undefined) {
+    drop: (originField: Field & TrashedField) => {
+      if (originField.trashed) {
+        room.restoreField(originField, field.id);
+      } else if (originField.isTable && originField.student === undefined) {
         room.moveStudent(originField.id, field.id, true);
       } else {
         room.moveStudent(originField.id, field.id, false);

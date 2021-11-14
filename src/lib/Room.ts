@@ -1,7 +1,14 @@
-import { Position, Student, Field, PositionObserver } from "./Types";
+import {
+  Position,
+  Student,
+  Field,
+  TrashedField,
+  PositionObserver,
+} from "./Types";
 
 export class Room {
   private room: { [id: Field["id"]]: Field } = {};
+  private bin: TrashedField[] = [];
 
   constructor(room: Position[] = [], students: Student[] = []) {
     const data = room.map((p) => ({
@@ -18,7 +25,11 @@ export class Room {
     });
   }
 
-  public roomObservers: { id: string; action: PositionObserver<Field> }[] = [];
+  private roomObservers: { id: string; action: PositionObserver<Field> }[] = [];
+  private binObservers: {
+    id: string;
+    action: PositionObserver<TrashedField[]>;
+  }[] = [];
 
   private generateId() {
     return "_" + (Math.random() * 30).toString(36).slice(4, 16);
@@ -33,6 +44,19 @@ export class Room {
 
     return (): void => {
       this.roomObservers = this.roomObservers.filter((t) => t.id !== id);
+    };
+  }
+
+  public observeBin(
+    id: string,
+    o: PositionObserver<TrashedField[]>
+  ): () => void {
+    this.binObservers.push({ id, action: o });
+
+    this.emitUpdatedBin(this.bin);
+
+    return (): void => {
+      this.binObservers = this.binObservers.filter((t) => t.id !== id);
     };
   }
 
@@ -91,6 +115,8 @@ export class Room {
   }
 
   public resetField(field: Field): void {
+    this.bin.unshift({ ...this.room[field.id], trashed: true });
+
     this.room[field.id] = {
       ...this.room[field.id],
       student: undefined,
@@ -98,6 +124,22 @@ export class Room {
     };
 
     this.emitChange(this.room[field.id]);
+  }
+
+  public restoreField(field: TrashedField, destinationId?: string): void {
+    const id = destinationId || field.id;
+
+    this.bin = this.bin.filter((trashedField) => trashedField.id !== field.id);
+
+    this.room[id] = {
+      id,
+      isTable: field.isTable,
+      student: field.student,
+      position: this.room[id].position,
+    };
+
+    this.emitChange(this.room[id]);
+    this.emitUpdatedBin(this.bin);
   }
 
   private findEmptyTable(): Field {
@@ -119,6 +161,12 @@ export class Room {
       if (observer.id === id) {
         observer.action && observer.action(updatedField);
       }
+    });
+  }
+
+  private emitUpdatedBin(updatedBin: TrashedField[]) {
+    this.binObservers.forEach((observer) => {
+      observer.action && observer.action(updatedBin);
     });
   }
 
