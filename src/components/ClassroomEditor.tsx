@@ -1,4 +1,5 @@
 import { CSSProperties, FC, useState } from "react";
+import { RecycleBin } from "./RecycleBin";
 import { Room } from "../lib/Room";
 
 interface ClassroomEditorProps {
@@ -30,7 +31,10 @@ export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
       <h2>Editor</h2>
       <div style={asideBlockStyles}>
         <h3>Vorlage</h3>
-        <button onClick={() => room.generateTablePreset(3)}>
+        <button
+          onClick={() => room.generateTablePreset(3)}
+          style={{ width: "100%" }}
+        >
           Parallele Reihen
         </button>
       </div>
@@ -57,6 +61,13 @@ export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
         <p>
           <em>Doppelklick auf ein freies Feld</em>
         </p>
+      </div>
+      <div style={asideBlockStyles}>
+        <h3>Platz leeren</h3>
+        <p style={{ marginBottom: "8px" }}>
+          Zum Recyclen hier einen Platz fallen lassen
+        </p>
+        <RecycleBin room={room} />
       </div>
     </aside>
   );

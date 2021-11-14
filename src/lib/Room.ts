@@ -90,6 +90,16 @@ export class Room {
     }
   }
 
+  public resetField(field: Field): void {
+    this.room[field.id] = {
+      ...this.room[field.id],
+      student: undefined,
+      isTable: false,
+    };
+
+    this.emitChange(this.room[field.id]);
+  }
+
   private findEmptyTable(): Field {
     const allFields = Object.values(this.room);
     const emptyTable = allFields.find(
