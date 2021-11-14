@@ -28,7 +28,7 @@ export const Classroom: FC<ClassroomProps> = ({ room }) => {
         {Object.values(room.getFields()).map((field) => {
           return (
             <div key={field.id} style={squareStyles}>
-              <Square field={field} room={room} />
+              <Square initialField={field} room={room} />
             </div>
           );
         })}
