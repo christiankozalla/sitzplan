@@ -20,10 +20,8 @@ export const Square: FC<SquareProps> = ({ initialField, room }) => {
     drop: (originField: Field & TrashedField) => {
       if (originField.trashed) {
         room.restoreField(originField, field.id);
-      } else if (originField.isTable && originField.student === undefined) {
-        room.moveStudent(originField.id, field.id, true);
       } else {
-        room.moveStudent(originField.id, field.id, false);
+        room.moveStudent(originField.id, field.id, true);
       }
     },
     collect: (monitor) => ({
