@@ -1,6 +1,10 @@
 {
   "name": "sitzplan",
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/christiankozalla/sitzplan"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
