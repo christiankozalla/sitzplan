@@ -89,8 +89,8 @@ export class Room {
     this.emitChange(this.room[destinationId]);
   }
 
-  public createTable(id: Field["id"]) {
-    const field = { ...this.room[id], isTable: true };
+  public toggleTable(id: Field["id"]) {
+    const field = { ...this.room[id], isTable: !this.room[id].isTable };
     this.room[id] = { ...field };
     this.emitChange(field);
   }

@@ -51,10 +51,7 @@ export const Square: FC<SquareProps> = ({ initialField, room }) => {
 
   return (
     <div ref={drop} style={squareStyles}>
-      <div
-        style={tableStyles}
-        onDoubleClick={() => !field.isTable && room.createTable(field.id)}
-      >
+      <div style={tableStyles} onDoubleClick={() => room.toggleTable(field.id)}>
         <StudentComp key={field.id} field={field} />
       </div>
     </div>
