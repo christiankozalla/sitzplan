@@ -22,7 +22,7 @@ export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
   const [studentName, setStudentName] = useState("");
 
   const addStudent = () => {
-    room.assignNewStudent(studentName);
+    studentName && room.assignNewStudent(studentName);
     setStudentName("");
   };
 
@@ -48,6 +48,7 @@ export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
           value={studentName}
           onChange={(e) => setStudentName(e.target.value)}
           style={{ width: "100%" }}
+          onKeyUp={(e) => e.key === "Enter" && addStudent()}
         />
         <button
           onClick={addStudent}
