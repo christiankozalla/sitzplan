@@ -5,13 +5,15 @@ import {
   TrashedField,
   PositionObserver,
 } from "./Types";
+import { squaresPerRow, squaresPerColumn } from "./Constants";
 
 export class Room {
   private room: { [id: Field["id"]]: Field } = {};
   private bin: TrashedField[] = [];
 
-  constructor(room: Position[] = [], students: Student[] = []) {
-    const data = room.map((p) => ({
+  constructor(students: Student[] = []) {
+    const room = this.generateRoom(squaresPerRow, squaresPerColumn);
+    const data = room.map((p, i) => ({
       id: this.generateId(),
       student: students.find(
         ({ position }) => position[0] === p[0] && position[1] === p[1]
@@ -23,6 +25,18 @@ export class Room {
     data.forEach((field) => {
       Object.assign(this.room, { [field.id]: field });
     });
+  }
+
+  private generateRoom(rows: number, cols: number): Position[] {
+    const positions: Position[] = [];
+
+    for (let y = 0; y < rows; y++) {
+      for (let x = 0; x < cols; x++) {
+        positions.push([x, y]);
+      }
+    }
+
+    return positions;
   }
 
   private roomObservers: { id: string; action: PositionObserver<Field> }[] = [];
