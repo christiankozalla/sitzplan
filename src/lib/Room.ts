@@ -1,17 +1,24 @@
 import {
   Position,
+  Dimensions,
   Student,
   Field,
   TrashedField,
   PositionObserver,
 } from "./Types";
-import { squaresPerRow, squaresPerColumn } from "./Constants";
 
 export class Room {
   private room: { [id: Field["id"]]: Field } = {};
   private bin: TrashedField[] = [];
 
-  constructor(students: Student[] = []) {
+  private squaresPerRow: number = 10;
+  private squaresPerColumn: number = 10;
+
+  constructor(
+    students: Student[] = [],
+    dimensions: Dimensions = { squaresPerRow: 10, squaresPerColumn: 10 }
+  ) {
+    const { squaresPerRow, squaresPerColumn } = dimensions;
     const room = this.generateRoom(squaresPerRow, squaresPerColumn);
     const data = room.map((p, i) => ({
       id: this.generateId(),
@@ -25,6 +32,13 @@ export class Room {
     data.forEach((field) => {
       Object.assign(this.room, { [field.id]: field });
     });
+
+    this.squaresPerRow = squaresPerRow;
+    this.squaresPerColumn = squaresPerColumn;
+  }
+
+  public getDimension(direction: "row" | "column"): number {
+    return direction === "row" ? this.squaresPerRow : this.squaresPerColumn;
   }
 
   private generateRoom(rows: number, cols: number): Position[] {

@@ -3,12 +3,12 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Classroom } from "./components/Classroom";
 import { Room } from "./lib/Room";
-import { students } from "./data.json";
+import { students, dimensions } from "./data.json";
 import { Student } from "./lib/Types";
-import "./styles/global.css";
+import "./global.css";
 
 export default function App() {
-  const room = useMemo(() => new Room(students as Student[]), []);
+  const room = useMemo(() => new Room(students as Student[], dimensions), []);
 
   return (
     <div style={{ maxWidth: "900px", margin: "1rem auto" }}>

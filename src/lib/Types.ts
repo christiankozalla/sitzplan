@@ -1,5 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 
+export type Dimensions = { squaresPerRow: number; squaresPerColumn: number };
+
 export type Position = [number, number];
 
 export type Student = {
