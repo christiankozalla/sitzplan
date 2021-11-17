@@ -1,26 +1,29 @@
-import { FC, CSSProperties } from "react";
-import { squaresPerRow, squaresPerColumn } from "../lib/Constants";
+import { FC, useEffect } from "react";
 import { Square } from "./Square";
 import { ClassroomEditor } from "./ClassroomEditor";
 import { Room } from "../lib/Room";
-import "../styles/classroom.css";
+import "./Classroom.css";
 
 export interface ClassroomProps {
   room: Room;
 }
 
 export const Classroom: FC<ClassroomProps> = ({ room }) => {
-  const squareStyles: CSSProperties = {
-    width: `${100 / squaresPerRow}%`,
-    height: `${100 / squaresPerColumn}%`,
-  };
+  document.documentElement.style.setProperty(
+    "--squaresPerRow",
+    `${room.getDimension("row")}`
+  );
+  document.documentElement.style.setProperty(
+    "--squaresPerColumn",
+    `${room.getDimension("column")}`
+  );
 
   return (
     <div style={{ display: "flex", gap: "20px" }}>
-      <div className="classroom__board">
+      <div className="board">
         {Object.values(room.getFields()).map((field) => {
           return (
-            <div key={field.id} style={squareStyles}>
+            <div key={field.id} className="square">
               <Square initialField={field} room={room} />
             </div>
           );

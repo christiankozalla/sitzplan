@@ -1,22 +1,11 @@
-import { CSSProperties, FC, useState } from "react";
+import { FC, useState } from "react";
 import { RecycleBin } from "./RecycleBin";
 import { Room } from "../lib/Room";
+import "./ClassroomEditor.css";
 
 interface ClassroomEditorProps {
   room: Room;
 }
-
-const asideStyles: CSSProperties = {
-  width: "25%",
-  minHeight: "100%",
-};
-
-const asideBlockStyles: CSSProperties = {
-  borderRadius: "4px",
-  border: "1px solid lightgrey",
-  padding: "8px",
-  margin: "12px 0px",
-};
 
 export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
   const [studentName, setStudentName] = useState("");
@@ -27,18 +16,15 @@ export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
   };
 
   return (
-    <aside style={asideStyles}>
+    <aside className="aside">
       <h2>Editor</h2>
-      <div style={asideBlockStyles}>
+      <div className="aside__section">
         <h3>Vorlage</h3>
-        <button
-          onClick={() => room.generateTablePreset(3)}
-          style={{ width: "100%" }}
-        >
+        <button onClick={() => room.generateTablePreset(3)} className="w-100">
           Parallele Reihen
         </button>
       </div>
-      <div style={asideBlockStyles}>
+      <div className="aside__section">
         <label htmlFor="add-student">
           <h3>Neuer Schüler</h3>
         </label>
@@ -47,23 +33,20 @@ export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
           type="text"
           value={studentName}
           onChange={(e) => setStudentName(e.target.value)}
-          style={{ width: "100%" }}
+          className="w-100"
           onKeyUp={(e) => e.key === "Enter" && addStudent()}
         />
-        <button
-          onClick={addStudent}
-          style={{ width: "100%", marginTop: "8px" }}
-        >
+        <button onClick={addStudent} className="w-100 mt-1">
           +
         </button>
       </div>
-      <div style={asideBlockStyles}>
+      <div className="aside__section">
         <h3>Neuen Tisch erstellen </h3>
         <p>
           <em>Doppelklick auf ein freies Feld</em>
         </p>
       </div>
-      <div style={asideBlockStyles}>
+      <div className="aside__section">
         <h3>Platz löschen</h3>
         <RecycleBin room={room} />
       </div>

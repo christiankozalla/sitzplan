@@ -1,0 +1,11 @@
+.board {
+  width: 75%;
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.square {
+  width: calc(100% / var(--squaresPerRow));
+  height: calc(100% / var(--squaresPerColumn));
+}

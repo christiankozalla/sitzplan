@@ -5,6 +5,7 @@ import { Room } from "../lib/Room";
 import { Field, TrashedField } from "../lib/Types";
 
 import { StudentComp } from "./Student";
+import "./Square.css";
 
 export interface SquareProps {
   room: Room;
@@ -40,16 +41,9 @@ export const Square: FC<SquareProps> = ({ initialField, room }) => {
     zIndex: isOver ? 2 : 1,
   };
 
-  const tableStyles: CSSProperties = {
-    width: "100%",
-    aspectRatio: "1 / 1",
-    margin: 0,
-    border: "1px solid white",
-  };
-
   return (
     <div ref={drop} style={squareStyles}>
-      <div style={tableStyles} onDoubleClick={() => room.toggleTable(field.id)}>
+      <div className="table" onDoubleClick={() => room.toggleTable(field.id)}>
         <StudentComp key={field.id} field={field} />
       </div>
     </div>
