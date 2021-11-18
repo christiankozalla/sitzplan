@@ -11,3 +11,13 @@ This web application aims to simplify creating a seating plan for teachers at sc
 3. Teachers should be able to save the seating plan as a PDF file on their machine.
 
 4. Authenticated teachers should be able to save their seating plan to the database.
+
+## ToDo
+
+1. Decent Styles for the application.
+
+2. Add PDF Export
+
+3. Connect Supabase for Auth and Data Storage
+
+4. Landing page
