@@ -4,12 +4,14 @@
   background-color: white;
   width: 100%;
   margin: 0;
-  padding-left: calc(var(--space-2) * 2);
-  padding-right: calc(var(--space-2) * 2);
+  padding-left: calc(var(--space) * 3);
+  padding-right: calc(var(--space) * 3);
   border-bottom: 1px solid var(--text-grey-400);
+  position: fixed;
+  z-index: 2;
 }
 
-.editor__controls {
+.editorControls {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -17,13 +19,13 @@
   margin-right: 0;
 }
 
-input#add-student {
-  border-radius: var(--space-1);
-  padding: calc(0.5 * var(--space-1));
-  outline: none;
-  margin-right: var(--space-1);
+.addStudent {
+  border-radius: var(--space);
+  padding: var(--space);
+  border: 1px solid var(--text-grey-400);
+  margin-right: var(--space);
 }
 
-input#add-student::placeholder {
+.addStudent::placeholder {
   color: var(--text-grey-400);
 }

@@ -7,21 +7,21 @@ import { ClassroomEditor } from "./components/ClassroomEditor";
 import { Room } from "./lib/Room";
 import { students, dimensions } from "./data.json";
 import { Student } from "./lib/Types";
-import "./App.css";
+import styles from "./App.module.css";
 
 export default function App() {
   const room = useMemo(() => new Room(students as Student[], dimensions), []);
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="grid">
-        <div id="editor">
+      <div className={styles.grid}>
+        <div id={styles.editor}>
           <ClassroomEditor room={room} />
         </div>
-        <div id="board">
+        <div id={styles.board}>
           <Classroom room={room} />
         </div>
-        <div id="sidebar">
+        <div id={styles.sidebar}>
           <ClassroomSidebar room={room} />
         </div>
       </div>

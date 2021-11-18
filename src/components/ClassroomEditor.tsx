@@ -17,7 +17,7 @@ export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
   return (
     <header className={[styles.editor, "pt-2", "pb-2", "mb-2"].join(" ")}>
       <p>Sitzplan Logo</p>
-      <div className={styles.editor__controls}>
+      <div className={styles.editorControls}>
         <div>
           <label htmlFor="add-student"></label>
           <input
@@ -25,6 +25,7 @@ export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
             type="text"
             value={studentName}
             placeholder="Schülername"
+            className={styles.addStudent}
             onChange={(e) => setStudentName(e.target.value)}
             onKeyUp={(e) => e.key === "Enter" && addStudent()}
           />
