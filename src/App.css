@@ -1,0 +1,20 @@
+.grid {
+  display: grid;
+  grid-template-rows: 80px auto;
+  grid-template-columns: 4fr 1fr;
+  grid-template-areas:
+    "editor editor"
+    "board sidebar";
+}
+
+#editor {
+  grid-area: editor;
+}
+
+#sidebar {
+  grid-area: sidebar;
+}
+
+#board {
+  grid-area: board;
+}

@@ -1,6 +1,5 @@
 .description {
   margin-bottom: 8px;
-  height: 150px;
   overflow-y: auto;
 }
 
@@ -10,7 +9,5 @@
 }
 
 .target {
-  width: 100%;
   transition: transform 300ms ease;
-  margin-top: 8px;
 }

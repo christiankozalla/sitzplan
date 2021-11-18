@@ -1,6 +1,5 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { Square } from "./Square";
-import { ClassroomEditor } from "./ClassroomEditor";
 import { Room } from "../lib/Room";
 import "./Classroom.css";
 
@@ -19,17 +18,14 @@ export const Classroom: FC<ClassroomProps> = ({ room }) => {
   );
 
   return (
-    <div style={{ display: "flex", gap: "20px" }}>
-      <div className="board">
-        {Object.values(room.getFields()).map((field) => {
-          return (
-            <div key={field.id} className="square">
-              <Square initialField={field} room={room} />
-            </div>
-          );
-        })}
-      </div>
-      <ClassroomEditor room={room} />
+    <div className="board">
+      {Object.values(room.getFields()).map((field) => {
+        return (
+          <div key={field.id} className="square">
+            <Square initialField={field} room={room} />
+          </div>
+        );
+      })}
     </div>
   );
 };
