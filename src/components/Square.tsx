@@ -3,9 +3,8 @@ import { useDrop } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
 import { Room } from "../lib/Room";
 import { Field, TrashedField } from "../lib/Types";
-
 import { StudentComp } from "./Student";
-import "./Square.css";
+import styles from "./Square.module.css";
 
 export interface SquareProps {
   room: Room;
@@ -43,7 +42,10 @@ export const Square: FC<SquareProps> = ({ initialField, room }) => {
 
   return (
     <div ref={drop} style={squareStyles}>
-      <div className="table" onDoubleClick={() => room.toggleTable(field.id)}>
+      <div
+        className={styles.table}
+        onDoubleClick={() => room.toggleTable(field.id)}
+      >
         <StudentComp key={field.id} field={field} />
       </div>
     </div>

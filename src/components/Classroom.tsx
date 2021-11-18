@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Square } from "./Square";
 import { Room } from "../lib/Room";
-import "./Classroom.css";
+import styles from "./Classroom.module.css";
 
 export interface ClassroomProps {
   room: Room;
@@ -18,10 +18,10 @@ export const Classroom: FC<ClassroomProps> = ({ room }) => {
   );
 
   return (
-    <div className="board">
+    <div className={styles.board}>
       {Object.values(room.getFields()).map((field) => {
         return (
-          <div key={field.id} className="square">
+          <div key={field.id} className={styles.square}>
             <Square initialField={field} room={room} />
           </div>
         );

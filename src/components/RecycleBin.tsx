@@ -4,7 +4,7 @@ import { ItemTypes } from "../lib/Constants";
 import { Room } from "../lib/Room";
 import { Field, TrashedField } from "../lib/Types";
 import { StudentComp } from "./Student";
-import "./RecycleBin.css";
+import styles from "./RecycleBin.module.css";
 
 interface RecycleBinProps {
   room: Room;
@@ -27,7 +27,7 @@ export const RecycleBin: FC<RecycleBinProps> = ({ room }) => {
 
   return (
     <>
-      <div className="description">
+      <div className={styles.description}>
         {trash.map((trashedField: TrashedField) => (
           <li key={trashedField.id} className="list">
             <StudentComp field={trashedField} />
@@ -36,7 +36,7 @@ export const RecycleBin: FC<RecycleBinProps> = ({ room }) => {
       </div>
       <button
         ref={drop}
-        className="target"
+        className={styles.target}
         style={{ transform: isOver ? "translateY(-4px)" : "" }}
       >
         Papierkorb

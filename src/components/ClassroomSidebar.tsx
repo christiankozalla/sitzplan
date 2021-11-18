@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Room } from "../lib/Room";
 import { RecycleBin } from "./RecycleBin";
-import "./ClassroomSidebar.css";
+import styles from "./ClassroomSidebar.module.css";
 
 interface ClassroomSidebarProps {
   room: Room;
@@ -9,7 +9,7 @@ interface ClassroomSidebarProps {
 
 export const ClassroomSidebar: FC<ClassroomSidebarProps> = ({ room }) => {
   return (
-    <section className="sidebar">
+    <section className={styles.sidebar}>
       <h2>Details</h2>
       <RecycleBin room={room} />
     </section>

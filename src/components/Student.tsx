@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Field } from "../lib/Types";
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
-import "./Student.css";
+import styles from "./Student.module.css";
 
 interface StudentCompProps {
   field: Field;
@@ -18,7 +18,7 @@ export const StudentComp: FC<StudentCompProps> = ({ field }) => {
     return (
       <div
         ref={drag}
-        className="student"
+        className={styles.student}
         style={{ backgroundColor: field.isTable ? "coral" : "lightgrey" }}
       >
         {field.student?.name || null}

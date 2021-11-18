@@ -1,7 +1,6 @@
 import { FC, useState } from "react";
-import { RecycleBin } from "./RecycleBin";
 import { Room } from "../lib/Room";
-import "./ClassroomEditor.css";
+import styles from "./ClassroomEditor.module.css";
 
 interface ClassroomEditorProps {
   room: Room;
@@ -16,9 +15,9 @@ export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
   };
 
   return (
-    <header className="editor pt-2 pb-2 mb-2">
-      <p id="logo-editor">Sitzplan Logo</p>
-      <div className="editor__controls">
+    <header className={[styles.editor, "pt-2", "pb-2", "mb-2"].join(" ")}>
+      <p>Sitzplan Logo</p>
+      <div className={styles.editor__controls}>
         <div>
           <label htmlFor="add-student"></label>
           <input
