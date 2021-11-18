@@ -9,9 +9,9 @@ interface ClassroomSidebarProps {
 
 export const ClassroomSidebar: FC<ClassroomSidebarProps> = ({ room }) => {
   return (
-    <section className={styles.sidebar}>
+    <aside className={styles.sidebar}>
       <h2>Details</h2>
       <RecycleBin room={room} />
-    </section>
+    </aside>
   );
 };

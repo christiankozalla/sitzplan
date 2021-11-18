@@ -1,6 +1,7 @@
 :root {
   --squaresPerRow: 10;
   --squaresPerColumn: 10;
+  --editor-height: 80px;
   --space: 8px;
   --color-primary-light: rgb(56, 199, 147);
   --color-primary-dark: rgb(0, 128, 82);

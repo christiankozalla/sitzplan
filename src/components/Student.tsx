@@ -19,7 +19,7 @@ export const StudentComp: FC<StudentCompProps> = ({ field }) => {
       <div
         ref={drag}
         className={styles.student}
-        style={{ backgroundColor: field.isTable ? "coral" : "lightgrey" }}
+        style={{ backgroundColor: field.isTable ? "#38C793" : "transparent" }}
       >
         {field.student?.name || null}
       </div>

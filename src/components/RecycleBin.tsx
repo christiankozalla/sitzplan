@@ -28,11 +28,14 @@ export const RecycleBin: FC<RecycleBinProps> = ({ room }) => {
   return (
     <>
       <div className={styles.description}>
-        {trash.map((trashedField: TrashedField) => (
-          <li key={trashedField.id} className="list">
-            <StudentComp field={trashedField} />
-          </li>
-        ))}
+        {trash.map(
+          (trashedField: TrashedField) =>
+            trashedField.student && (
+              <li key={trashedField.id} className={styles.list}>
+                <StudentComp field={trashedField} />
+              </li>
+            )
+        )}
       </div>
       <button
         ref={drop}

@@ -31,11 +31,11 @@ export const Square: FC<SquareProps> = ({ initialField, room }) => {
 
   const squareStyles: CSSProperties = {
     position: "relative",
-    background: isOver ? "darkgrey" : "lightgrey",
+    background: isOver ? "lightgrey" : "transparent",
     boxShadow: isOver
       ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
       : "",
-    transform: isOver ? "translate(4px, -4px)" : "",
+    transform: isOver ? "scale(1.1) translateY(-4px)" : "",
     transition: "all 300ms ease",
     zIndex: isOver ? 2 : 1,
   };

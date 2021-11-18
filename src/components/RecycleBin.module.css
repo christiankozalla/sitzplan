@@ -5,7 +5,9 @@
 
 .list {
   list-style: none;
-  margin-bottom: 8px;
+  margin-bottom: var(--space);
+  border-radius: var(--space);
+  border: 2px solid var(--color-primary-light);
 }
 
 .target {

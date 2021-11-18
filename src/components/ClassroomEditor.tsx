@@ -15,7 +15,7 @@ export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
   };
 
   return (
-    <header className={[styles.editor, "pt-2", "pb-2", "mb-2"].join(" ")}>
+    <header className={styles.editor}>
       <p>Sitzplan Logo</p>
       <div className={styles.editorControls}>
         <div>
