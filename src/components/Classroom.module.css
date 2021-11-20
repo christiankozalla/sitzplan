@@ -1,9 +1,13 @@
 .board {
   display: flex;
   flex-wrap: wrap;
+  max-width: calc((100vh - (var(--editor-height) + var(--space))));
+  margin: 0 auto;
 }
 
 .square {
-  width: calc(100% / var(--squaresPerRow));
-  height: calc(100% / var(--squaresPerColumn));
+  aspect-ratio: 1 / 1;
+  height: calc(
+    (100vh - (var(--editor-height) + var(--space))) / var(--squaresPerColumn)
+  );
 }

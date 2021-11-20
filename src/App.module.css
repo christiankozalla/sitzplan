@@ -20,4 +20,5 @@
 #board {
   grid-area: board;
   margin-left: var(--space);
+  max-height: calc(100vh - (var(--editor-height) + var(--space)));
 }

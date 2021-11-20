@@ -1,7 +1,7 @@
 :root {
   --squaresPerRow: 10;
   --squaresPerColumn: 10;
-  --editor-height: 80px;
+  --editor-height: 50px;
   --space: 8px;
   --color-primary-light: rgb(56, 199, 147);
   --color-primary-dark: rgb(0, 128, 82);
@@ -76,12 +76,12 @@ h3 {
 
 button {
   display: inline-block;
-  padding: var(--space) calc(2 * var(--space));
+  padding: calc(0.5 * var(--space)) var(--space);
   border: none;
   background-color: var(--color-primary-light);
   color: var(--text-grey-700);
   border-radius: var(--space);
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
 }
 
