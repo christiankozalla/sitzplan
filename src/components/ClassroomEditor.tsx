@@ -1,12 +1,8 @@
 import { FC, useState } from "react";
-import { Room } from "../lib/Room";
+import { room } from "../lib/Room";
 import styles from "./ClassroomEditor.module.css";
 
-interface ClassroomEditorProps {
-  room: Room;
-}
-
-export const ClassroomEditor: FC<ClassroomEditorProps> = ({ room }) => {
+export const ClassroomEditor: FC = () => {
   const [studentName, setStudentName] = useState("");
 
   const addStudent = () => {

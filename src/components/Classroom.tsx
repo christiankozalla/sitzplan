@@ -1,13 +1,9 @@
 import { FC } from "react";
 import { Square } from "./Square";
-import { Room } from "../lib/Room";
+import { room } from "../lib/Room";
 import styles from "./Classroom.module.css";
 
-export interface ClassroomProps {
-  room: Room;
-}
-
-export const Classroom: FC<ClassroomProps> = ({ room }) => {
+export const Classroom: FC = () => {
   document.documentElement.style.setProperty(
     "--squaresPerRow",
     `${room.getDimension("row")}`

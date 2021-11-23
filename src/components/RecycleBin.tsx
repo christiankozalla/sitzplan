@@ -1,16 +1,12 @@
 import { FC, useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
-import { Room } from "../lib/Room";
+import { room } from "../lib/Room";
 import { Field, TrashedField } from "../lib/Types";
 import { StudentComp } from "./Student";
 import styles from "./RecycleBin.module.css";
 
-interface RecycleBinProps {
-  room: Room;
-}
-
-export const RecycleBin: FC<RecycleBinProps> = ({ room }) => {
+export const RecycleBin: FC = () => {
   const [trash, setTrash] = useState<TrashedField[]>([]);
 
   useEffect(() => room.observeBin("recycle-bin", setTrash), []);

@@ -6,6 +6,7 @@ import {
   TrashedField,
   PositionObserver,
 } from "./Types";
+import { students, dimensions } from "../data.json";
 
 export class Room {
   private room: { [id: Field["id"]]: Field } = {};
@@ -232,3 +233,5 @@ export class Room {
     }
   }
 }
+
+export const room = new Room(students as Student[], dimensions);
