@@ -18,7 +18,7 @@ export const Classroom: FC = () => {
       {Object.values(room.getFields()).map((field) => {
         return (
           <div key={field.id} className={styles.square}>
-            <Square initialField={field} room={room} />
+            <Square initialField={field} />
           </div>
         );
       })}

@@ -1,13 +1,25 @@
 .board {
-  display: flex;
-  flex-wrap: wrap;
-  max-width: calc((100vh - (var(--editor-height) + var(--space))));
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(
+    var(--squaresPerColumn),
+    calc(
+      (100vh - var(--editor-height) - var(--space)) / var(--squaresPerColumn)
+    )
+  );
+  grid-template-rows: repeat(
+    var(--squaresPerRow),
+    calc(
+      (100vh - var(--editor-height) - var(--space)) / var(--squaresPerColumn)
+    )
+  );
+  margin-left: var(--space);
 }
 
 .square {
   aspect-ratio: 1 / 1;
   height: calc(
-    (100vh - (var(--editor-height) + var(--space))) / var(--squaresPerColumn)
+    (100vh - var(--editor-height) - var(--space)) / var(--squaresPerColumn)
   );
+  border-right: 1px dashed #ababab;
+  border-bottom: 1px dashed #ababab;
 }
