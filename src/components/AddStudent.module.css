@@ -1,0 +1,29 @@
+.screenReaderOnly:not(:focus):not(:active) {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+.wrapper {
+  padding: var(--space);
+  position: absolute;
+  box-shadow: var(--shadow-xl);
+  border-radius: var(--space);
+  z-index: 10;
+  background-color: white;
+}
+
+.addStudentInput {
+  padding: 3px;
+  border-radius: var(--space);
+  border: 1px solid var(--text-grey-400);
+  margin-right: var(--space);
+}
+
+.addStudentInput::placeholder {
+  color: var(--text-grey-400);
+}

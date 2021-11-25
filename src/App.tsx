@@ -1,22 +1,16 @@
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Classroom } from "./components/Classroom";
-import { ClassroomSidebar } from "./components/ClassroomSidebar";
-import { ClassroomEditor } from "./components/ClassroomEditor";
+import { Controls } from "./components/Controls";
 import styles from "./App.module.css";
 
 export default function App() {
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className={styles.grid}>
-        <div id={styles.editor}>
-          <ClassroomEditor />
-        </div>
-        <div id={styles.board}>
+      <div className={styles.layout}>
+        <Controls />
+        <div className={styles.room}>
           <Classroom />
-        </div>
-        <div id={styles.sidebar}>
-          <ClassroomSidebar />
         </div>
       </div>
     </DndProvider>

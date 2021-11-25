@@ -1,24 +1,17 @@
-.grid {
-  display: grid;
-  grid-template-rows: var(--editor-height) auto;
-  grid-template-columns: 4fr 1fr;
-  gap: var(--space);
-  grid-template-areas:
-    "editor editor"
-    "board sidebar";
+.layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100vh;
 }
 
-#editor {
-  grid-area: editor;
+.room {
+  border-top: 1px dashed var(--text-grey-300);
+  border-left: 1px dashed var(--text-grey-300);
 }
 
-#sidebar {
-  grid-area: sidebar;
-  margin-right: var(--space);
-}
-
-#board {
-  grid-area: board;
-  margin-left: var(--space);
-  max-height: calc(100vh - (var(--editor-height) + var(--space)));
+@media screen and (max-width: 700px) {
+  .layout {
+    flex-direction: column-reverse;
+  }
 }
