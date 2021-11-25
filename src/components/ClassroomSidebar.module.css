@@ -1,8 +1,0 @@
-.sidebar {
-  position: sticky;
-  top: calc(var(--editor-height) + var(--space));
-  border-radius: var(--space);
-  border: 1px solid var(--text-grey-400);
-  padding: calc(0.5 * var(--space)) var(--space);
-  height: 100%;
-}
