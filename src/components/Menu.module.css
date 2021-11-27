@@ -1,0 +1,53 @@
+.wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: 0 0 var(--space) 0;
+  box-shadow: var(--shadow-md);
+  padding: var(--space) 0;
+  border-radius: 0 0 4px 0;
+  display: flex;
+  background-color: white;
+}
+
+.wrapper > * {
+  margin: 0 var(--space);
+}
+
+.menuButton {
+  border: none;
+  border-radius: var(--space);
+  padding: var(--space);
+  height: calc(4 * var(--space));
+  width: calc(4 * var(--space));
+  background-color: var(--text-grey-300);
+  cursor: pointer;
+}
+
+.menuButton::before {
+  display: block;
+  content: " ";
+  height: 2px;
+  border-radius: 3px;
+  width: 100%;
+  background-color: var(--text-grey-700);
+}
+
+.menuButton::after {
+  display: block;
+  content: " ";
+  height: 2px;
+  border-radius: 3px;
+  width: 100%;
+  background-color: var(--text-grey-700);
+  margin-top: 4px;
+}
+
+.input {
+  border: none;
+  width: 80px;
+  padding: 0 var(--space);
+  color: var(--text-grey-700);
+  font-weight: bold;
+  letter-spacing: 1.1px;
+}

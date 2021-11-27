@@ -15,6 +15,9 @@ export class Room {
   private squaresPerRow: number = 10;
   private squaresPerColumn: number = 10;
 
+  private roomName: string = "";
+  private className: string = "";
+
   constructor(
     students: Student[] = [],
     dimensions: Dimensions = { squaresPerRow: 10, squaresPerColumn: 10 }
@@ -59,6 +62,10 @@ export class Room {
     id: string;
     action: PositionObserver<TrashedField[]>;
   }[] = [];
+  private roomMetaObservers: {
+    id: string;
+    action: PositionObserver<string>;
+  }[] = [];
 
   private generateId() {
     return "_" + (Math.random() * 30).toString(36).slice(4, 16);
@@ -87,6 +94,24 @@ export class Room {
     return (): void => {
       this.binObservers = this.binObservers.filter((t) => t.id !== id);
     };
+  }
+
+  public observeRoomMeta(
+    id: "roomName" | "className",
+    o: PositionObserver<string>
+  ): () => void {
+    this.roomMetaObservers.push({ id, action: o });
+
+    return (): void => {
+      this.roomMetaObservers = this.roomMetaObservers.filter(
+        (t) => t.id !== id
+      );
+    };
+  }
+
+  public updateMeta(id: "className" | "roomName", newName: string) {
+    this[id] = newName;
+    this.emitUpdatedRoomMeta(id, newName);
   }
 
   public moveStudent(
@@ -197,6 +222,16 @@ export class Room {
     this.binObservers.forEach((observer) => {
       observer.action && observer.action(updatedBin);
     });
+  }
+
+  private emitUpdatedRoomMeta(id: "roomName" | "className", newName: string) {
+    const observer = this.roomMetaObservers.find(
+      (observer) => observer.id === id
+    );
+
+    if (observer && observer.action) {
+      observer.action(newName);
+    }
   }
 
   public generateTablePreset(rows: number, numberOfTables: number = 24): void {
