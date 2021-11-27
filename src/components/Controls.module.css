@@ -1,4 +1,4 @@
-.wrapper {
+.controls {
   width: 65px;
   box-shadow: var(--shadow-xl);
   padding: calc(1.5 * var(--space));
@@ -23,7 +23,7 @@
 }
 
 @media screen and (max-width: 700px) {
-  .wrapper {
+  .controls {
     display: flex;
     height: 65px;
     border-radius: var(--space) var(--space) 0 0;

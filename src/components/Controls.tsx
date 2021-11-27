@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import React, { FC, useState } from "react";
 import { AddStudent } from "./AddStudent";
 import styles from "./Controls.module.css";
 
@@ -19,7 +19,7 @@ export const Controls: FC = () => {
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div className={styles.controls}>
       {showAddStudentDialog && <AddStudent x={x} y={y} />}
       <img
         src={AddStudentIcon}
