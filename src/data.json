@@ -34,7 +34,7 @@
     }
   ],
   "dimensions": {
-    "squaresPerRow": 10,
-    "squaresPerColumn": 10
+    "columns": 10,
+    "rows": 10
   }
 }

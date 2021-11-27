@@ -5,25 +5,31 @@ import {
   Field,
   TrashedField,
   PositionObserver,
+  MetaKeys,
 } from "./Types";
 import { students, dimensions } from "../data.json";
+import { Dispatch, SetStateAction } from "react";
 
 export class Room {
   private room: { [id: Field["id"]]: Field } = {};
   private bin: TrashedField[] = [];
+  private classroomKey: string;
 
-  private squaresPerRow: number = 10;
-  private squaresPerColumn: number = 10;
+  private rows: number = 10;
+  private columns: number = 10;
 
   private roomName: string = "";
   private className: string = "";
 
   constructor(
     students: Student[] = [],
-    dimensions: Dimensions = { squaresPerRow: 10, squaresPerColumn: 10 }
+    dimensions: Dimensions = { columns: 10, rows: 10 }
   ) {
-    const { squaresPerRow, squaresPerColumn } = dimensions;
-    const room = this.generateRoom(squaresPerRow, squaresPerColumn);
+    const { columns, rows } = dimensions;
+    const room = this.generateRoom(rows, columns);
+
+    // TODO: Refactor data generation because it is frequently used in this.updateMeta()
+    // when changing the number of columns and rows
     const data = room.map((p, i) => ({
       id: this.generateId(),
       student: students.find(
@@ -37,12 +43,17 @@ export class Room {
       Object.assign(this.room, { [field.id]: field });
     });
 
-    this.squaresPerRow = squaresPerRow;
-    this.squaresPerColumn = squaresPerColumn;
+    this.rows = rows;
+    this.columns = columns;
+    this.classroomKey = this.generateId();
   }
 
-  public getDimension(direction: "row" | "column"): number {
-    return direction === "row" ? this.squaresPerRow : this.squaresPerColumn;
+  public getClassroomKey() {
+    return this.classroomKey;
+  }
+
+  public getDimension(direction: "rows" | "cols"): number {
+    return direction === "rows" ? this.rows : this.columns;
   }
 
   private generateRoom(rows: number, cols: number): Position[] {
@@ -63,9 +74,14 @@ export class Room {
     action: PositionObserver<TrashedField[]>;
   }[] = [];
   private roomMetaObservers: {
-    id: string;
+    id: MetaKeys;
     action: PositionObserver<string>;
   }[] = [];
+  private classroomObserver: PositionObserver<string> | undefined;
+
+  public observeClassroomKey(o: PositionObserver<string>) {
+    this.classroomObserver = o;
+  }
 
   private generateId() {
     return "_" + (Math.random() * 30).toString(36).slice(4, 16);
@@ -97,7 +113,7 @@ export class Room {
   }
 
   public observeRoomMeta(
-    id: "roomName" | "className",
+    id: MetaKeys,
     o: PositionObserver<string>
   ): () => void {
     this.roomMetaObservers.push({ id, action: o });
@@ -109,11 +125,80 @@ export class Room {
     };
   }
 
-  public updateMeta(id: "className" | "roomName", newName: string) {
-    this[id] = newName;
-    this.emitUpdatedRoomMeta(id, newName);
+  public updateMeta(id: MetaKeys, newValue: string) {
+    if (id === "className" || id === "roomName") {
+      this[id] = newValue;
+    } else {
+      // Number of rows or colums is updated
+      if (id === "rows") {
+        const newRows = Number(newValue);
+
+        // regenerate the whole room and update the classroomKey to trigger re-render
+        const students = Object.values(this.room)
+          .filter(
+            (field) =>
+              field.hasOwnProperty("student") && field.student !== undefined
+          )
+          .map((field) => field.student) as Student[];
+        const newPositions = this.generateRoom(newRows, this["columns"]);
+        this.room = {};
+
+        newPositions.forEach((position) => {
+          const student = students.find(
+            (student) =>
+              position[0] === student.position[0] &&
+              position[1] === student.position[1]
+          );
+
+          const newField: Field = {
+            id: student?.id || this.generateId(),
+            isTable: false,
+            student,
+            position,
+          };
+          this.room[newField.id] = newField;
+          this.updateClassroom();
+        });
+      } else if (id === "columns") {
+        const newCols = Number(newValue);
+
+        const students = Object.values(this.room)
+          .filter(
+            (field) =>
+              field.hasOwnProperty("student") && field.student !== undefined
+          )
+          .map((field) => field.student) as Student[];
+
+        const newPositions = this.generateRoom(this["rows"], newCols);
+        this.room = {};
+
+        newPositions.forEach((position) => {
+          const student = students.find(
+            (student) =>
+              position[0] === student.position[0] &&
+              position[1] === student.position[1]
+          );
+          const newField: Field = {
+            id: student?.id || this.generateId(),
+            isTable: false,
+            student,
+            position,
+          };
+          this.room[newField.id] = newField;
+        });
+        this.updateClassroom();
+      }
+
+      this[id] = Number(newValue);
+    }
+    this.emitUpdatedRoomMeta(id, newValue);
   }
 
+  private updateClassroom() {
+    this.classroomKey = this.generateId();
+    typeof this.classroomObserver === "function" &&
+      this.classroomObserver(this.classroomKey);
+  }
   public moveStudent(
     originId: Field["id"],
     destinationId: Field["id"],
@@ -224,7 +309,7 @@ export class Room {
     });
   }
 
-  private emitUpdatedRoomMeta(id: "roomName" | "className", newName: string) {
+  private emitUpdatedRoomMeta(id: MetaKeys, newName: string) {
     const observer = this.roomMetaObservers.find(
       (observer) => observer.id === id
     );

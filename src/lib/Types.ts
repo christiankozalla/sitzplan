@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type Dimensions = { squaresPerRow: number; squaresPerColumn: number };
+export type Dimensions = { columns: number; rows: number };
 
 export type Position = [number, number];
 
@@ -20,6 +20,8 @@ export type Field = {
 export type Trashed = {
   trashed: boolean;
 };
+
+export type MetaKeys = "roomName" | "className" | "columns" | "rows";
 
 export type TrashedField = Field & Trashed;
 

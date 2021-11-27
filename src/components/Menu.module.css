@@ -1,16 +1,20 @@
-.wrapper {
-  position: absolute;
+.menu {
+  position: fixed;
   top: 0;
   left: 0;
   border: 0 0 var(--space) 0;
-  box-shadow: var(--shadow-md);
   padding: var(--space) 0;
+  box-shadow: var(--shadow-md);
   border-radius: 0 0 4px 0;
-  display: flex;
   background-color: white;
+  z-index: 3;
 }
 
-.wrapper > * {
+.firstLine {
+  display: flex;
+}
+
+.firstLine > * {
   margin: 0 var(--space);
 }
 
@@ -54,4 +58,19 @@
   color: var(--text-grey-700);
   font-weight: bold;
   letter-spacing: 1.1px;
+}
+
+.expandedMenu {
+  margin-top: var(--space);
+}
+
+.expandedMenu li {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space);
+  border-top: 1px solid var(--text-grey-300);
+}
+
+.expandedMenu li:last-child {
+  border-bottom: 1px solid var(--text-grey-300);
 }

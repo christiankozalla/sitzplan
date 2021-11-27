@@ -1,6 +1,6 @@
 :root {
-  --squaresPerRow: 10;
-  --squaresPerColumn: 10;
+  --columns: 10;
+  --rows: 10;
   --editor-height: 50px;
   --space: 8px;
   --color-primary-light: rgb(56, 199, 147);
@@ -13,6 +13,11 @@
     0 2px 4px -1px rgba(0, 0, 0, 0.06);
   --shadow-xl: 0 0 #0000, 0 0 #0000, 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+#root {
+  height: 100vh;
+  overflow-y: hidden;
 }
 
 /* Box sizing rules */
@@ -28,6 +33,8 @@ h2,
 h3,
 h4,
 p,
+ul,
+ol,
 figure,
 blockquote,
 dl,
@@ -36,7 +43,9 @@ dd {
 }
 
 button,
-input {
+input,
+ul,
+ol {
   padding: 0;
 }
 

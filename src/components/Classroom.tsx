@@ -1,17 +1,19 @@
-import { FC } from "react";
+import { FC, useEffect } from "react";
 import { Square } from "./Square";
 import { room } from "../lib/Room";
 import styles from "./Classroom.module.css";
 
 export const Classroom: FC = () => {
-  document.documentElement.style.setProperty(
-    "--squaresPerRow",
-    `${room.getDimension("row")}`
-  );
-  document.documentElement.style.setProperty(
-    "--squaresPerColumn",
-    `${room.getDimension("column")}`
-  );
+  useEffect(() => {
+    document.documentElement.style.setProperty(
+      "--columns",
+      `${room.getDimension("cols")}`
+    );
+    document.documentElement.style.setProperty(
+      "--rows",
+      `${room.getDimension("rows")}`
+    );
+  });
 
   return (
     <div className={styles.board}>
