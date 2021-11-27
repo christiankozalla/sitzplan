@@ -1,0 +1,19 @@
+.wrapper {
+  padding: var(--space);
+  position: absolute;
+  box-shadow: var(--shadow-xl);
+  border-radius: var(--space);
+  z-index: 10;
+  background-color: white;
+}
+
+.addStudentInput {
+  padding: 3px;
+  border-radius: var(--space);
+  border: 1px solid var(--text-grey-400);
+  margin-right: var(--space);
+}
+
+.addStudentInput::placeholder {
+  color: var(--text-grey-400);
+}

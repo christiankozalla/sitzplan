@@ -1,17 +1,16 @@
 import { CSSProperties, FC, useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
-import { Room } from "../lib/Room";
+import { room } from "../lib/Room";
 import { Field, TrashedField } from "../lib/Types";
-
 import { StudentComp } from "./Student";
+import styles from "./Square.module.css";
 
 export interface SquareProps {
-  room: Room;
   initialField: Field;
 }
 
-export const Square: FC<SquareProps> = ({ initialField, room }) => {
+export const Square: FC<SquareProps> = ({ initialField }) => {
   const [field, setField] = useState<Field>(initialField);
   useEffect(() => room.observeRoom(field.id, setField), []);
 
@@ -31,27 +30,23 @@ export const Square: FC<SquareProps> = ({ initialField, room }) => {
 
   const squareStyles: CSSProperties = {
     position: "relative",
-    background: isOver ? "darkgrey" : "lightgrey",
+    background: isOver ? "lightgrey" : "transparent",
     boxShadow: isOver
       ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
       : "",
-    transform: isOver ? "translate(4px, -4px)" : "",
+    transform: isOver ? "scale(1.1) translateY(-4px)" : "",
     transition: "all 300ms ease",
     zIndex: isOver ? 2 : 1,
   };
 
-  const tableStyles: CSSProperties = {
-    width: "100%",
-    aspectRatio: "1 / 1",
-    margin: 0,
-    border: "1px solid white",
-  };
-
   return (
-    <div ref={drop} style={squareStyles}>
-      <div style={tableStyles} onDoubleClick={() => room.toggleTable(field.id)}>
-        <StudentComp key={field.id} field={field} />
-      </div>
+    <div
+      ref={drop}
+      style={squareStyles}
+      className={styles.table}
+      onDoubleClick={() => room.toggleTable(field.id)}
+    >
+      <StudentComp key={field.id} field={field} />
     </div>
   );
 };

@@ -1,0 +1,15 @@
+.description {
+  margin-bottom: 8px;
+  overflow-y: auto;
+}
+
+.list {
+  list-style: none;
+  margin-bottom: var(--space);
+  border-radius: var(--space);
+  border: 2px solid var(--color-primary-light);
+}
+
+.target {
+  transition: transform 300ms ease;
+}

@@ -1,0 +1,7 @@
+.student {
+  cursor: move;
+  height: 100%;
+  text-align: center;
+  overflow: hidden;
+  word-break: break-all;
+}

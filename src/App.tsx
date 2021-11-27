@@ -1,23 +1,25 @@
-import { useMemo } from "react";
+import { useState, useEffect } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Classroom } from "./components/Classroom";
-import { Room } from "./lib/Room";
-import { students, fields } from "./data.json";
-import { Student, Position } from "./lib/Types";
-import "./global.css";
+import { Controls } from "./components/Controls";
+import { Menu } from "./components/Menu";
+import styles from "./App.module.css";
+import { room } from "./lib/Room";
 
 export default function App() {
-  const room = useMemo(
-    () => new Room(fields as Position[], students as Student[]),
-    []
-  );
+  const [classroomKey, setClassroomKey] = useState(room.getClassroomKey());
 
+  useEffect(() => room.observeClassroomKey(setClassroomKey), [classroomKey]);
   return (
-    <div style={{ maxWidth: "900px", margin: "1rem auto" }}>
+    <>
+      <Menu />
       <DndProvider backend={HTML5Backend}>
-        <Classroom room={room} />
+        <div className={styles.layout}>
+          <Controls />
+          <Classroom key={classroomKey} />
+        </div>
       </DndProvider>
-    </div>
+    </>
   );
 }

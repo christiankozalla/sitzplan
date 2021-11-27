@@ -1,0 +1,41 @@
+.controls {
+  width: 65px;
+  box-shadow: var(--shadow-xl);
+  padding: calc(1.5 * var(--space));
+  border-radius: 0 var(--space) var(--space) 0;
+  background-color: white;
+}
+
+.icon {
+  border-radius: var(--space);
+  background-color: var(--text-grey-200);
+  padding: calc(0.5 * var(--space));
+  cursor: pointer;
+}
+
+.icon + .icon {
+  margin-top: var(--space);
+}
+
+.icon:hover {
+  transform: translateY(-3px);
+  transition: transform 150ms ease;
+}
+
+@media screen and (max-width: 700px) {
+  .controls {
+    display: flex;
+    height: 65px;
+    border-radius: var(--space) var(--space) 0 0;
+    width: calc(49px * 4);
+  }
+
+  .icon {
+    width: calc(0.25 * (100% - 3 * var(--space)));
+  }
+
+  .icon + .icon {
+    margin-top: 0;
+    margin-left: var(--space);
+  }
+}
