@@ -18,7 +18,7 @@ export const AddStudent: FC<AddStudentProps> = ({ x, y }) => {
 
   return (
     <div className={styles.wrapper} style={{ left: x + 20, top: y - 30 }}>
-      <label htmlFor="addStudent" className={styles.screenReaderOnly}>
+      <label htmlFor="addStudent" className="screenReaderOnly">
         Neuer Schüler
       </label>
       <input
