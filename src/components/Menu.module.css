@@ -24,6 +24,10 @@
   cursor: pointer;
 }
 
+.menuButton:active {
+  border: 1px solid var(--text-grey-700);
+}
+
 .menuButton::before {
   display: block;
   content: " ";
