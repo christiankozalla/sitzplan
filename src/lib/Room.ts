@@ -25,18 +25,18 @@ export class Room {
     dimensions: Dimensions = { columns: 10, rows: 10 }
   ) {
     const { columns, rows } = dimensions;
-    const room = this.generateRoom(rows, columns);
+    const data = this.generateRoom(rows, columns, students);
 
     // TODO: Refactor data generation because it is frequently used in this.updateMeta()
     // when changing the number of columns and rows
-    const data = room.map((p, i) => ({
-      id: this.generateId(),
-      student: students.find(
-        ({ position }) => position[0] === p[0] && position[1] === p[1]
-      ),
-      isTable: false,
-      position: p,
-    }));
+    // const data = room.map((p, i) => ({
+    //   id: this.generateId(),
+    //   student: students.find(
+    //     ({ position }) => position[0] === p[0] && position[1] === p[1]
+    //   ),
+    //   isTable: false,
+    //   position: p,
+    // }));
 
     data.forEach((field) => {
       Object.assign(this.room, { [field.id]: field });
@@ -55,16 +55,29 @@ export class Room {
     return direction === "rows" ? this.rows : this.columns;
   }
 
-  private generateRoom(rows: number, cols: number): Position[] {
-    const positions: Position[] = [];
+  private generateRoom(
+    rows: number,
+    cols: number,
+    students: Student[]
+  ): Field[] {
+    const fields: Field[] = [];
 
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
-        positions.push([x, y]);
+        const student = students.find(
+          ({ position }) => position[0] === x && position[1] === y
+        );
+
+        fields.push({
+          id: student?.id || this.generateId(),
+          isTable: false,
+          student,
+          position: [x, y],
+        });
       }
     }
 
-    return positions;
+    return fields;
   }
 
   private roomObservers: { id: string; action: PositionObserver<Field> }[] = [];
@@ -128,63 +141,36 @@ export class Room {
     if (id === "className" || id === "roomName") {
       this[id] = newValue;
     } else {
-      // Number of rows or colums is updated
+      // regenerate the whole room and update the classroomKey to trigger re-render
+      const students = Object.values(this.room)
+        .filter(
+          (field) =>
+            field.hasOwnProperty("student") && field.student !== undefined
+        )
+        .map((field) => field.student) as Student[];
+
+      // Number of rows is updated
       if (id === "rows") {
         const newRows = Number(newValue);
 
-        // regenerate the whole room and update the classroomKey to trigger re-render
-        const students = Object.values(this.room)
-          .filter(
-            (field) =>
-              field.hasOwnProperty("student") && field.student !== undefined
-          )
-          .map((field) => field.student) as Student[];
-        const newPositions = this.generateRoom(newRows, this["columns"]);
+        const newFields = this.generateRoom(newRows, this["columns"], students);
         this.room = {};
 
-        newPositions.forEach((position) => {
-          const student = students.find(
-            (student) =>
-              position[0] === student.position[0] &&
-              position[1] === student.position[1]
-          );
+        for (let field of newFields) {
+          this.room[field.id] = field;
+        }
+        this.updateClassroom();
 
-          const newField: Field = {
-            id: student?.id || this.generateId(),
-            isTable: false,
-            student,
-            position,
-          };
-          this.room[newField.id] = newField;
-          this.updateClassroom();
-        });
+        // Number of columns is updated
       } else if (id === "columns") {
         const newCols = Number(newValue);
 
-        const students = Object.values(this.room)
-          .filter(
-            (field) =>
-              field.hasOwnProperty("student") && field.student !== undefined
-          )
-          .map((field) => field.student) as Student[];
-
-        const newPositions = this.generateRoom(this["rows"], newCols);
+        const newFields = this.generateRoom(this["rows"], newCols, students);
         this.room = {};
 
-        newPositions.forEach((position) => {
-          const student = students.find(
-            (student) =>
-              position[0] === student.position[0] &&
-              position[1] === student.position[1]
-          );
-          const newField: Field = {
-            id: student?.id || this.generateId(),
-            isTable: false,
-            student,
-            position,
-          };
-          this.room[newField.id] = newField;
-        });
+        for (let field of newFields) {
+          this.room[field.id] = field;
+        }
         this.updateClassroom();
       }
 
