@@ -8,7 +8,6 @@ import {
   MetaKeys,
 } from "./Types";
 import { students, dimensions } from "../data.json";
-import { Dispatch, SetStateAction } from "react";
 
 export class Room {
   private room: { [id: Field["id"]]: Field } = {};

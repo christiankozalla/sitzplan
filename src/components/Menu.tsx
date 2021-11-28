@@ -5,12 +5,12 @@ import styles from "./Menu.module.css";
 export const Menu: FC = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [roomName, setRoomName] = useState("");
-  const [className, setClassName] = useState("");
+  const [classGroupName, setClassGroupName] = useState("");
   const [rows, setRows] = useState(room.getDimension("rows").toString());
   const [cols, setCols] = useState(room.getDimension("cols").toString());
 
   useEffect(() => room.observeRoomMeta("roomName", setRoomName), []);
-  useEffect(() => room.observeRoomMeta("className", setClassName), []);
+  useEffect(() => room.observeRoomMeta("className", setClassGroupName), []);
   useEffect(() => {
     room.observeRoomMeta("rows", setRows);
     room.observeRoomMeta("columns", setCols);
@@ -43,7 +43,7 @@ export const Menu: FC = () => {
         <input
           id="className"
           className={styles.input}
-          value={className}
+          value={classGroupName}
           placeholder="Klasse"
           type="text"
           onChange={(e) => room.updateMeta("className", e.target.value)}
