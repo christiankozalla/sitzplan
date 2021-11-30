@@ -27,17 +27,6 @@ export class Room {
     const { columns, rows } = dimensions;
     const data = this.generateRoom(rows, columns, students);
 
-    // TODO: Refactor data generation because it is frequently used in this.updateMeta()
-    // when changing the number of columns and rows
-    // const data = room.map((p, i) => ({
-    //   id: this.generateId(),
-    //   student: students.find(
-    //     ({ position }) => position[0] === p[0] && position[1] === p[1]
-    //   ),
-    //   isTable: false,
-    //   position: p,
-    // }));
-
     data.forEach((field) => {
       Object.assign(this.room, { [field.id]: field });
     });
@@ -61,6 +50,9 @@ export class Room {
     students: Student[]
   ): Field[] {
     const fields: Field[] = [];
+    const tables = Object.values(this.room)
+      .filter((field) => field.isTable)
+      .map((fieldWithTable) => fieldWithTable.position);
 
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
@@ -68,9 +60,13 @@ export class Room {
           ({ position }) => position[0] === x && position[1] === y
         );
 
+        const isTable = tables.some(
+          ([tableX, tableY]) => tableX === x && tableY === y
+        );
+
         fields.push({
           id: student?.id || this.generateId(),
-          isTable: false,
+          isTable,
           student,
           position: [x, y],
         });
