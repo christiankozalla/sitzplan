@@ -17,18 +17,20 @@ export type MetaKeys = "roomName" | "className" | "columns" | "rows";
 export type TrashedField = Field & Trashed;
 export type PositionObserver<T> = Dispatch<SetStateAction<T>> | null;
 
+type FieldProps = {
+  id: string;
+  position: Position;
+  isTable: boolean;
+  student: Student | undefined;
+};
+
 export class Field {
   id: string;
   position: Position;
   isTable: boolean;
   student: Student | undefined;
 
-  constructor(
-    id: string,
-    position: Position,
-    isTable: boolean,
-    student?: Student
-  ) {
+  constructor({ id, position, isTable, student }: FieldProps) {
     this.id = id;
     this.position = position;
     this.isTable = isTable;

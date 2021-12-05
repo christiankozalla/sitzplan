@@ -58,12 +58,12 @@ export class Controller {
         );
 
         fields.push(
-          new Field(
-            this.generateId(),
-            [x, y],
-            field?.isTable || false,
-            field?.student
-          )
+          new Field({
+            id: this.generateId(),
+            position: [x, y],
+            isTable: field?.isTable || false,
+            student: field?.student,
+          })
         );
       }
     }
@@ -220,13 +220,13 @@ export class Controller {
     const emptyField = this.findEmptyTable();
 
     if (emptyField) {
-      const newField = {
+      const newField = new Field({
         ...emptyField,
         student: {
           id: this.generateId(),
           name,
         },
-      };
+      });
 
       this.room[emptyField.id] = newField;
       this.emitChange(newField);
@@ -314,10 +314,11 @@ export class Controller {
       );
 
       if (field) {
-        const newField = {
+        const newField = new Field({
           ...field,
           isTable: true,
-        };
+        });
+
         this.room[field.id] = newField;
         this.emitChange(newField);
       } else {
