@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { room } from "../lib/Room";
+import { controller } from "../lib/Controller";
 
 import styles from "./AddStudent.module.css";
 
@@ -12,7 +12,7 @@ export const AddStudent: FC<AddStudentProps> = ({ x, y }) => {
   const [studentName, setStudentName] = useState("");
 
   const handleNewStudent = () => {
-    studentName && room.assignNewStudent(studentName);
+    studentName && controller.assignNewStudent(studentName);
     setStudentName("");
   };
 

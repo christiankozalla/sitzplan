@@ -5,12 +5,17 @@ import { Classroom } from "./components/Classroom";
 import { Controls } from "./components/Controls";
 import { Menu } from "./components/Menu";
 import styles from "./App.module.css";
-import { room } from "./lib/Room";
+import { controller } from "./lib/Controller";
 
 export default function App() {
-  const [classroomKey, setClassroomKey] = useState(room.getClassroomKey());
+  const [classroomKey, setClassroomKey] = useState(
+    controller.getClassroomKey()
+  );
 
-  useEffect(() => room.observeClassroomKey(setClassroomKey), [classroomKey]);
+  useEffect(
+    () => controller.observeClassroomKey(setClassroomKey),
+    [classroomKey]
+  );
   return (
     <>
       <Menu />

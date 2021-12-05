@@ -1,40 +1,66 @@
 {
-  "students": [
+  "dimensions": {
+    "columns": 10,
+    "rows": 10
+  },
+  "fields": [
     {
-      "id": "3nöas",
-      "name": "Adam Ries",
+      "isTable": true,
+      "student": {
+        "id": "3nöas",
+        "name": "Adam Ries"
+      },
       "position": [
         0,
         1
       ]
     },
     {
-      "id": "ipwnrp",
-      "name": "Marie Curie",
+      "isTable": false,
+      "student": {
+        "id": "ipwnrp",
+        "name": "Marie Curie"
+      },
       "position": [
         3,
         5
       ]
     },
     {
-      "id": "espak2",
-      "name": "Albert Einstein",
+      "isTable": true,
+      "student": {
+        "id": "espak2",
+        "name": "Albert Einstein"
+      },
       "position": [
         6,
         7
       ]
     },
     {
-      "id": "5apektgn",
-      "name": "Wolfgang Pauli",
+      "isTable": false,
+      "student": {
+        "id": "5apektgn",
+        "name": "Wolfgang Pauli"
+      },
       "position": [
         2,
         3
       ]
+    },
+    {
+      "isTable": true,
+      "position": [
+        8,
+        8
+      ]
+    },
+    {
+      "isTable": true,
+      "position": [
+        0,
+        0
+      ]
     }
-  ],
-  "dimensions": {
-    "columns": 10,
-    "rows": 10
-  }
+  ]
 }

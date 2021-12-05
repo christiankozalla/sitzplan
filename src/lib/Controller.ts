@@ -1,15 +1,13 @@
 import {
-  Position,
   Dimensions,
-  Student,
-  Field,
   TrashedField,
   PositionObserver,
   MetaKeys,
-} from "./Types";
-import { students, dimensions } from "../data.json";
+  Field,
+} from "./Model";
+import { fields, dimensions } from "../data.json";
 
-export class Room {
+export class Controller {
   private room: { [id: Field["id"]]: Field } = {};
   private bin: TrashedField[] = [];
   private classroomKey: string;
@@ -21,11 +19,11 @@ export class Room {
   private className: string = "";
 
   constructor(
-    students: Student[] = [],
+    fieldsData: Field[] = [],
     dimensions: Dimensions = { columns: 10, rows: 10 }
   ) {
     const { columns, rows } = dimensions;
-    const data = this.generateRoom(rows, columns, students);
+    const data = this.generateRoom(rows, columns, fieldsData);
 
     data.forEach((field) => {
       Object.assign(this.room, { [field.id]: field });
@@ -47,29 +45,26 @@ export class Room {
   private generateRoom(
     rows: number,
     cols: number,
-    students: Student[]
+    fieldsData: Field[]
   ): Field[] {
     const fields: Field[] = [];
-    const tables = Object.values(this.room)
-      .filter((field) => field.isTable)
-      .map((fieldWithTable) => fieldWithTable.position);
 
+    // An existing room can be regenerated with a different number of rows or columns
+    // Here existing data is moved to newly created fields
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
-        const student = students.find(
-          ({ position }) => position[0] === x && position[1] === y
+        const field = fieldsData.find(
+          ({ position: [fieldX, fieldY] }) => fieldX === x && fieldY === y
         );
 
-        const isTable = tables.some(
-          ([tableX, tableY]) => tableX === x && tableY === y
+        fields.push(
+          new Field(
+            this.generateId(),
+            [x, y],
+            field?.isTable || false,
+            field?.student
+          )
         );
-
-        fields.push({
-          id: student?.id || this.generateId(),
-          isTable,
-          student,
-          position: [x, y],
-        });
       }
     }
 
@@ -133,23 +128,25 @@ export class Room {
     };
   }
 
-  public updateMeta(id: MetaKeys, newValue: string) {
+  // MetaData are the name of the class and room, and number of rows and columns
+  public updateMetaData(id: MetaKeys, newValue: string) {
     if (id === "className" || id === "roomName") {
       this[id] = newValue;
     } else {
       // regenerate the whole room and update the classroomKey to trigger re-render
-      const students = Object.values(this.room)
-        .filter(
-          (field) =>
-            field.hasOwnProperty("student") && field.student !== undefined
-        )
-        .map((field) => field.student) as Student[];
+      const fieldsWithStudentsAndTables = Object.values(this.room).filter(
+        (field) => field.student || field.isTable
+      ) as Field[];
 
       // Number of rows is updated
       if (id === "rows") {
         const newRows = Number(newValue);
 
-        const newFields = this.generateRoom(newRows, this["columns"], students);
+        const newFields = this.generateRoom(
+          newRows,
+          this["columns"],
+          fieldsWithStudentsAndTables
+        );
         this.room = {};
 
         for (let field of newFields) {
@@ -161,7 +158,11 @@ export class Room {
       } else if (id === "columns") {
         const newCols = Number(newValue);
 
-        const newFields = this.generateRoom(this["rows"], newCols, students);
+        const newFields = this.generateRoom(
+          this["rows"],
+          newCols,
+          fieldsWithStudentsAndTables
+        );
         this.room = {};
 
         for (let field of newFields) {
@@ -335,4 +336,4 @@ export class Room {
   }
 }
 
-export const room = new Room(students as Student[], dimensions);
+export const controller = new Controller(fields as Field[], dimensions);
