@@ -12,11 +12,11 @@ export class Controller {
   private bin: TrashedField[] = [];
   private classroomKey: string;
 
-  private rows: number = 10;
-  private columns: number = 10;
+  private rows = 10;
+  private columns = 10;
 
-  private roomName: string = "";
-  private className: string = "";
+  private roomName = "";
+  private className = "";
 
   constructor(
     fieldsData: Field[] = [],
@@ -149,7 +149,7 @@ export class Controller {
         );
         this.room = {};
 
-        for (let field of newFields) {
+        for (const field of newFields) {
           this.room[field.id] = field;
         }
         this.updateClassroom();
@@ -165,7 +165,7 @@ export class Controller {
         );
         this.room = {};
 
-        for (let field of newFields) {
+        for (const field of newFields) {
           this.room[field.id] = field;
         }
         this.updateClassroom();
@@ -225,13 +225,11 @@ export class Controller {
         student: {
           id: this.generateId(),
           name,
-          position: emptyField.position,
         },
       };
 
       this.room[emptyField.id] = newField;
       this.emitChange(newField);
-    } else {
     }
   }
 
@@ -263,7 +261,7 @@ export class Controller {
     this.emitUpdatedBin(this.bin);
   }
 
-  private findEmptyTable(): Field {
+  private findEmptyTable(): Field | undefined {
     const allFields = Object.values(this.room);
     const emptyTable = allFields.find(
       (firstField) => firstField.isTable && !firstField.student
@@ -271,7 +269,7 @@ export class Controller {
     if (emptyTable) {
       return emptyTable;
     } else {
-      return allFields.find((firstField) => !firstField.student)!;
+      return allFields.find((firstField) => !firstField.student);
     }
   }
 
@@ -301,7 +299,7 @@ export class Controller {
     }
   }
 
-  public generateTablePreset(rows: number, numberOfTables: number = 24): void {
+  public generateTablePreset(rows: number, numberOfTables = 24): void {
     const width = Math.ceil(numberOfTables / rows);
 
     const offsetX = 10 - width;
@@ -311,12 +309,12 @@ export class Controller {
     let y = 0 + offsetY;
 
     for (let i = 0; i < numberOfTables; i++) {
-      let field = Object.values(this.room).find(
+      const field = Object.values(this.room).find(
         ({ position }) => position[0] === x && position[1] === y
       );
 
       if (field) {
-        let newField = {
+        const newField = {
           ...field,
           isTable: true,
         };
