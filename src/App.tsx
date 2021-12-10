@@ -6,6 +6,7 @@ import { Controls } from "./components/Controls";
 import { Menu } from "./components/Menu";
 import styles from "./App.module.css";
 import { controller } from "./lib/Controller";
+import { RecycleBin } from "./components/RecycleBin";
 
 export default function App() {
   const [classroomKey, setClassroomKey] = useState(
@@ -24,6 +25,7 @@ export default function App() {
           <Controls />
           <Classroom key={classroomKey} />
         </div>
+        <RecycleBin />
       </DndProvider>
     </>
   );
