@@ -9,14 +9,11 @@ export const Menu: FC = () => {
   const [rows, setRows] = useState(controller.getDimension("rows").toString());
   const [cols, setCols] = useState(controller.getDimension("cols").toString());
 
-  useEffect(() => controller.observeRoomMeta("roomName", setRoomName), []);
-  useEffect(
-    () => controller.observeRoomMeta("className", setClassGroupName),
-    []
-  );
+  useEffect(() => controller.observe("roomName", setRoomName), []);
+  useEffect(() => controller.observe("className", setClassGroupName), []);
   useEffect(() => {
-    controller.observeRoomMeta("rows", setRows);
-    controller.observeRoomMeta("columns", setCols);
+    controller.observe("rows", setRows);
+    controller.observe("columns", setCols);
     document.documentElement.style.setProperty("--rows", `${rows}`);
     document.documentElement.style.setProperty("--columns", `${cols}`);
   }, [rows, cols]);

@@ -71,7 +71,9 @@ export class Controller {
     return fields;
   }
 
-  private roomObservers: { id: string; action: PositionObserver<Field> }[] = [];
+  // all observers should be in one array
+  // an observer is an object { id: string, updateUI: "setState" } - id is the field.id or "roomName", "className", "rows", "columns"
+  private roomObservers: { id: string; updateUi: PositionObserver<any> }[] = [];
   private binObservers: {
     id: string;
     action: PositionObserver<TrashedField[]>;
@@ -94,8 +96,8 @@ export class Controller {
     return this.room;
   }
 
-  public observeRoom(id: string, o: PositionObserver<Field>): () => void {
-    this.roomObservers.push({ id, action: o });
+  public observe(id: string, o: PositionObserver<any>): () => void {
+    this.roomObservers.push({ id, updateUi: o });
 
     return (): void => {
       this.roomObservers = this.roomObservers.filter((t) => t.id !== id);
@@ -112,19 +114,6 @@ export class Controller {
 
     return (): void => {
       this.binObservers = this.binObservers.filter((t) => t.id !== id);
-    };
-  }
-
-  public observeRoomMeta(
-    id: MetaKeys,
-    o: PositionObserver<string>
-  ): () => void {
-    this.roomMetaObservers.push({ id, action: o });
-
-    return (): void => {
-      this.roomMetaObservers = this.roomMetaObservers.filter(
-        (t) => t.id !== id
-      );
     };
   }
 
@@ -173,7 +162,7 @@ export class Controller {
 
       this[id] = Number(newValue);
     }
-    this.emitUpdatedRoomMeta(id, newValue);
+    this.emitChange(id, newValue);
   }
 
   private updateClassroom() {
@@ -206,14 +195,14 @@ export class Controller {
         : this.room[originId].isTable,
     };
 
-    this.emitChange(this.room[originId]);
-    this.emitChange(this.room[destinationId]);
+    this.emitChange(originId, this.room[originId]);
+    this.emitChange(destinationId, this.room[destinationId]);
   }
 
   public toggleTable(id: Field["id"]) {
     const field = { ...this.room[id], isTable: !this.room[id].isTable };
     this.room[id] = { ...field };
-    this.emitChange(field);
+    this.emitChange(field.id, field);
   }
 
   public assignNewStudent(name: string): void {
@@ -229,7 +218,7 @@ export class Controller {
       });
 
       this.room[emptyField.id] = newField;
-      this.emitChange(newField);
+      this.emitChange(newField.id, newField);
     }
   }
 
@@ -242,7 +231,7 @@ export class Controller {
       isTable: false,
     };
 
-    this.emitChange(this.room[field.id]);
+    this.emitChange(this.room[field.id].id, this.room[field.id]);
   }
 
   public restoreField(field: TrashedField, destinationId?: string): void {
@@ -257,7 +246,7 @@ export class Controller {
       position: this.room[id].position,
     };
 
-    this.emitChange(this.room[id]);
+    this.emitChange(id, this.room[id]);
     this.emitUpdatedBin(this.bin);
   }
 
@@ -273,12 +262,10 @@ export class Controller {
     }
   }
 
-  private emitChange(updatedField: Field): void {
-    const { id } = updatedField;
-
+  private emitChange(id: string, updatedValue: Field | string): void {
     this.roomObservers.forEach((observer) => {
       if (observer.id === id) {
-        observer.action && observer.action(updatedField);
+        observer.updateUi && observer.updateUi(updatedValue);
       }
     });
   }
@@ -287,16 +274,6 @@ export class Controller {
     this.binObservers.forEach((observer) => {
       observer.action && observer.action(updatedBin);
     });
-  }
-
-  private emitUpdatedRoomMeta(id: MetaKeys, newName: string) {
-    const observer = this.roomMetaObservers.find(
-      (observer) => observer.id === id
-    );
-
-    if (observer && observer.action) {
-      observer.action(newName);
-    }
   }
 
   public generateTablePreset(rows: number, numberOfTables = 24): void {
@@ -320,7 +297,7 @@ export class Controller {
         });
 
         this.room[field.id] = newField;
-        this.emitChange(newField);
+        this.emitChange(newField.id, newField);
       } else {
         throw new Error("Field not found");
       }
