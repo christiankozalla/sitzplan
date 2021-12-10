@@ -1,7 +1,7 @@
 import { FC } from "react";
-import { Field } from "../lib/Types";
 import { useDrag } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
+import { Field } from "../lib/Model";
 import styles from "./Student.module.css";
 
 interface StudentCompProps {

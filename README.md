@@ -4,9 +4,9 @@ This web application aims to simplify creating a seating plan for teachers at sc
 
 ## Feature Roadmap
 
-1. Teachers should be able to design the seating arrangement according to his wishes by drag n drop.
+1. Teachers should be able to design the seating arrangement according to his wishes by drag n drop. [Done - Dec 10th 2021]
 
-2. Teachers should be able to create a list of students and distribute them to the seats. The room and the class should have a name.
+2. Teachers should be able to create a students and distribute them to the seats. The room and the class should have a name. Students can be removed again. [Done - Dec 10th 2021]
 
 3. Teachers should be able to save the seating plan as a PDF file on their machine.
 
@@ -14,7 +14,7 @@ This web application aims to simplify creating a seating plan for teachers at sc
 
 ## ToDo
 
-1. Decent Styles for the application.
+1. Decent Styles for the application [Done - Dec 10th 2021]
 
 2. Add PDF Export
 

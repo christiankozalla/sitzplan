@@ -1,23 +1,17 @@
 import { FC, useState } from "react";
-import { room } from "../lib/Room";
-
+import { controller } from "../lib/Controller";
 import styles from "./AddStudent.module.css";
 
-interface AddStudentProps {
-  x: number;
-  y: number;
-}
-
-export const AddStudent: FC<AddStudentProps> = ({ x, y }) => {
+export const AddStudent: FC = () => {
   const [studentName, setStudentName] = useState("");
 
   const handleNewStudent = () => {
-    studentName && room.assignNewStudent(studentName);
+    studentName && controller.assignNewStudent(studentName);
     setStudentName("");
   };
 
   return (
-    <div className={styles.wrapper} style={{ left: x + 20, top: y - 30 }}>
+    <div className={styles.addStudent}>
       <label htmlFor="addStudent" className="screenReaderOnly">
         Neuer Schüler
       </label>
@@ -30,7 +24,9 @@ export const AddStudent: FC<AddStudentProps> = ({ x, y }) => {
         onChange={(e) => setStudentName(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleNewStudent()}
       />
-      <button onClick={handleNewStudent}>+</button>
+      <button className={styles.addStudentButton} onClick={handleNewStudent}>
+        +
+      </button>
     </div>
   );
 };

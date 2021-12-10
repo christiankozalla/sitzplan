@@ -2,7 +2,7 @@
   position: fixed;
   top: 0;
   left: 0;
-  border: 0 0 var(--space) 0;
+  border-radius: 0 0 var(--space) 0;
   padding: var(--space) 0;
   box-shadow: var(--shadow-md);
   border-radius: 0 0 4px 0;

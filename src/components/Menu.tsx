@@ -1,19 +1,19 @@
 import { FC, useState, useEffect } from "react";
-import { room } from "../lib/Room";
+import { controller } from "../lib/Controller";
 import styles from "./Menu.module.css";
 
 export const Menu: FC = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [roomName, setRoomName] = useState("");
   const [classGroupName, setClassGroupName] = useState("");
-  const [rows, setRows] = useState(room.getDimension("rows").toString());
-  const [cols, setCols] = useState(room.getDimension("cols").toString());
+  const [rows, setRows] = useState(controller.getDimension("rows").toString());
+  const [cols, setCols] = useState(controller.getDimension("cols").toString());
 
-  useEffect(() => room.observeRoomMeta("roomName", setRoomName), []);
-  useEffect(() => room.observeRoomMeta("className", setClassGroupName), []);
+  useEffect(() => controller.observe("roomName", setRoomName), []);
+  useEffect(() => controller.observe("className", setClassGroupName), []);
   useEffect(() => {
-    room.observeRoomMeta("rows", setRows);
-    room.observeRoomMeta("columns", setCols);
+    controller.observe("rows", setRows);
+    controller.observe("columns", setCols);
     document.documentElement.style.setProperty("--rows", `${rows}`);
     document.documentElement.style.setProperty("--columns", `${cols}`);
   }, [rows, cols]);
@@ -35,7 +35,9 @@ export const Menu: FC = () => {
           value={roomName}
           placeholder="Raum"
           type="text"
-          onChange={(e) => room.updateMeta("roomName", e.target.value)}
+          onChange={(e) =>
+            controller.updateMetaData("roomName", e.target.value)
+          }
         />
         <label htmlFor="className" className="screenReaderOnly">
           Name der Klasse
@@ -46,7 +48,9 @@ export const Menu: FC = () => {
           value={classGroupName}
           placeholder="Klasse"
           type="text"
-          onChange={(e) => room.updateMeta("className", e.target.value)}
+          onChange={(e) =>
+            controller.updateMetaData("className", e.target.value)
+          }
         />
       </div>
       {showMenu && (
@@ -58,7 +62,9 @@ export const Menu: FC = () => {
                 name="rows"
                 id="rows"
                 value={rows}
-                onChange={(e) => room.updateMeta("rows", e.target.value)}
+                onChange={(e) =>
+                  controller.updateMetaData("rows", e.target.value)
+                }
               >
                 <option value="9">9</option>
                 <option value="10">10</option>
@@ -72,7 +78,9 @@ export const Menu: FC = () => {
                 name="cols"
                 id="cols"
                 value={cols}
-                onChange={(e) => room.updateMeta("columns", e.target.value)}
+                onChange={(e) =>
+                  controller.updateMetaData("columns", e.target.value)
+                }
               >
                 <option value="9">9</option>
                 <option value="10">10</option>

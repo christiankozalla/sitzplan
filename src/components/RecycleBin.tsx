@@ -1,45 +1,72 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, CSSProperties } from "react";
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
-import { room } from "../lib/Room";
-import { Field, TrashedField } from "../lib/Types";
+import { controller } from "../lib/Controller";
+import { Field, TrashedField } from "../lib/Model";
 import { StudentComp } from "./Student";
+import RemoveStudentIcon from "../assets/person-remove-outline.svg";
 import styles from "./RecycleBin.module.css";
 
 export const RecycleBin: FC = () => {
   const [trash, setTrash] = useState<TrashedField[]>([]);
+  const [showTrashContent, setShowTrashContent] = useState(false);
 
-  useEffect(() => room.observeBin("recycle-bin", setTrash), []);
+  useEffect(() => controller.observe("recycleBin", setTrash), []);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.FIELD,
     drop: (field: Field) => {
-      room.resetField(field);
+      controller.resetField(field);
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
     }),
   }));
 
+  const renderTrashContainer = () => {
+    const trashedStudents = trash.filter((field) => field.student);
+    if (trashedStudents.length > 0) {
+      return trashedStudents.map((field) => (
+        <li key={field.id} className={styles.trashedField}>
+          <StudentComp field={field} />
+        </li>
+      ));
+    } else {
+      setTimeout(() => setShowTrashContent(false), 4000);
+      return <p>Momentan sind keine Schüler:innen entfernt worden.</p>;
+    }
+  };
+
+  const dropStyles: CSSProperties = {
+    transform: `translateY(-3px)`,
+    transition: `transform 150ms ease`,
+  };
+
   return (
     <>
-      <div className={styles.description}>
-        {trash.map(
-          (trashedField: TrashedField) =>
-            trashedField.student && (
-              <li key={trashedField.id} className={styles.list}>
-                <StudentComp field={trashedField} />
-              </li>
-            )
-        )}
-      </div>
-      <button
+      {showTrashContent && (
+        <div className={styles.trashedFieldsContainer}>
+          <button
+            className={styles.closeTrashContentButton}
+            onClick={() => setShowTrashContent((prevShow) => !prevShow)}
+          >
+            &times;
+          </button>
+          {renderTrashContainer()}
+        </div>
+      )}
+      <div
+        className={styles.recycleBin}
         ref={drop}
-        className={styles.target}
-        style={{ transform: isOver ? "translateY(-4px)" : "" }}
+        onClick={() => setShowTrashContent((prevShow) => !prevShow)}
       >
-        Papierkorb
-      </button>
+        <img
+          className={styles.icon}
+          style={isOver ? dropStyles : undefined}
+          src={RemoveStudentIcon}
+          alt=""
+        />
+      </div>
     </>
   );
 };
