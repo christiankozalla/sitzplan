@@ -231,7 +231,7 @@ export class Controller {
       isTable: false,
     };
 
-    this.emitChange(this.room[field.id].id, this.room[field.id]);
+    this.emitChange(field.id, this.room[field.id]);
   }
 
   public restoreField(field: TrashedField, destinationId?: string): void {
