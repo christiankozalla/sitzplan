@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { AddStudent } from "./AddStudent";
 import styles from "./Controls.module.css";
 
