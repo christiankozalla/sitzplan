@@ -11,7 +11,7 @@ export const RecycleBin: FC = () => {
   const [trash, setTrash] = useState<TrashedField[]>([]);
   const [showTrashContent, setShowTrashContent] = useState(false);
 
-  useEffect(() => controller.observeBin("recycle-bin", setTrash), []);
+  useEffect(() => controller.observe("recycleBin", setTrash), []);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.FIELD,

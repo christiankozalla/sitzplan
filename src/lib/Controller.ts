@@ -75,10 +75,6 @@ export class Controller {
     id: string;
     updateUi: PositionObserver<any>;
   }[] = [];
-  private binObservers: {
-    id: string;
-    action: PositionObserver<TrashedField[]>;
-  }[] = [];
   private classroomObserver: PositionObserver<string> | undefined;
 
   public observeClassroomKey(o: PositionObserver<string>) {
@@ -101,19 +97,6 @@ export class Controller {
 
     return (): void => {
       this.roomObservers = this.roomObservers.filter((t) => t.id !== id);
-    };
-  }
-
-  public observeBin(
-    id: string,
-    o: PositionObserver<TrashedField[]>
-  ): () => void {
-    this.binObservers.push({ id, action: o });
-
-    this.emitUpdatedBin(this.bin);
-
-    return (): void => {
-      this.binObservers = this.binObservers.filter((t) => t.id !== id);
     };
   }
 
@@ -232,6 +215,7 @@ export class Controller {
     };
 
     this.emitChange(field.id, this.room[field.id]);
+    this.emitChange("recycleBin", this.bin);
   }
 
   public restoreField(field: TrashedField, destinationId?: string): void {
@@ -247,7 +231,7 @@ export class Controller {
     };
 
     this.emitChange(id, this.room[id]);
-    this.emitUpdatedBin(this.bin);
+    this.emitChange("recycleBin", this.bin);
   }
 
   private findEmptyTable(): Field | undefined {
@@ -262,17 +246,14 @@ export class Controller {
     }
   }
 
-  private emitChange(id: string, updatedValue: Field | string): void {
+  private emitChange(
+    id: string,
+    updatedValue: Field | TrashedField[] | string
+  ): void {
     this.roomObservers.forEach((observer) => {
       if (observer.id === id) {
         observer.updateUi && observer.updateUi(updatedValue);
       }
-    });
-  }
-
-  private emitUpdatedBin(updatedBin: TrashedField[]) {
-    this.binObservers.forEach((observer) => {
-      observer.action && observer.action(updatedBin);
     });
   }
 
