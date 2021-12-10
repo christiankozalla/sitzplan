@@ -47,3 +47,12 @@
   min-width: 30px;
   cursor: pointer;
 }
+
+@media screen and (max-width: 700px) {
+  .recycleBin {
+    left: unset;
+    right: 0;
+    border-radius: var(--space) 0 0 0;
+    height: 60px;
+  }
+}
