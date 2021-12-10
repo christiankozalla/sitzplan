@@ -1,10 +1,12 @@
-.wrapper {
+.addStudent {
   padding: var(--space);
   position: absolute;
   box-shadow: var(--shadow-xl);
   border-radius: var(--space);
   z-index: 10;
   background-color: white;
+  left: 20px;
+  top: 25vh;
 }
 
 .addStudentInput {
@@ -16,4 +18,17 @@
 
 .addStudentInput::placeholder {
   color: var(--text-grey-400);
+}
+
+.addStudentButton {
+  border: none;
+  cursor: pointer;
+  width: 20px;
+}
+
+@media screen and (max-width: 700px) {
+  .addStudent {
+    top: unset;
+    bottom: 60px;
+  }
 }
