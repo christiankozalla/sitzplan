@@ -71,16 +71,13 @@ export class Controller {
     return fields;
   }
 
-  // all observers should be in one array
-  // an observer is an object { id: string, updateUI: "setState" } - id is the field.id or "roomName", "className", "rows", "columns"
-  private roomObservers: { id: string; updateUi: PositionObserver<any> }[] = [];
+  private roomObservers: {
+    id: string;
+    updateUi: PositionObserver<any>;
+  }[] = [];
   private binObservers: {
     id: string;
     action: PositionObserver<TrashedField[]>;
-  }[] = [];
-  private roomMetaObservers: {
-    id: MetaKeys;
-    action: PositionObserver<string>;
   }[] = [];
   private classroomObserver: PositionObserver<string> | undefined;
 
@@ -93,11 +90,14 @@ export class Controller {
   }
 
   public getFields() {
-    return this.room;
+    return Object.values(this.room);
   }
 
-  public observe(id: string, o: PositionObserver<any>): () => void {
-    this.roomObservers.push({ id, updateUi: o });
+  public observe(
+    id: string,
+    setStateAction: PositionObserver<any>
+  ): () => void {
+    this.roomObservers.push({ id, updateUi: setStateAction });
 
     return (): void => {
       this.roomObservers = this.roomObservers.filter((t) => t.id !== id);

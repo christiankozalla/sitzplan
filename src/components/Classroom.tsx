@@ -17,7 +17,7 @@ export const Classroom: FC = () => {
 
   return (
     <div className={styles.board}>
-      {Object.values(controller.getFields()).map((field) => {
+      {controller.getFields().map((field) => {
         return (
           <div key={field.id} className={styles.square}>
             <Square initialField={field} />
