@@ -11,6 +11,14 @@ export const generatePdf = () => {
   const roomName = controller.getRoomName();
   const fields = controller.getFields();
 
+  localStorage.setItem(
+    "sitzplanData",
+    JSON.stringify({ rows, columns, className, roomName, fields })
+  );
+
+  const tableWidth = 280 / columns;
+  const tableHeight = 200 / rows;
+
   // First row with Headline, room and class name and Date
   doc.text("Dein Sitzplan", 10, 10);
   doc.text(`Raum ${roomName}`, 120, 10);
@@ -24,14 +32,16 @@ export const generatePdf = () => {
   );
 
   fields.forEach(({ position: [x, y], isTable, student }) => {
-    const currentX = 25 * x + 10;
-    const currentY = 18 * y;
+    const currentX = tableWidth * x + 10;
+    const currentY = tableHeight * y + 13;
     if (isTable) {
-      doc.rect(currentX, currentY, 25, 18);
+      doc.rect(currentX, currentY, tableWidth, tableHeight);
     }
 
     if (student) {
-      doc.text(`${student.name}`, currentX, currentY + 5);
+      doc.text(`${student.name}`, currentX + 1, currentY + 6, {
+        maxWidth: tableWidth - 3,
+      });
     }
   });
   doc.save("dein-sitzplan.pdf");
