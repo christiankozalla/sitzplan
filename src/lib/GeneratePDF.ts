@@ -4,6 +4,11 @@ import { controller } from "../lib/Controller";
 export const generatePdf = () => {
   const doc = new jsPDF({ orientation: "landscape", unit: "mm" });
   const today = new Date();
+  const currentDate = `${today.getDate().toString().padStart(2, "0")}.${(
+    today.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}.${today.getFullYear()}`;
 
   const rows = controller.getDimension("rows");
   const columns = controller.getDimension("cols");
@@ -23,13 +28,7 @@ export const generatePdf = () => {
   doc.text("Dein Sitzplan", 10, 10);
   doc.text(`Raum ${roomName}`, 120, 10);
   doc.text(`Klasse ${className}`, 160, 10);
-  doc.text(
-    `${today.getDate().toString().padStart(2, "0")}.${(today.getMonth() + 1)
-      .toString()
-      .padStart(2, "0")}.${today.getFullYear()}`,
-    260,
-    10
-  );
+  doc.text(currentDate, 260, 10);
 
   fields.forEach(({ position: [x, y], isTable, student }) => {
     const currentX = tableWidth * x + 10;
@@ -44,5 +43,7 @@ export const generatePdf = () => {
       });
     }
   });
-  doc.save("dein-sitzplan.pdf");
+  doc.save(
+    `Sitzplan-${className}-${roomName}-${currentDate.replaceAll(".", "-")}.pdf`
+  );
 };
