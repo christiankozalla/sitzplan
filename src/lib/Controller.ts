@@ -38,6 +38,14 @@ export class Controller {
     return this.classroomKey;
   }
 
+  public getRoomName() {
+    return this.roomName;
+  }
+
+  public getClassName() {
+    return this.className;
+  }
+
   public getDimension(direction: "rows" | "cols"): number {
     return direction === "rows" ? this.rows : this.columns;
   }
