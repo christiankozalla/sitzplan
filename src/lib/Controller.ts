@@ -5,7 +5,6 @@ import {
   MetaKeys,
   Field,
 } from "./Model";
-import { fields, dimensions } from "../data.json";
 
 export class Controller {
   private room: { [id: Field["id"]]: Field } = {};
@@ -264,41 +263,6 @@ export class Controller {
       }
     });
   }
-
-  public generateTablePreset(rows: number, numberOfTables = 24): void {
-    const width = Math.ceil(numberOfTables / rows);
-
-    const offsetX = 10 - width;
-    const offsetY = Math.ceil((10 - rows) / (3 * rows));
-
-    let x = 0 + offsetX;
-    let y = 0 + offsetY;
-
-    for (let i = 0; i < numberOfTables; i++) {
-      const field = Object.values(this.room).find(
-        ({ position }) => position[0] === x && position[1] === y
-      );
-
-      if (field) {
-        const newField = new Field({
-          ...field,
-          isTable: true,
-        });
-
-        this.room[field.id] = newField;
-        this.emitChange(newField.id, newField);
-      } else {
-        throw new Error("Field not found");
-      }
-
-      x++;
-
-      if (x === width) {
-        x = 0 + offsetX;
-        y += 2;
-      }
-    }
-  }
 }
 
-export const controller = new Controller(fields as Field[], dimensions);
+export const controller = new Controller();
