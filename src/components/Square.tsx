@@ -1,4 +1,4 @@
-import { CSSProperties, FC, useState, useEffect } from "react";
+import React, { CSSProperties, FC, useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
 import { controller } from "../lib/Controller";
@@ -39,11 +39,20 @@ export const Square: FC<SquareProps> = ({ initialField }) => {
     zIndex: isOver ? 2 : 1,
   };
 
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!e.ctrlKey) {
+      return;
+    } else {
+      !field.isTable && controller.toggleTable(field.id);
+    }
+  };
+
   return (
     <div
       ref={drop}
       style={squareStyles}
       className={styles.table}
+      onMouseMove={handleMouseMove}
       onDoubleClick={() => controller.toggleTable(field.id)}
     >
       <StudentComp key={field.id} field={field} />
