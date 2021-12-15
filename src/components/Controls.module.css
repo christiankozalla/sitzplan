@@ -32,7 +32,7 @@
   left: 100%;
   width: max-content;
   max-width: 250px;
-  padding: calc(1.5 * var(--space));
+  padding: var(--space) calc(1.5 * var(--space));
   border-radius: var(--space);
   border-start-start-radius: 0;
   background-color: var(--color-primary-light);
