@@ -15,24 +15,41 @@ export const Controls: FC = () => {
   return (
     <div className={styles.controls}>
       {showAddStudentDialog && <AddStudent />}
-      <img
-        src={AddStudentIcon}
-        alt="Füge einen Schüler hinzu"
-        className={styles.icon}
-        onClick={() => setShowAddStudentDialog((prevShow) => !prevShow)}
-      />
-      <img
-        src={ClassDocumentIcon}
-        alt="Sitzplan Info"
-        className={styles.icon}
-      />
-      <img src={SettingsIcon} alt="Einstellungen" className={styles.icon} />
-      <img
-        src={SaveIcon}
-        alt="Speichere Sitzplan as PDF"
-        className={styles.icon}
-        onClick={generatePdf}
-      />
+      <div className={styles.tooltip} data-tooltip="Füge einen Schüler hinzu">
+        <img
+          src={AddStudentIcon}
+          alt="Füge einen Schüler hinzu"
+          className={styles.icon}
+          onClick={() => setShowAddStudentDialog((prevShow) => !prevShow)}
+        />
+      </div>
+      <div
+        className={styles.tooltip}
+        data-tooltip="Stelle konkrete Schüler-Sitzplan-Bedingungen auf!"
+      >
+        <img
+          src={ClassDocumentIcon}
+          alt="Sitzplan Info"
+          className={styles.icon}
+        />
+      </div>
+      <div
+        className={styles.tooltip}
+        data-tooltip="Mehr Einstellungen für deinen Sitzplan...!"
+      >
+        <img src={SettingsIcon} alt="Einstellungen" className={styles.icon} />
+      </div>
+      <div
+        className={styles.tooltip}
+        data-tooltip="Speichere deinen Sitzplan als PDF!"
+      >
+        <img
+          src={SaveIcon}
+          alt="Speichere Sitzplan as PDF"
+          className={styles.icon}
+          onClick={generatePdf}
+        />
+      </div>
     </div>
   );
 };

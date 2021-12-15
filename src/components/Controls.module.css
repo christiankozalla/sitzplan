@@ -13,13 +13,39 @@
   cursor: pointer;
 }
 
-.icon + .icon {
-  margin-top: var(--space);
-}
-
 .icon:hover {
   transform: translateY(-3px);
   transition: transform 150ms ease;
+}
+
+.tooltip {
+  position: relative;
+}
+
+.tooltip::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  z-index: 5;
+  top: 50%;
+  transform: translateY(-50%);
+  margin-left: var(--space);
+  left: 100%;
+  width: max-content;
+  max-width: 250px;
+  padding: calc(1.5 * var(--space));
+  border-radius: var(--space);
+  border-start-start-radius: 0;
+  background-color: var(--color-primary-light);
+  color: white;
+  display: none;
+}
+
+.tooltip:hover::before {
+  display: block;
+}
+
+.tooltip + .tooltip {
+  margin-top: var(--space);
 }
 
 @media screen and (max-width: 700px) {
