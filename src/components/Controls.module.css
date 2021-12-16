@@ -37,11 +37,14 @@
   border-start-start-radius: 0;
   background-color: var(--color-primary-light);
   color: white;
-  display: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 500ms 1000ms ease;
 }
 
 .tooltip:hover::before {
-  display: block;
+  visibility: visible;
+  opacity: 1;
 }
 
 .tooltip + .tooltip {
