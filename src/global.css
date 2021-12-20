@@ -95,6 +95,11 @@ h3 {
   font-size: 1.4rem;
 }
 
+*:focus {
+  outline: 1px solid var(--color-primary-dark);
+  outline-offset: 2px;
+}
+
 /* Utilities */
 .screenReaderOnly:not(:focus):not(:active) {
   clip: rect(0 0 0 0);

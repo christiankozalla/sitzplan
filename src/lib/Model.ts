@@ -8,9 +8,12 @@ export type Student = {
   id: string;
   name: string;
   gender: GenderTypes | undefined;
+  row: RowTypes | undefined;
+  forbiddenNeighbors: string[];
 };
 
 export type GenderTypes = "male" | "female";
+export type RowTypes = "first" | "last";
 
 export type Trashed = {
   trashed: boolean;

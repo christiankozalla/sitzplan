@@ -1,30 +1,39 @@
-import { FC, ChangeEvent } from "react";
+import { FC, ChangeEvent, SetStateAction, Dispatch } from "react";
 import { controller } from "../lib/Controller";
-import { Field, GenderTypes } from "../lib/Model";
+import { Field, GenderTypes, RowTypes } from "../lib/Model";
 import styles from "./StudentEditor.module.css";
 
 interface StudentEditorProps {
-  field: Field | undefined;
+  field: Field;
+  setSelectNeighborsForId: Dispatch<SetStateAction<Field["id"]>>;
 }
 
-export const StudentEditor: FC<StudentEditorProps> = ({ field }) => {
+export const StudentEditor: FC<StudentEditorProps> = ({
+  field,
+  setSelectNeighborsForId,
+}) => {
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    field &&
-      field.student &&
+    field.student &&
       controller.setStudent(field.id, {
         name: e.currentTarget.value,
       });
   };
 
   const handleChangeGender = (e: ChangeEvent<HTMLSelectElement>) => {
-    field &&
-      field.student &&
+    field.student &&
       controller.setStudent(field.id, {
         gender: e.currentTarget.value as GenderTypes,
       });
   };
 
-  if (field && field.student) {
+  const handleChangeRow = (e: ChangeEvent<HTMLSelectElement>) => {
+    field.student &&
+      controller.setStudent(field.id, {
+        row: e.currentTarget.value as RowTypes,
+      });
+  };
+
+  if (field.student) {
     return (
       <>
         <div>
@@ -49,17 +58,30 @@ export const StudentEditor: FC<StudentEditorProps> = ({ field }) => {
             <option value="male">männlich</option>
           </select>
         </div>
+        <div>
+          <label htmlFor="row">Muss in {field.student.row} Reihe sitzen</label>
+          <select
+            name="row"
+            id="row"
+            defaultValue={field.student.row}
+            onChange={handleChangeRow}
+          >
+            <option value={undefined}>Wähle</option>
+            <option value="first">erste</option>
+            <option value="last">letzte</option>
+          </select>
+        </div>
+        <div className={styles.forbiddenNeighbors}>
+          Darf nicht neben diesen Schülern sitzen{" "}
+          {field.student.forbiddenNeighbors?.join(", ")}
+          <button onClick={() => setSelectNeighborsForId(field.id)}>
+            Schüler auswählen
+          </button>
+          <button onClick={() => setSelectNeighborsForId("")}>&times;</button>
+        </div>
       </>
     );
   } else {
-    return (
-      <div className={styles.noStudent}>
-        <p>Im Moment ist kein Schüler ausgewählt.</p>
-        <p>
-          Bitte wähle einen Schüler rechts aus der Liste oder füge neue Schüler
-          hinzu.
-        </p>
-      </div>
-    );
+    return null;
   }
 };

@@ -1,13 +1,4 @@
-.noStudent {
-  border-radius: var(--space);
-  border: 1px solid var(--color-primary-light);
-  padding: calc(2 * var(--space));
-}
-
-p {
-  max-width: 50ch;
-}
-
-.noStudent p + p {
-  margin-top: var(--space);
+.forbiddenNeighbors {
+  display: flex;
+  justify-content: space-between;
 }

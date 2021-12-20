@@ -97,6 +97,10 @@ export class Controller {
     return Object.values(this.room);
   }
 
+  public getFieldById(id: Field["id"]): Field {
+    return this.room[id];
+  }
+
   public setStudent(id: Field["id"], newStudent: Partial<Student>) {
     const field = this.room[id];
 
@@ -118,7 +122,7 @@ export class Controller {
     id: string,
     setStateAction: PositionObserver<any>
   ): () => void {
-    let existingIndex = this.roomObservers.findIndex(
+    const existingIndex = this.roomObservers.findIndex(
       (observer) => observer.id === id
     );
 
@@ -247,6 +251,8 @@ export class Controller {
           id: this.generateId(),
           name,
           gender: undefined,
+          forbiddenNeighbors: [],
+          row: undefined,
         },
       });
 

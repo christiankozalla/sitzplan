@@ -1,17 +1,39 @@
 import { FC, useState, useEffect, SetStateAction, Dispatch } from "react";
 import { controller } from "../lib/Controller";
 import { Field } from "../lib/Model";
+import styles from "./StudentTag.module.css";
 
 interface StudentTagProps {
   initialField: Field;
-  onClickHandler: Dispatch<SetStateAction<Field | undefined>>;
+  setSelectedField: Dispatch<SetStateAction<Field | undefined>>;
+  selectNeighborsForId: Field["id"];
 }
 
 export const StudentTag: FC<StudentTagProps> = ({
   initialField,
-  onClickHandler,
+  setSelectedField,
+  selectNeighborsForId,
 }) => {
   const [field, setField] = useState<Field>(initialField);
+
+  const handleClick = () => {
+    if (selectNeighborsForId && field.student) {
+      if (selectNeighborsForId === field.id) {
+        return;
+      }
+      const neighborField = controller.getFieldById(selectNeighborsForId);
+      if (neighborField.student) {
+        controller.setStudent(selectNeighborsForId, {
+          forbiddenNeighbors: [
+            ...neighborField.student.forbiddenNeighbors,
+            field.student.name,
+          ],
+        });
+      }
+    } else if (selectNeighborsForId === "") {
+      setSelectedField(field);
+    }
+  };
 
   useEffect(() => {
     controller.observe(field.id, setField);
@@ -19,18 +41,8 @@ export const StudentTag: FC<StudentTagProps> = ({
   }, []);
 
   return field.student ? (
-    <div
-      style={{
-        backgroundColor: "var(--color-primary-light",
-        color: "white",
-        borderRadius: "var(--space)",
-        padding: "var(--space)",
-        marginTop: "var(--space)",
-        cursor: "pointer",
-      }}
-      onClick={() => onClickHandler(field)}
-    >
+    <button className={styles.studentTag} onClick={handleClick}>
       {field.student.name}
-    </div>
+    </button>
   ) : null;
 };

@@ -13,6 +13,7 @@ interface ConditionsProps {
 
 export const Conditions: FC<ConditionsProps> = ({ isOpen, setOpen }) => {
   const [selectedField, setSelectedField] = useState<Field>();
+  const [selectNeighborsForId, setSelectNeighborsForId] = useState("");
 
   useEffect(() => {
     if (selectedField) {
@@ -33,18 +34,33 @@ export const Conditions: FC<ConditionsProps> = ({ isOpen, setOpen }) => {
             <div>
               <AddStudent />
             </div>
-            <div>
+            <div className={selectNeighborsForId ? styles.selectNeighbors : ""}>
               {controller.getFields().map((field) => (
                 <StudentTag
                   key={field.id}
                   initialField={field}
-                  onClickHandler={setSelectedField}
+                  setSelectedField={setSelectedField}
+                  selectNeighborsForId={selectNeighborsForId}
                 />
               ))}
             </div>
           </div>
           <div id={styles.studentEditor}>
-            <StudentEditor field={selectedField} />
+            {selectedField ? (
+              <StudentEditor
+                key={selectedField.id}
+                field={selectedField}
+                setSelectNeighborsForId={setSelectNeighborsForId}
+              />
+            ) : (
+              <div className={styles.noStudent}>
+                <p>Im Moment ist kein Schüler ausgewählt.</p>
+                <p>
+                  Bitte wähle einen Schüler rechts aus der Liste oder füge neue
+                  Schüler hinzu.
+                </p>
+              </div>
+            )}
           </div>
           <div id={styles.footer}>
             <button>Generiere!</button>
