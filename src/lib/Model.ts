@@ -7,7 +7,10 @@ export type Position = [number, number];
 export type Student = {
   id: string;
   name: string;
+  gender: GenderTypes | undefined;
 };
+
+export type GenderTypes = "male" | "female";
 
 export type Trashed = {
   trashed: boolean;

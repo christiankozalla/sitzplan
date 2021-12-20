@@ -4,6 +4,7 @@ import {
   PositionObserver,
   MetaKeys,
   Field,
+  Student,
 } from "./Model";
 
 export class Controller {
@@ -80,7 +81,7 @@ export class Controller {
 
   private roomObservers: {
     id: string;
-    updateUi: PositionObserver<any>;
+    updateUi: PositionObserver<any>[];
   }[] = [];
   private classroomObserver: PositionObserver<string> | undefined;
 
@@ -96,15 +97,56 @@ export class Controller {
     return Object.values(this.room);
   }
 
+  public setStudent(id: Field["id"], newStudent: Partial<Student>) {
+    const field = this.room[id];
+
+    if (field.student) {
+      const newField = {
+        ...field,
+        student: {
+          ...field.student,
+          ...newStudent,
+        },
+      };
+
+      this.room[id] = newField;
+      this.emitChange(id, this.room[id]);
+    }
+  }
+
   public observe(
     id: string,
     setStateAction: PositionObserver<any>
   ): () => void {
-    this.roomObservers.push({ id, updateUi: setStateAction });
+    let existingIndex = this.roomObservers.findIndex(
+      (observer) => observer.id === id
+    );
+
+    if (existingIndex > -1) {
+      this.roomObservers[existingIndex] = {
+        id,
+        updateUi: [
+          ...this.roomObservers[existingIndex].updateUi,
+          setStateAction,
+        ],
+      };
+    } else {
+      this.roomObservers.push({ id, updateUi: [setStateAction] });
+    }
 
     return (): void => {
       this.roomObservers = this.roomObservers.filter((t) => t.id !== id);
     };
+  }
+
+  public removeObserver(id: string, setStateAction: PositionObserver<any>) {
+    this.roomObservers.forEach((observer) => {
+      if (observer.id === id) {
+        observer.updateUi = observer.updateUi.filter(
+          (updateAction) => updateAction !== setStateAction
+        );
+      }
+    });
   }
 
   // MetaData are the name of the class and room, and number of rows and columns
@@ -204,6 +246,7 @@ export class Controller {
         student: {
           id: this.generateId(),
           name,
+          gender: undefined,
         },
       });
 
@@ -259,7 +302,11 @@ export class Controller {
   ): void {
     this.roomObservers.forEach((observer) => {
       if (observer.id === id) {
-        observer.updateUi && observer.updateUi(updatedValue);
+        observer.updateUi.forEach((update) => {
+          if (update) {
+            update(updatedValue);
+          }
+        });
       }
     });
   }
