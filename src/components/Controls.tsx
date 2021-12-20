@@ -8,8 +8,6 @@ import ClassDocumentIcon from "../assets/document-text-outline.svg";
 import SettingsIcon from "../assets/settings-outline.svg";
 import SaveIcon from "../assets/save-outline.svg";
 
-import { generatePdf } from "../lib/GeneratePDF";
-
 export const Controls: FC = () => {
   const [showAddStudentDialog, setShowAddStudentDialog] = useState(false);
   const [showConditions, setShowConditions] = useState(false);
@@ -55,7 +53,9 @@ export const Controls: FC = () => {
           src={SaveIcon}
           alt="Speichere Sitzplan as PDF"
           className={styles.icon}
-          onClick={generatePdf}
+          onClick={() =>
+            import("../lib/GeneratePdf").then((module) => module.generatePdf())
+          }
         />
       </div>
     </div>
