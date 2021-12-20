@@ -34,6 +34,7 @@
   padding: var(--space) calc(1.5 * var(--space));
   border-radius: var(--space);
   border-start-start-radius: 0;
+  border: 1px solid white;
   background-color: var(--color-primary-light);
   color: white;
   opacity: 0;
