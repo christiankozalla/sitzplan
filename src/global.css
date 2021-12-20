@@ -83,6 +83,18 @@ select {
   font: inherit;
 }
 
+h1 {
+  font-size: 3rem;
+}
+
+h2 {
+  font-size: 2.2rem;
+}
+
+h3 {
+  font-size: 1.4rem;
+}
+
 /* Utilities */
 .screenReaderOnly:not(:focus):not(:active) {
   clip: rect(0 0 0 0);
