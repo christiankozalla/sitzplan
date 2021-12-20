@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import { AddStudent } from "./AddStudent";
+import { Conditions } from "./Conditions";
 import styles from "./Controls.module.css";
 
 import AddStudentIcon from "../assets/person-add-outline.svg";
@@ -11,10 +12,16 @@ import { generatePdf } from "../lib/GeneratePDF";
 
 export const Controls: FC = () => {
   const [showAddStudentDialog, setShowAddStudentDialog] = useState(false);
+  const [showConditions, setShowConditions] = useState(false);
 
   return (
     <div className={styles.controls}>
-      {showAddStudentDialog && <AddStudent />}
+      {showAddStudentDialog && (
+        <div className={styles.addStudent}>
+          <AddStudent />
+        </div>
+      )}
+      <Conditions isOpen={showConditions} setOpen={setShowConditions} />
       <div className={styles.tooltip} data-tooltip="Füge einen Schüler hinzu">
         <img
           src={AddStudentIcon}
@@ -31,6 +38,7 @@ export const Controls: FC = () => {
           src={ClassDocumentIcon}
           alt="Sitzplan Info"
           className={styles.icon}
+          onClick={() => setShowConditions((prevShow) => !prevShow)}
         />
       </div>
       <div

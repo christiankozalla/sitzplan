@@ -27,7 +27,6 @@
   position: absolute;
   z-index: 5;
   top: 50%;
-  transform: translateY(-50%);
   margin-left: var(--space);
   left: 100%;
   width: max-content;
@@ -51,6 +50,17 @@
   margin-top: var(--space);
 }
 
+.addStudent {
+  padding: var(--space);
+  position: absolute;
+  box-shadow: var(--shadow-xl);
+  border-radius: var(--space);
+  z-index: 10;
+  background-color: white;
+  left: 20px;
+  top: 25vh;
+}
+
 @media screen and (max-width: 700px) {
   .controls {
     display: flex;
@@ -66,5 +76,10 @@
   .icon + .icon {
     margin-top: 0;
     margin-left: var(--space);
+  }
+
+  .addStudent {
+    top: unset;
+    bottom: 60px;
   }
 }
