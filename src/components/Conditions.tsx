@@ -1,6 +1,6 @@
 import { Dispatch, FC, SetStateAction, useState, useEffect } from "react";
 import { AddStudent } from "./AddStudent";
-import { controller } from "../lib/Controller";
+import { controller } from "../App";
 import styles from "./Conditions.module.css";
 import { StudentTag } from "./StudentTag";
 import { Field } from "../lib/Model";

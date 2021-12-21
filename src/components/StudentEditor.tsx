@@ -1,5 +1,5 @@
 import { FC, ChangeEvent, SetStateAction, Dispatch } from "react";
-import { controller } from "../lib/Controller";
+import { controller } from "../App";
 import { Field, GenderTypes, RowTypes } from "../lib/Model";
 import styles from "./StudentEditor.module.css";
 

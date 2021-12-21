@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC, useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import { ItemTypes } from "../lib/Constants";
-import { controller } from "../lib/Controller";
+import { controller } from "../App";
 import { Field, TrashedField } from "../lib/Model";
 import { StudentComp } from "./Student";
 import styles from "./Square.module.css";

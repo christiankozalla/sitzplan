@@ -4,14 +4,34 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { Classroom } from "./components/Classroom";
 import { Controls } from "./components/Controls";
 import { Menu } from "./components/Menu";
-import styles from "./App.module.css";
-import { controller } from "./lib/Controller";
 import { RecycleBin } from "./components/RecycleBin";
+import { Controller } from "./lib/Controller";
+import type { StorageData } from "./lib/Model";
+import styles from "./App.module.css";
+
+export let controller = new Controller();
 
 export default function App() {
   const [classroomKey, setClassroomKey] = useState(
     controller.getClassroomKey()
   );
+
+  useEffect(() => {
+    const dataString: string | null = new URLSearchParams(location.search).get(
+      "state"
+    );
+    const data = dataString ? JSON.parse(atob(dataString)) : undefined;
+    if (data) {
+      controller = new Controller(
+        data.className,
+        data.roomName,
+        data.rows,
+        data.columns,
+        data.fields
+      );
+      setClassroomKey(controller.getClassroomKey());
+    }
+  }, []);
 
   useEffect(
     () => controller.observeClassroomKey(setClassroomKey),

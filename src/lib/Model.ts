@@ -1,7 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type Dimensions = { columns: number; rows: number };
-
 export type Position = [number, number];
 
 export type Student = {
@@ -28,6 +26,14 @@ type FieldProps = {
   position: Position;
   isTable: boolean;
   student: Student | undefined;
+};
+
+export type StorageData = {
+  className: string;
+  roomName: string;
+  rows: number;
+  columns: number;
+  fields: Field[];
 };
 
 export class Field {

@@ -1,10 +1,10 @@
 import {
-  Dimensions,
   TrashedField,
   PositionObserver,
   MetaKeys,
   Field,
   Student,
+  StorageData,
 } from "./Model";
 
 export class Controller {
@@ -19,10 +19,12 @@ export class Controller {
   private className = "";
 
   constructor(
-    fieldsData: Field[] = [],
-    dimensions: Dimensions = { columns: 10, rows: 10 }
+    className = "",
+    roomName = "",
+    rows = 10,
+    columns = 10,
+    fieldsData: Field[] = []
   ) {
-    const { columns, rows } = dimensions;
     const data = this.generateRoom(rows, columns, fieldsData);
 
     data.forEach((field) => {
@@ -31,6 +33,8 @@ export class Controller {
 
     this.rows = rows;
     this.columns = columns;
+    this.className = className;
+    this.roomName = roomName;
     this.classroomKey = this.generateId();
   }
 
@@ -302,6 +306,16 @@ export class Controller {
     }
   }
 
+  private storeData(data: StorageData) {
+    const base64data = window.btoa(JSON.stringify(data));
+
+    const paramsString = `state=${base64data}`;
+    const searchParams = new URLSearchParams(paramsString);
+
+    const fullUrl = `${import.meta.env.BASE_URL}?${searchParams.toString()}`;
+    history.pushState(data, document.title, fullUrl);
+  }
+
   private emitChange(
     id: string,
     updatedValue: Field | TrashedField[] | string
@@ -315,7 +329,15 @@ export class Controller {
         });
       }
     });
+
+    this.storeData({
+      className: this.className,
+      roomName: this.roomName,
+      rows: this.rows,
+      columns: this.columns,
+      fields: this.getFields().filter(
+        (field) => field.isTable || field.student
+      ),
+    });
   }
 }
-
-export const controller = new Controller();

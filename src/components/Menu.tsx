@@ -1,5 +1,5 @@
 import { FC, useState, useEffect } from "react";
-import { controller } from "../lib/Controller";
+import { controller } from "../App";
 import styles from "./Menu.module.css";
 
 export const Menu: FC = () => {

@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { controller } from "../lib/Controller";
+import { controller } from "../App";
 import styles from "./AddStudent.module.css";
 
 export const AddStudent: FC = () => {
