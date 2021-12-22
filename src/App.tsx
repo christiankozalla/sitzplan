@@ -20,7 +20,11 @@ export default function App() {
     const dataString: string | null = new URLSearchParams(location.search).get(
       "state"
     );
-    const data = dataString ? JSON.parse(atob(dataString)) : undefined;
+
+    const data: StorageData | undefined = dataString
+      ? JSON.parse(atob(decodeURIComponent(dataString)))
+      : undefined;
+
     if (data) {
       controller = new Controller(
         data.className,
@@ -29,6 +33,7 @@ export default function App() {
         data.columns,
         data.fields
       );
+
       setClassroomKey(controller.getClassroomKey());
     }
   }, []);
@@ -37,9 +42,10 @@ export default function App() {
     () => controller.observeClassroomKey(setClassroomKey),
     [classroomKey]
   );
+
   return (
     <>
-      <Menu />
+      <Menu key={classroomKey} />
       <DndProvider backend={HTML5Backend}>
         <div className={styles.layout}>
           <Controls />
