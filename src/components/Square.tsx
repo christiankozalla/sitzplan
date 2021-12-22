@@ -12,7 +12,10 @@ export interface SquareProps {
 
 export const Square: FC<SquareProps> = ({ initialField }) => {
   const [field, setField] = useState<Field>(initialField);
-  useEffect(() => controller.observe(field.id, setField), []);
+  useEffect(() => {
+    controller.observe(field.id, setField);
+    return () => controller.removeObserver(field.id, setField);
+  }, [field.id]);
 
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.FIELD,

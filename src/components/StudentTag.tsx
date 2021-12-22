@@ -38,7 +38,7 @@ export const StudentTag: FC<StudentTagProps> = ({
   useEffect(() => {
     controller.observe(field.id, setField);
     return () => controller.removeObserver(field.id, setField);
-  }, []);
+  }, [field.id]);
 
   return field.student ? (
     <button className={styles.studentTag} onClick={handleClick}>

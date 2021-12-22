@@ -341,3 +341,25 @@ export class Controller {
     });
   }
 }
+
+export function getInitialDataFromUrl(): Controller {
+  const dataString: string | null = new URLSearchParams(location.search).get(
+    "state"
+  );
+
+  const data: StorageData | undefined = dataString
+    ? JSON.parse(atob(decodeURIComponent(dataString)))
+    : undefined;
+
+  if (data) {
+    return new Controller(
+      data.className,
+      data.roomName,
+      data.rows,
+      data.columns,
+      data.fields
+    );
+  } else {
+    return new Controller();
+  }
+}

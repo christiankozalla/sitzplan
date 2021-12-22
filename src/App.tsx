@@ -5,38 +5,15 @@ import { Classroom } from "./components/Classroom";
 import { Controls } from "./components/Controls";
 import { Menu } from "./components/Menu";
 import { RecycleBin } from "./components/RecycleBin";
-import { Controller } from "./lib/Controller";
-import type { StorageData } from "./lib/Model";
+import { Controller, getInitialDataFromUrl } from "./lib/Controller";
 import styles from "./App.module.css";
 
-export let controller = new Controller();
+export const controller: Controller = getInitialDataFromUrl();
 
 export default function App() {
   const [classroomKey, setClassroomKey] = useState(
     controller.getClassroomKey()
   );
-
-  useEffect(() => {
-    const dataString: string | null = new URLSearchParams(location.search).get(
-      "state"
-    );
-
-    const data: StorageData | undefined = dataString
-      ? JSON.parse(atob(decodeURIComponent(dataString)))
-      : undefined;
-
-    if (data) {
-      controller = new Controller(
-        data.className,
-        data.roomName,
-        data.rows,
-        data.columns,
-        data.fields
-      );
-
-      setClassroomKey(controller.getClassroomKey());
-    }
-  }, []);
 
   useEffect(
     () => controller.observeClassroomKey(setClassroomKey),
