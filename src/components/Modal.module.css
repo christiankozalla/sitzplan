@@ -1,0 +1,39 @@
+:root {
+  --modalFooterHeight: 50px;
+}
+
+.dialog {
+  position: absolute;
+  padding: calc(2 * var(--space));
+  border-radius: var(--space);
+  box-shadow: var(--shadow-xl);
+  border: none;
+  background-color: lightgray;
+  z-index: 5;
+  height: 90vh;
+  width: calc(100vw - 300px);
+  top: calc(2 * var(--space));
+  right: calc(2 * var(--space));
+}
+
+.content {
+  height: calc(100% - var(--modalFooterHeight));
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: var(--modalFooterHeight);
+}
+
+.footer button {
+  border: none;
+  cursor: pointer;
+  border-radius: var(--space);
+  background-color: var(--color-primary-light);
+  color: white;
+  font-weight: bold;
+  padding: var(--space) calc(2 * var(--space));
+  min-width: 45px;
+}

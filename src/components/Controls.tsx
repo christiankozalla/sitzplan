@@ -1,6 +1,7 @@
 import { FC, useState } from "react";
 import { AddStudent } from "./AddStudent";
 import { Conditions } from "./Conditions";
+import { Modal } from "./Modal";
 import styles from "./Controls.module.css";
 
 import AddStudentIcon from "../assets/person-add-outline.svg";
@@ -19,7 +20,13 @@ export const Controls: FC = () => {
           <AddStudent />
         </div>
       )}
-      <Conditions isOpen={showConditions} setOpen={setShowConditions} />
+      <Modal
+        isOpen={showConditions}
+        setOpen={setShowConditions}
+        action={<button>Generiere</button>}
+      >
+        <Conditions />
+      </Modal>
       <div className={styles.tooltip} data-tooltip="Füge einen Schüler hinzu">
         <img
           src={AddStudentIcon}
