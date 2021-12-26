@@ -8,12 +8,12 @@
   border-radius: var(--space);
   box-shadow: var(--shadow-xl);
   border: none;
-  background-color: lightgray;
+  background-color: #f4f4f5;
   z-index: 5;
   height: 90vh;
   width: calc(100vw - 300px);
   top: calc(2 * var(--space));
-  right: calc(2 * var(--space));
+  right: calc(4 * var(--space));
 }
 
 .content {
