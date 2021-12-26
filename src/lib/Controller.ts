@@ -229,7 +229,7 @@ export class Controller {
 
     this.room[originId] = {
       ...this.room[originId],
-      student: destinationField?.student,
+      student: destinationField.student,
       isTable: moveTable
         ? destinationField.isTable
         : this.room[originId].isTable,
