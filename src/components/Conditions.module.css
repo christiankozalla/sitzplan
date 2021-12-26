@@ -20,6 +20,7 @@
   grid-area: editorHeadline;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 #studentEditor {

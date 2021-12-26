@@ -1,5 +1,10 @@
+:root {
+  --addStudentHeight: 48px;
+}
+
 .addStudent {
   display: flex;
+  height: var(--addStudentHeight);
 }
 
 .addStudentInput {
@@ -16,7 +21,7 @@
 .addStudentButton {
   border: none;
   cursor: pointer;
-  width: 30px;
+  width: var(--addStudentHeight);
   border-radius: var(--space);
   background-color: var(--color-primary-light);
   color: white;
