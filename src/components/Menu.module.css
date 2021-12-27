@@ -19,17 +19,10 @@
 }
 
 .menuButton {
-  border: none;
-  border-radius: var(--space);
   padding: var(--space);
   height: calc(4 * var(--space));
   width: calc(4 * var(--space));
   background-color: var(--text-grey-300);
-  cursor: pointer;
-}
-
-.menuButton:active {
-  border: 1px solid var(--text-grey-700);
 }
 
 .menuButton::before {

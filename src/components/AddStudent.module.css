@@ -8,13 +8,7 @@
 }
 
 .addStudentButton {
-  border: none;
-  cursor: pointer;
   width: var(--addStudentHeight);
-  border-radius: var(--space);
-  background-color: var(--color-primary-light);
-  color: white;
-  font-weight: bold;
   margin-left: var(--space);
 }
 

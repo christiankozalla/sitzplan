@@ -5,6 +5,7 @@
   --space: 8px;
   --color-primary-light: rgb(56, 199, 147);
   --color-primary-dark: rgb(0, 128, 82);
+  --color-attention: rgb(222, 70, 33);
   --text-grey-200: rgb(229, 231, 235);
   --text-grey-300: rgb(209, 213, 219);
   --text-grey-400: rgb(156, 163, 175);
@@ -111,6 +112,24 @@ input[type="text"] {
 
 input[type="text"]::placeholder {
   color: var(--text-grey-400);
+}
+
+select {
+  border: none;
+  padding: var(--space);
+  color: var(--text-grey-700);
+  font-weight: bold;
+  min-width: 200px;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  border-radius: var(--space);
+  background-color: var(--color-primary-light);
+  color: white;
+  font-weight: bold;
+  padding: var(--space) calc(2 * var(--space));
 }
 
 ::-webkit-scrollbar {
