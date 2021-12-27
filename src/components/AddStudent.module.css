@@ -7,17 +7,6 @@
   height: var(--addStudentHeight);
 }
 
-.addStudentInput {
-  padding: 3px;
-  border-radius: var(--space);
-  border: 1px solid var(--text-grey-400);
-  margin-right: var(--space);
-}
-
-.addStudentInput::placeholder {
-  color: var(--text-grey-400);
-}
-
 .addStudentButton {
   border: none;
   cursor: pointer;
@@ -26,6 +15,7 @@
   background-color: var(--color-primary-light);
   color: white;
   font-weight: bold;
+  margin-left: var(--space);
 }
 
 @media screen and (max-width: 700px) {

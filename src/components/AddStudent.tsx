@@ -17,8 +17,8 @@ export const AddStudent: FC = () => {
       </label>
       <input
         id="addStudent"
-        className={styles.addStudentInput}
         value={studentName}
+        type="text"
         placeholder="Neue:r Schüler:in"
         autoFocus
         onChange={(e) => setStudentName(e.target.value)}
