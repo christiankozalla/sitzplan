@@ -17,7 +17,7 @@
 }
 
 .content {
-  height: calc(100% - var(--modalFooterHeight));
+  height: calc(100% - var(--modalFooterHeight) - (2 * var(--space)));
 }
 
 .footer {
@@ -25,15 +25,9 @@
   justify-content: space-between;
   align-items: center;
   height: var(--modalFooterHeight);
+  margin-top: calc(2 * var(--space));
 }
 
 .footer button {
-  border: none;
-  cursor: pointer;
-  border-radius: var(--space);
-  background-color: var(--color-primary-light);
-  color: white;
-  font-weight: bold;
-  padding: var(--space) calc(2 * var(--space));
   min-width: 45px;
 }
