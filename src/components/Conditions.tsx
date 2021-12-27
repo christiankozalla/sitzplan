@@ -41,6 +41,7 @@ export const Conditions: FC = () => {
           <StudentEditor
             key={selectedField.id}
             field={selectedField}
+            selectNeighborsForId={selectNeighborsForId}
             setSelectNeighborsForId={setSelectNeighborsForId}
           />
         ) : (

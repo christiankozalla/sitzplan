@@ -5,11 +5,13 @@ import styles from "./StudentEditor.module.css";
 
 interface StudentEditorProps {
   field: Field;
+  selectNeighborsForId: string;
   setSelectNeighborsForId: Dispatch<SetStateAction<Field["id"]>>;
 }
 
 export const StudentEditor: FC<StudentEditorProps> = ({
   field,
+  selectNeighborsForId,
   setSelectNeighborsForId,
 }) => {
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
@@ -35,51 +37,76 @@ export const StudentEditor: FC<StudentEditorProps> = ({
 
   if (field.student) {
     return (
-      <>
-        <div>
-          <label htmlFor="name">Name: </label>
+      <div className={styles.studentEditor}>
+        <div className={styles.editorItem}>
+          <label htmlFor="name" className={styles.description}>
+            Name des Schülers
+          </label>
           <input
             type="text"
             id="name"
+            placeholder="Name"
             defaultValue={field.student.name}
             onChange={handleChangeName}
           />
         </div>
-        <div>
-          <label htmlFor="gender">Gender </label>
+        <div className={styles.editorItem}>
+          <label htmlFor="gender" className={styles.description}>
+            Wähle, ob Schüler:in männlich oder weiblich ist.
+          </label>
           <select
             name="gender"
             id="gender"
             onChange={handleChangeGender}
             defaultValue={field.student.gender}
           >
-            <option value={undefined}>Wähle...</option>
+            <option value={undefined}>Wähle m|w</option>
             <option value="female">weiblich</option>
             <option value="male">männlich</option>
           </select>
         </div>
-        <div>
-          <label htmlFor="row">Muss in {field.student.row} Reihe sitzen</label>
+        <div className={styles.editorItem}>
+          <label htmlFor="row" className={styles.description}>
+            Wähle, in welcher Reihe der Schüler:in sitzen soll.
+          </label>
           <select
             name="row"
             id="row"
             defaultValue={field.student.row}
             onChange={handleChangeRow}
           >
-            <option value={undefined}>Wähle</option>
+            <option value={undefined}>Wähle Reihe</option>
             <option value="first">erste</option>
             <option value="last">letzte</option>
           </select>
         </div>
-        <div className={styles.forbiddenNeighbors}>
-          Darf nicht neben diesen Schülern sitzen{" "}
-          {field.student.forbiddenNeighbors?.join(", ")}
-          <button onClick={() => setSelectNeighborsForId(field.id)}>
-            Schüler auswählen
-          </button>
-          <button onClick={() => setSelectNeighborsForId("")}>&times;</button>
+        <div className={styles.editorItem}>
+          <p className={styles.description}>
+            Wähle aus, neben wem der Schüler:in nicht sitzen darf
+          </p>
+          <p>{field.student.forbiddenNeighbors?.join(", ")}</p>
+          <button
+            className={styles.selectForbiddenNeighborsButton}
+            onClick={() =>
+              setSelectNeighborsForId((prevId) =>
+                prevId === field.id ? "" : field.id
+              )
+            }
+            dangerouslySetInnerHTML={{
+              __html:
+                selectNeighborsForId === field.id
+                  ? "&times;"
+                  : "Schüler auswählen",
+            }}
+            style={{
+              backgroundColor:
+                selectNeighborsForId === field.id
+                  ? "var(--color-attention)"
+                  : "var(--color-primary-light)",
+            }}
+          />
         </div>
-      </>
+      </div>
     );
   } else {
     return null;
