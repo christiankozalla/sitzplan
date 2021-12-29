@@ -3,9 +3,10 @@
   --rows: 10;
   --editor-height: 50px;
   --space: 8px;
-  --color-primary-light: rgb(56, 199, 147); /* #38c793, hsl(158, 56, 50) */
-  --color-primary-dark: rgb(0, 153, 97); /* #009961,  hsl(158, 100, 30) */
-  --color-attention: rgb(222, 70, 33);
+  --color-primary-light: rgb(128, 206, 213); /* #80ced5*/
+  --color-primary-dark: rgb(49, 181, 212);
+  --color-warning: rgb(243, 194, 39);
+  --color-attention: rgb(236, 71, 26);
   --text-grey-200: rgb(229, 231, 235);
   --text-grey-300: rgb(209, 213, 219);
   --text-grey-400: rgb(156, 163, 175);
@@ -41,6 +42,7 @@ blockquote,
 dl,
 dd {
   margin: 0;
+  color: #3a3a3a;
 }
 
 button,
@@ -126,7 +128,7 @@ button {
   border: none;
   cursor: pointer;
   border-radius: var(--space);
-  background-color: var(--color-primary-light);
+  background-color: var(--color-primary-dark);
   color: white;
   font-weight: bold;
   padding: var(--space) calc(2 * var(--space));
