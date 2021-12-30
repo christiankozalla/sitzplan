@@ -7,7 +7,6 @@ import {
   StorageData,
   FieldWithStudent,
   FieldWithTable,
-  RowTypes,
 } from "./Model";
 
 export class Controller {
