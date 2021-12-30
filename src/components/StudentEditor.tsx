@@ -102,7 +102,7 @@ export const StudentEditor: FC<StudentEditorProps> = ({
               backgroundColor:
                 selectNeighborsForId === field.id
                   ? "var(--color-attention)"
-                  : "var(--color-primary-light)",
+                  : "var(--color-primary-dark)",
             }}
           />
         </div>

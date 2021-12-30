@@ -35,7 +35,7 @@
   border-radius: var(--space);
   border-start-start-radius: 0;
   border: 1px solid white;
-  background-color: var(--color-primary-light);
+  background-color: var(--color-primary-dark);
   color: white;
   opacity: 0;
   visibility: hidden;
