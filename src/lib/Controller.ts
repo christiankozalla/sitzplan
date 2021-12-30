@@ -5,6 +5,9 @@ import {
   Field,
   Student,
   StorageData,
+  FieldWithStudent,
+  FieldWithTable,
+  RowTypes,
 } from "./Model";
 
 export class Controller {
@@ -294,16 +297,24 @@ export class Controller {
     this.emitChange("recycleBin", this.bin);
   }
 
-  private findEmptyTable(): Field | undefined {
+  private findEmptyTable(row?: number): Field | undefined {
     const allFields = Object.values(this.room);
-    const emptyTable = allFields.find(
-      (firstField) => firstField.isTable && !firstField.student
+
+    const hasTableAndStudentInSpecificRow = (field: Field) =>
+      field.position[1] === row && field.isTable && !field.student;
+    const hasTableAndStudent = (field: Field) =>
+      field.isTable && !field.student;
+
+    const emptyTable =
+      row !== undefined
+        ? allFields.find(hasTableAndStudentInSpecificRow)
+        : undefined;
+
+    return (
+      emptyTable ??
+      allFields.find(hasTableAndStudent) ??
+      allFields.find((firstField) => !firstField.student)
     );
-    if (emptyTable) {
-      return emptyTable;
-    } else {
-      return allFields.find((firstField) => !firstField.student);
-    }
   }
 
   private storeData(data: StorageData) {
@@ -338,6 +349,54 @@ export class Controller {
       fields: this.getFields().filter(
         (field) => field.isTable || field.student
       ),
+    });
+  }
+
+  private determineFirstAndLastRow(fieldsWithTable: FieldWithTable[]): {
+    firstRow: number;
+    lastRow: number;
+  } {
+    // firstRow has the smallest currentY of a table - i.e. the Y coordinate of the table "highest up" on the plan
+    // lastRow has the largest currentY of a table - i.e. the Y coordinate of the table most "down below" on the plan
+    const yCoordinates: number[] = fieldsWithTable.map(
+      ({ position: [, y] }) => y
+    );
+    const firstRow = Math.max(...yCoordinates);
+    const lastRow = Math.min(...yCoordinates);
+
+    return {
+      firstRow,
+      lastRow,
+    };
+  }
+
+  public rearrangeStudentsByConstraints(): void {
+    const students = Object.values(this.room).filter(
+      (field) => field.student
+    ) as FieldWithStudent[];
+
+    const tables = Object.values(this.room).filter(
+      (field) => field.isTable
+    ) as FieldWithTable[];
+
+    const { firstRow, lastRow } = this.determineFirstAndLastRow(tables);
+
+    // 0. Check if current student has got any constraints - e.g. row constraint or forbiddenNeighbors constraint
+    // 1. Use this.findEmptyTable - modify to return an empty table in first or last row (parameter row?: number)
+    // 2. Check left and right tables / fields around possible destination - check for forbiddenNeighbors
+    // 3. Use this.moveStudent() if check (in 2.) has passed
+    //
+
+    students.forEach((field) => {
+      // Student Constraints
+      const { row, forbiddenNeighbors } = field.student;
+
+      if (row) {
+        const destinationField = this.findEmptyTable(
+          row === "first" ? firstRow : lastRow
+        );
+        destinationField && this.moveStudent(field.id, destinationField.id);
+      }
     });
   }
 }

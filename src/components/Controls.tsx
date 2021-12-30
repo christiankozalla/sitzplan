@@ -8,6 +8,7 @@ import AddStudentIcon from "../assets/person-add-outline.svg";
 import ClassDocumentIcon from "../assets/document-text-outline.svg";
 import SettingsIcon from "../assets/settings-outline.svg";
 import SaveIcon from "../assets/save-outline.svg";
+import { controller } from "../App";
 
 export const Controls: FC = () => {
   const [showAddStudentDialog, setShowAddStudentDialog] = useState(false);
@@ -23,7 +24,11 @@ export const Controls: FC = () => {
       <Modal
         isOpen={showConditions}
         setOpen={setShowConditions}
-        action={<button>Generiere</button>}
+        action={
+          <button onClick={() => controller.rearrangeStudentsByConstraints()}>
+            Generiere
+          </button>
+        }
       >
         <Conditions />
       </Modal>
