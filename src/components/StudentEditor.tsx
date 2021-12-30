@@ -96,7 +96,7 @@ export const StudentEditor: FC<StudentEditorProps> = ({
               __html:
                 selectNeighborsForId === field.id
                   ? "&times;"
-                  : "Schüler auswählen",
+                  : "Verbotene Sitznachbarn wählen",
             }}
             style={{
               backgroundColor:
