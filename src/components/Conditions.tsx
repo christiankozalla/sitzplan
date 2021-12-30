@@ -21,7 +21,7 @@ export const Conditions: FC = () => {
   return (
     <div className={styles.grid}>
       <div id={styles.editorHeadline}>
-        <h2>Student Editor</h2>
+        <h2>Schüler Editor</h2>
         <AddStudent />
       </div>
       <div id={styles.studentList}>

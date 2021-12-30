@@ -26,7 +26,7 @@ export const Controls: FC = () => {
         setOpen={setShowConditions}
         action={
           <button onClick={() => controller.rearrangeStudentsByConstraints()}>
-            Generiere
+            Neu Anordnen
           </button>
         }
       >
