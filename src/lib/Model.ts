@@ -49,3 +49,11 @@ export class Field {
     this.student = student;
   }
 }
+
+export type FieldWithStudent = Field & {
+  student: Student;
+};
+
+export type FieldWithTable = Field & {
+  isTable: true;
+};
