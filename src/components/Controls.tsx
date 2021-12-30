@@ -66,7 +66,7 @@ export const Controls: FC = () => {
           alt="Speichere Sitzplan as PDF"
           className={styles.icon}
           onClick={() =>
-            import("../lib/GeneratePdf")
+            import("../lib/GeneratePDF")
               .then((module) => module.generatePdf())
               .catch((err) => console.error(err.message))
           }
