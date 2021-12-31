@@ -19,7 +19,9 @@ export const Modal: FC<ModalProps> = ({
         <div className={styles.content}>{children}</div>
         <div className={styles.footer}>
           {action}
-          <button onClick={() => setOpen(false)}>&times;</button>
+          <button className={styles.closeModal} onClick={() => setOpen(false)}>
+            &times;
+          </button>
         </div>
       </div>
     );

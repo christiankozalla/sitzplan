@@ -20,6 +20,15 @@
   height: calc(100% - var(--modalFooterHeight) - (2 * var(--space)));
 }
 
+.closeModal {
+  background-color: var(--color-attention);
+}
+
+.closeModal:active,
+.closeModal:focus {
+  outline-color: var(--color-attention);
+}
+
 .footer {
   display: flex;
   justify-content: space-between;
