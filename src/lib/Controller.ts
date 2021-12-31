@@ -299,15 +299,13 @@ export class Controller {
   private findEmptyTable(row?: number): Field | undefined {
     const allFields = Object.values(this.room);
 
-    const hasTableAndStudentInSpecificRow = (field: Field) =>
+    const hasTableAndNoStudentInRow = (field: Field) =>
       field.position[1] === row && field.isTable && !field.student;
     const hasTableAndStudent = (field: Field) =>
       field.isTable && !field.student;
 
     const emptyTable =
-      row !== undefined
-        ? allFields.find(hasTableAndStudentInSpecificRow)
-        : undefined;
+      row !== undefined ? allFields.find(hasTableAndNoStudentInRow) : undefined;
 
     return (
       emptyTable ??
