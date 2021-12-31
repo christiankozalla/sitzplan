@@ -1,3 +1,4 @@
+import { AcroFormCheckBox } from "jspdf";
 import {
   TrashedField,
   PositionObserver,
@@ -248,7 +249,7 @@ export class Controller {
   }
 
   public assignNewStudent(name: string): void {
-    const emptyField = this.findEmptyTable();
+    const emptyField = this.findTable();
 
     if (emptyField) {
       const newField = new Field({
@@ -296,20 +297,20 @@ export class Controller {
     this.emitChange("recycleBin", this.bin);
   }
 
-  private findEmptyTable(row?: number): Field | undefined {
+  private findTable(row?: number): Field | undefined {
     const allFields = Object.values(this.room);
 
-    const hasTableAndNoStudentInRow = (field: Field) =>
-      field.position[1] === row && field.isTable && !field.student;
-    const hasTableAndStudent = (field: Field) =>
+    const hasTableInRow = (field: Field) =>
+      field.position[1] === row && field.isTable;
+    const hasTableAndNoStudent = (field: Field) =>
       field.isTable && !field.student;
 
     const emptyTable =
-      row !== undefined ? allFields.find(hasTableAndNoStudentInRow) : undefined;
+      row !== undefined ? allFields.find(hasTableInRow) : undefined;
 
     return (
       emptyTable ??
-      allFields.find(hasTableAndStudent) ??
+      allFields.find(hasTableAndNoStudent) ??
       allFields.find((firstField) => !firstField.student)
     );
   }
@@ -352,6 +353,9 @@ export class Controller {
   private determineFirstAndLastRow(fieldsWithTable: FieldWithTable[]): {
     firstRow: number;
     lastRow: number;
+    tablesFirstRow: FieldWithTable[];
+    tablesLastRow: FieldWithTable[];
+    remainingTables: FieldWithTable[];
   } {
     // firstRow has the smallest currentY of a table - i.e. the Y coordinate of the table "highest up" on the plan
     // lastRow has the largest currentY of a table - i.e. the Y coordinate of the table most "down below" on the plan
@@ -364,36 +368,67 @@ export class Controller {
     return {
       firstRow,
       lastRow,
+      tablesFirstRow: fieldsWithTable.filter(
+        ({ position: [, y] }) => y === firstRow
+      ),
+      tablesLastRow: fieldsWithTable.filter(
+        ({ position: [, y] }) => y === lastRow
+      ),
+      remainingTables: fieldsWithTable.filter(
+        ({ position: [, y] }) => y !== lastRow && y !== firstRow
+      ),
     };
   }
 
   public rearrangeStudentsByConstraints(): void {
+    // TODO: Check if more studends are placed in first or last row than available tables => true ? alert and abort : proceed
+
     const students = Object.values(this.room).filter(
       (field) => field.student
     ) as FieldWithStudent[];
+
+    const { studentsFirstRow, studentsLastRow, remainingStudents } =
+      students.reduce<{
+        studentsFirstRow: FieldWithStudent[];
+        studentsLastRow: FieldWithStudent[];
+        remainingStudents: FieldWithStudent[];
+      }>(
+        (acc, currentField) => {
+          if (currentField.student?.row === "first") {
+            acc.studentsFirstRow.push(currentField);
+          } else if (currentField.student?.row === "last") {
+            acc.studentsLastRow.push(currentField);
+          } else {
+            acc.remainingStudents.push(currentField);
+          }
+
+          return acc;
+        },
+        { studentsFirstRow: [], studentsLastRow: [], remainingStudents: [] }
+      );
 
     const tables = Object.values(this.room).filter(
       (field) => field.isTable
     ) as FieldWithTable[];
 
-    const { firstRow, lastRow } = this.determineFirstAndLastRow(tables);
+    const { tablesFirstRow, tablesLastRow, remainingTables } =
+      this.determineFirstAndLastRow(tables);
 
-    // 0. Check if current student has got any constraints - e.g. row constraint or forbiddenNeighbors constraint
-    // 1. Use this.findEmptyTable - modify to return an empty table in first or last row (parameter row?: number)
-    // 2. Check left and right tables / fields around possible destination - check for forbiddenNeighbors
-    // 3. Use this.moveStudent() if check (in 2.) has passed
-    //
+    studentsFirstRow.forEach((field, index) => {
+      tablesFirstRow[index] &&
+        this.moveStudent(field.id, tablesFirstRow[index].id);
+    });
 
-    students.forEach((field) => {
-      // Student Constraints
-      const { row, forbiddenNeighbors } = field.student;
+    studentsLastRow.forEach((field, index) => {
+      tablesLastRow[index] &&
+        this.moveStudent(field.id, tablesLastRow[index].id);
+    });
 
-      if (row) {
-        const destinationField = this.findEmptyTable(
-          row === "first" ? firstRow : lastRow
-        );
-        destinationField && this.moveStudent(field.id, destinationField.id);
-      }
+    remainingStudents.forEach((field) => {
+      const randomIndex = Math.floor(Math.random() * remainingTables.length);
+      const destinationField = remainingTables[randomIndex];
+
+      this.moveStudent(field.id, destinationField.id);
     });
   }
 }
