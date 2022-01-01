@@ -134,6 +134,10 @@ button {
   padding: var(--space) calc(2 * var(--space));
 }
 
+button:active {
+  outline-color: var(--color-attention);
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
