@@ -1,4 +1,3 @@
-import { AcroFormCheckBox } from "jspdf";
 import {
   TrashedField,
   PositionObserver,
@@ -106,6 +105,12 @@ export class Controller {
 
   public getFieldById(id: Field["id"]): Field {
     return this.room[id];
+  }
+
+  public getFieldByRow(row: number): Field | undefined {
+    return this.getFields().find(
+      (field) => field.position[1] === row && field.isTable && !field.student
+    );
   }
 
   public setStudent(id: Field["id"], newStudent: Partial<Student>) {
@@ -387,48 +392,67 @@ export class Controller {
       (field) => field.student
     ) as FieldWithStudent[];
 
-    const { studentsFirstRow, studentsLastRow, remainingStudents } =
+    const { studentsForFirstRow, studentsForLastRow, remainingStudents } =
       students.reduce<{
-        studentsFirstRow: FieldWithStudent[];
-        studentsLastRow: FieldWithStudent[];
+        studentsForFirstRow: FieldWithStudent[];
+        studentsForLastRow: FieldWithStudent[];
         remainingStudents: FieldWithStudent[];
       }>(
         (acc, currentField) => {
           if (currentField.student?.row === "first") {
-            acc.studentsFirstRow.push(currentField);
+            acc.studentsForFirstRow.push(currentField);
           } else if (currentField.student?.row === "last") {
-            acc.studentsLastRow.push(currentField);
+            acc.studentsForLastRow.push(currentField);
           } else {
             acc.remainingStudents.push(currentField);
           }
 
           return acc;
         },
-        { studentsFirstRow: [], studentsLastRow: [], remainingStudents: [] }
+        {
+          studentsForFirstRow: [],
+          studentsForLastRow: [],
+          remainingStudents: [],
+        }
       );
 
     const tables = Object.values(this.room).filter(
       (field) => field.isTable
     ) as FieldWithTable[];
 
-    const { tablesFirstRow, tablesLastRow, remainingTables } =
+    const { firstRow, lastRow, remainingTables } =
       this.determineFirstAndLastRow(tables);
 
-    studentsFirstRow.forEach((field, index) => {
-      tablesFirstRow[index] &&
-        this.moveStudent(field.id, tablesFirstRow[index].id);
-    });
-
-    studentsLastRow.forEach((field, index) => {
-      tablesLastRow[index] &&
-        this.moveStudent(field.id, tablesLastRow[index].id);
-    });
-
     remainingStudents.forEach((field) => {
-      const randomIndex = Math.floor(Math.random() * remainingTables.length);
-      const destinationField = remainingTables[randomIndex];
+      if (field.isTable) {
+        const randomIndex = Math.floor(Math.random() * remainingTables.length);
+        const destinationField = remainingTables[randomIndex];
 
-      this.moveStudent(field.id, destinationField.id);
+        this.moveStudent(field.id, destinationField.id);
+      } else {
+        const emptyTable = remainingTables.find((field) => !field.student);
+        emptyTable && this.moveStudent(field.id, emptyTable.id);
+      }
+    });
+
+    studentsForFirstRow.forEach((field) => {
+      const destinationField = this.getFieldByRow(firstRow);
+
+      if (destinationField) {
+        this.moveStudent(field.id, destinationField.id);
+      } else {
+        console.error("No matching destination field found!");
+      }
+    });
+
+    studentsForLastRow.forEach((field) => {
+      const destinationField = this.getFieldByRow(lastRow);
+
+      if (destinationField) {
+        this.moveStudent(field.id, destinationField.id);
+      } else {
+        console.error("No matching destination field found!");
+      }
     });
   }
 }
