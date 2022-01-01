@@ -171,7 +171,7 @@ export class Controller {
       this[id] = newValue;
     } else {
       // regenerate the whole room and update the classroomKey to trigger re-render
-      const fieldsWithStudentsAndTables = Object.values(this.room).filter(
+      const fieldsWithStudentsAndTables = this.getFields().filter(
         (field) => field.student || field.isTable
       ) as Field[];
 
@@ -303,7 +303,7 @@ export class Controller {
   }
 
   private findTable(row?: number): Field | undefined {
-    const allFields = Object.values(this.room);
+    const allFields = this.getFields();
 
     const hasTableInRow = (field: Field) =>
       field.position[1] === row && field.isTable;
@@ -388,7 +388,7 @@ export class Controller {
   public rearrangeStudentsByConstraints(): void {
     // TODO: Check if more studends are placed in first or last row than available tables => true ? alert and abort : proceed
 
-    const students = Object.values(this.room).filter(
+    const students = this.getFields().filter(
       (field) => field.student
     ) as FieldWithStudent[];
 
@@ -416,7 +416,7 @@ export class Controller {
         }
       );
 
-    const tables = Object.values(this.room).filter(
+    const tables = this.getFields().filter(
       (field) => field.isTable
     ) as FieldWithTable[];
 
