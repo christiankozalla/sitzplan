@@ -72,3 +72,17 @@ p {
 .noStudent p + p {
   margin-top: var(--space);
 }
+
+@media screen and (max-width: 700px) {
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 1fr; /* auto gets as SMALL as it can, not as TALL as it can */
+    grid-template-areas:
+      "editorHeadline"
+      "studentList"
+      "studentEditor";
+    gap: calc(2 * var(--space));
+    height: 100%;
+  }
+}

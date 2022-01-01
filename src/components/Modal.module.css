@@ -40,3 +40,10 @@
 .footer button {
   min-width: 45px;
 }
+
+@media screen and (max-width: 700px) {
+  .dialog {
+    width: calc(100vw - 2 * var(--space));
+    right: var(--space);
+  }
+}

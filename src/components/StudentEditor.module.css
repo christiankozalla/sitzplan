@@ -1,13 +1,11 @@
 .studentEditor {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  height: 100%;
+  margin-top: calc(2 * var(--space));
 }
 
 .editorItem {
   display: flex;
   justify-content: space-between;
+  margin-top: calc(6 * var(--space));
 }
 
 .editorItem .description {
@@ -32,4 +30,49 @@
 
 #name {
   padding: var(--space);
+}
+
+table {
+  width: 100%;
+}
+
+td,
+th {
+  padding: var(--space);
+  border: 1px solid var(--color-primary-light);
+}
+
+th {
+  text-align: left;
+}
+
+.forbiddenNeighbor {
+  padding: 2px var(--space);
+  border-radius: 16px;
+  background-color: var(--color-warning);
+  margin: 0 var(--space);
+}
+
+@media screen and (max-width: 700px) {
+  .studentEditor {
+    height: auto;
+    overflow-y: scroll;
+  }
+
+  .editorItem {
+    flex-wrap: wrap;
+    margin-top: var(--space);
+  }
+
+  .editorItem > * {
+    margin: var(--space) 0;
+  }
+
+  .editorItem select,
+  .editorItem input,
+  .selectForbiddenNeighborsButton {
+    display: block;
+    margin: 0 var(--space);
+    width: 100%;
+  }
 }

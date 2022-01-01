@@ -38,6 +38,38 @@ export const StudentEditor: FC<StudentEditorProps> = ({
   if (field.student) {
     return (
       <div className={styles.studentEditor}>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>m|w</th>
+              <th>Reihe</th>
+              <th>Verbotene Nachbarn</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{field.student.name}</td>
+              <td>{field.student.row ?? "-"}</td>
+              <td>
+                {field.student.gender
+                  ? field.student.gender === "male"
+                    ? "Junge"
+                    : "Mädchen"
+                  : "-"}
+              </td>
+              <td>
+                {field.student.forbiddenNeighbors.length
+                  ? field.student.forbiddenNeighbors.map((name) => (
+                      <span key={name} className={styles.forbiddenNeighbor}>
+                        {name}
+                      </span>
+                    ))
+                  : "-"}
+              </td>
+            </tr>
+          </tbody>
+        </table>
         <div className={styles.editorItem}>
           <label htmlFor="name" className={styles.description}>
             Name des Schülers
@@ -84,7 +116,6 @@ export const StudentEditor: FC<StudentEditorProps> = ({
           <p className={styles.description}>
             Wähle aus, neben wem der Schüler:in nicht sitzen darf
           </p>
-          <p>{field.student.forbiddenNeighbors?.join(", ")}</p>
           <button
             className={styles.selectForbiddenNeighborsButton}
             onClick={() =>
