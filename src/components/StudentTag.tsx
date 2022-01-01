@@ -25,8 +25,10 @@ export const StudentTag: FC<StudentTagProps> = ({
       if (neighborField.student) {
         controller.setStudent(selectNeighborsForId, {
           forbiddenNeighbors: [
-            ...neighborField.student.forbiddenNeighbors,
-            field.student.name,
+            ...new Set([
+              ...neighborField.student.forbiddenNeighbors,
+              field.student.name,
+            ]),
           ],
         });
       }
