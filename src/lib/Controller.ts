@@ -388,6 +388,12 @@ export class Controller {
   public rearrangeStudentsByConstraints(): void {
     // TODO: Check if more studends are placed in first or last row than available tables => true ? alert and abort : proceed
 
+    // New Approach
+    // 1. Copy [allStudents]: Student[]
+    // 2. (Not necessarily) set student: undefined for all fields
+    // 3. Shuffle array indices (randomize order)=> tablesFirstRow, tablesLastRow, remainingTables
+    // 4. iterate over all tables and setStudent() one-by-one => allTables [...remainingTables, ...tablesFirstRow, ...tablesLastRow]
+
     const students = this.getFields().filter(
       (field) => field.student
     ) as FieldWithStudent[];
@@ -424,14 +430,19 @@ export class Controller {
       this.determineFirstAndLastRow(tables);
 
     remainingStudents.forEach((field) => {
-      if (field.isTable) {
+      if (
+        field.isTable &&
+        field.position[1] !== firstRow &&
+        field.position[1] !== lastRow
+      ) {
         const randomIndex = Math.floor(Math.random() * remainingTables.length);
         const destinationField = remainingTables[randomIndex];
 
         this.moveStudent(field.id, destinationField.id);
       } else {
-        const emptyTable = remainingTables.find((field) => !field.student);
+        const emptyTable = remainingTables.find((field) => !field.student); // remainingTables is not updating, so errors occur, because data from remaining table becomes stale during the process
         emptyTable && this.moveStudent(field.id, emptyTable.id);
+        console.log("ELSE", field.student.name, emptyTable);
       }
     });
 
