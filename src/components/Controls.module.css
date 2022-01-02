@@ -70,13 +70,17 @@
     width: calc(49px * 4);
   }
 
-  .icon {
+  .tooltip {
     width: calc(0.25 * (100% - 3 * var(--space)));
   }
 
-  .icon + .icon {
+  .tooltip + .tooltip {
     margin-top: 0;
     margin-left: var(--space);
+  }
+
+  .tooltip::before {
+    display: none;
   }
 
   .addStudent {
