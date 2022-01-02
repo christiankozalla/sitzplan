@@ -33,7 +33,7 @@ export const Square: FC<SquareProps> = ({ initialField }) => {
 
   const squareStyles: CSSProperties = {
     position: "relative",
-    background: isOver ? "lightgrey" : "transparent",
+    background: isOver ? "var(--color-primary-lighter)" : "transparent",
     boxShadow: isOver
       ? "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)"
       : "",
