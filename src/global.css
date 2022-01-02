@@ -3,6 +3,8 @@
   --rows: 10;
   --editor-height: 50px;
   --space: 8px;
+  --color-primary-lightest: rgb(224, 243, 245); /* #e0f3f5 */
+  --color-primary-lighter: rgb(205, 236, 238); /* #cdecee*/
   --color-primary-light: rgb(128, 206, 213); /* #80ced5*/
   --color-primary-dark: rgb(49, 181, 212);
   --color-warning: rgb(243, 194, 39);
