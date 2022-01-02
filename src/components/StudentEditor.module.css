@@ -56,7 +56,6 @@ th {
 @media screen and (max-width: 700px) {
   .studentEditor {
     height: auto;
-    overflow-y: scroll;
   }
 
   .editorItem {

@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, Dispatch, SetStateAction } from "react";
 import { AddStudent } from "./AddStudent";
 import { controller } from "../App";
 import styles from "./Conditions.module.css";
@@ -6,7 +6,11 @@ import { StudentTag } from "./StudentTag";
 import { Field } from "../lib/Model";
 import { StudentEditor } from "./StudentEditor";
 
-export const Conditions: FC = () => {
+interface ConditionsProps {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export const Conditions: FC<ConditionsProps> = ({ setOpen }) => {
   const [selectedField, setSelectedField] = useState<Field>();
   const [selectNeighborsForId, setSelectNeighborsForId] = useState("");
 
@@ -20,10 +24,6 @@ export const Conditions: FC = () => {
 
   return (
     <div className={styles.grid}>
-      <div id={styles.editorHeadline}>
-        <h2>Schüler Editor</h2>
-        <AddStudent />
-      </div>
       <div id={styles.studentList}>
         <div className={selectNeighborsForId ? styles.selectNeighbors : ""}>
           {controller.getFields().map((field) => (
@@ -46,13 +46,24 @@ export const Conditions: FC = () => {
           />
         ) : (
           <div className={styles.noStudent}>
-            <p>Im Moment ist kein Schüler ausgewählt.</p>
             <p>
-              Bitte wähle einen Schüler rechts aus der Liste oder füge neue
-              Schüler hinzu.
+              Im Moment ist kein Schüler ausgewählt. <br />
+              Bitte wähle einen Schüler aus der Liste oder füge neue Schüler
+              hinzu.
             </p>
           </div>
         )}
+      </div>
+      <div id={styles.footer}>
+        <button
+          onClick={() => {
+            controller.rearrangeStudentsByConstraints();
+            setOpen(false);
+          }}
+        >
+          Neu Anordnen
+        </button>
+        <AddStudent />
       </div>
     </div>
   );
