@@ -1,7 +1,6 @@
 :root {
   --columns: 10;
   --rows: 10;
-  --editor-height: 50px;
   --space: 8px;
   --color-primary-lightest: rgb(224, 243, 245); /* #e0f3f5 */
   --color-primary-lighter: rgb(205, 236, 238); /* #cdecee*/
