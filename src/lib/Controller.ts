@@ -27,11 +27,13 @@ export class Controller {
     columns = 10,
     fieldsData: Field[] = []
   ) {
-    const data = this.generateRoom(rows, columns, fieldsData);
+    this.room = this.generateRoom(rows, columns, fieldsData);
 
-    data.forEach((field) => {
-      Object.assign(this.room, { [field.id]: field });
-    });
+    // const data = this.generateRoom(rows, columns, fieldsData);
+
+    // data.forEach((field) => {
+    //   Object.assign(this.room, { [field.id]: field });
+    // });
 
     this.rows = rows;
     this.columns = columns;
@@ -60,7 +62,7 @@ export class Controller {
     rows: number,
     cols: number,
     fieldsData: Field[]
-  ): Field[] {
+  ): { [id: Field["id"]]: Field } {
     const fields: Field[] = [];
 
     // An existing room can be regenerated with a different number of rows or columns
@@ -82,7 +84,13 @@ export class Controller {
       }
     }
 
-    return fields;
+    const room = {};
+
+    fields.forEach((field) => {
+      Object.assign(room, { [field.id]: field });
+    });
+
+    return room;
   }
 
   private roomObservers: {
@@ -179,32 +187,22 @@ export class Controller {
       if (id === "rows") {
         const newRows = Number(newValue);
 
-        const newFields = this.generateRoom(
+        this.room = this.generateRoom(
           newRows,
           this["columns"],
           fieldsWithStudentsAndTables
         );
-        this.room = {};
-
-        for (const field of newFields) {
-          this.room[field.id] = field;
-        }
         this.updateClassroom();
 
         // Number of columns is updated
       } else if (id === "columns") {
         const newCols = Number(newValue);
 
-        const newFields = this.generateRoom(
+        this.room = this.generateRoom(
           this["rows"],
           newCols,
           fieldsWithStudentsAndTables
         );
-        this.room = {};
-
-        for (const field of newFields) {
-          this.room[field.id] = field;
-        }
         this.updateClassroom();
       }
 
@@ -373,30 +371,22 @@ export class Controller {
     return {
       firstRow,
       lastRow,
-      tablesFirstRow: fieldsWithTable.filter(
-        ({ position: [, y] }) => y === firstRow
-      ),
-      tablesLastRow: fieldsWithTable.filter(
-        ({ position: [, y] }) => y === lastRow
-      ),
-      remainingTables: fieldsWithTable.filter(
-        ({ position: [, y] }) => y !== lastRow && y !== firstRow
-      ),
+      tablesFirstRow: fieldsWithTable
+        .filter(({ position: [, y] }) => y === firstRow)
+        .sort(() => Math.random() - 0.5),
+      tablesLastRow: fieldsWithTable
+        .filter(({ position: [, y] }) => y === lastRow)
+        .sort(() => Math.random() - 0.5),
+      remainingTables: fieldsWithTable
+        .filter(({ position: [, y] }) => y !== lastRow && y !== firstRow)
+        .sort(() => Math.random() - 0.5),
     };
   }
 
   public rearrangeStudentsByConstraints(): void {
-    // TODO: Check if more studends are placed in first or last row than available tables => true ? alert and abort : proceed
-
-    // New Approach
-    // 1. Copy [allStudents]: Student[]
-    // 2. (Not necessarily) set student: undefined for all fields
-    // 3. Shuffle array indices (randomize order)=> tablesFirstRow, tablesLastRow, remainingTables
-    // 4. iterate over all tables and setStudent() one-by-one => allTables [...remainingTables, ...tablesFirstRow, ...tablesLastRow]
-
-    const students = this.getFields().filter(
-      (field) => field.student
-    ) as FieldWithStudent[];
+    const students = this.getFields()
+      .filter((field) => field.student)
+      .map((field) => new Field({ ...field })) as FieldWithStudent[];
 
     const { studentsForFirstRow, studentsForLastRow, remainingStudents } =
       students.reduce<{
@@ -422,48 +412,55 @@ export class Controller {
         }
       );
 
-    const tables = this.getFields().filter(
-      (field) => field.isTable
-    ) as FieldWithTable[];
+    const tables = this.getFields()
+      .filter((field) => field.isTable)
+      .map(
+        (field) => new Field({ ...field, student: undefined })
+      ) as FieldWithTable[];
 
-    const { firstRow, lastRow, remainingTables } =
+    const { tablesFirstRow, tablesLastRow, remainingTables } =
       this.determineFirstAndLastRow(tables);
 
-    remainingStudents.forEach((field) => {
-      if (
-        field.isTable &&
-        field.position[1] !== firstRow &&
-        field.position[1] !== lastRow
-      ) {
-        const randomIndex = Math.floor(Math.random() * remainingTables.length);
-        const destinationField = remainingTables[randomIndex];
+    if (tables.length < students.length) {
+      console.warn("Too few tables for students. Aborting...");
+      return;
+    } else if (tablesFirstRow.length < studentsForFirstRow.length) {
+      console.warn("Too few tables in first row for students. Aborting...");
+      return;
+    } else if (tablesLastRow.length < studentsForLastRow.length) {
+      console.warn("Too few tables in last row for students. Aborting...");
+      return;
+    }
 
-        this.moveStudent(field.id, destinationField.id);
-      } else {
-        const emptyTable = remainingTables.find((field) => !field.student); // remainingTables is not updating, so errors occur, because data from remaining table becomes stale during the process
-        emptyTable && this.moveStudent(field.id, emptyTable.id);
-        console.log("ELSE", field.student.name, emptyTable);
-      }
-    });
+    const allFields = [
+      ...remainingTables.map((field, index) => {
+        if (index < remainingStudents.length)
+          field.student = { ...remainingStudents[index].student };
+        return field;
+      }),
+      ...tablesFirstRow.map((field, index) => {
+        if (index < studentsForFirstRow.length)
+          field.student = { ...studentsForFirstRow[index].student };
+        return field;
+      }),
+      ...tablesLastRow.map((field, index) => {
+        if (index < studentsForLastRow.length)
+          field.student = { ...studentsForLastRow[index].student };
+        return field;
+      }),
+    ];
 
-    studentsForFirstRow.forEach((field) => {
-      const destinationField = this.getFieldByRow(firstRow);
-
-      if (destinationField) {
-        this.moveStudent(field.id, destinationField.id);
-      } else {
-        console.error("No matching destination field found!");
-      }
-    });
-
-    studentsForLastRow.forEach((field) => {
-      const destinationField = this.getFieldByRow(lastRow);
-
-      if (destinationField) {
-        this.moveStudent(field.id, destinationField.id);
-      } else {
-        console.error("No matching destination field found!");
-      }
+    this.room = this.generateRoom(this.rows, this.columns, allFields);
+    this.updateClassroom();
+    // Store the Updated Classroom in URL state query param
+    this.storeData({
+      className: this.className,
+      roomName: this.roomName,
+      rows: this.rows,
+      columns: this.columns,
+      fields: this.getFields().filter(
+        (field) => field.isTable || field.student
+      ),
     });
   }
 }
