@@ -57,3 +57,5 @@ export type FieldWithStudent = Field & {
 export type FieldWithTable = Field & {
   isTable: true;
 };
+
+export type ModalConfig = { isOpen: true; field?: Field };

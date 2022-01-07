@@ -7,6 +7,7 @@ import {
   StorageData,
   FieldWithStudent,
   FieldWithTable,
+  ModalConfig,
 } from "./Model";
 
 export class Controller {
@@ -103,6 +104,10 @@ export class Controller {
     this.classroomObserver = o;
   }
 
+  public openModal(field: Field) {
+    this.emitChange("appModal", { isOpen: true, field });
+  }
+
   private generateId() {
     return "_" + (Math.random() * 30).toString(36).slice(4, 16);
   }
@@ -142,17 +147,14 @@ export class Controller {
     id: string,
     setStateAction: PositionObserver<any>
   ): () => void {
-    const existingIndex = this.roomObservers.findIndex(
+    const index = this.roomObservers.findIndex(
       (observer) => observer.id === id
     );
 
-    if (existingIndex > -1) {
-      this.roomObservers[existingIndex] = {
+    if (index > -1) {
+      this.roomObservers[index] = {
         id,
-        updateUi: [
-          ...this.roomObservers[existingIndex].updateUi,
-          setStateAction,
-        ],
+        updateUi: [...this.roomObservers[index].updateUi, setStateAction],
       };
     } else {
       this.roomObservers.push({ id, updateUi: [setStateAction] });
@@ -330,7 +332,7 @@ export class Controller {
 
   private emitChange(
     id: string,
-    updatedValue: Field | TrashedField[] | string
+    updatedValue: Field | TrashedField[] | string | ModalConfig
   ): void {
     this.roomObservers.forEach((observer) => {
       if (observer.id === id) {

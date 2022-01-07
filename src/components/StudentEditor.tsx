@@ -5,8 +5,8 @@ import styles from "./StudentEditor.module.css";
 
 interface StudentEditorProps {
   field: Field;
-  selectNeighborsForId: string;
-  setSelectNeighborsForId: Dispatch<SetStateAction<Field["id"]>>;
+  selectNeighborsForId?: string;
+  setSelectNeighborsForId?: Dispatch<SetStateAction<Field["id"]>>;
 }
 
 export const StudentEditor: FC<StudentEditorProps> = ({
@@ -119,6 +119,7 @@ export const StudentEditor: FC<StudentEditorProps> = ({
           <button
             className={styles.selectForbiddenNeighborsButton}
             onClick={() =>
+              setSelectNeighborsForId &&
               setSelectNeighborsForId((prevId) =>
                 prevId === field.id ? "" : field.id
               )

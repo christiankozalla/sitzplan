@@ -49,6 +49,11 @@ export const Square: FC<SquareProps> = ({ initialField }) => {
     }
   };
 
+  const handleRightMouseClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    field.student && controller.openModal(field);
+  };
+
   return (
     <div
       ref={drop}
@@ -56,6 +61,7 @@ export const Square: FC<SquareProps> = ({ initialField }) => {
       className={styles.table}
       onMouseEnter={handleMouseEnter}
       onDoubleClick={() => controller.toggleTable(field.id)}
+      onAuxClick={handleRightMouseClick}
     >
       <StudentComp key={field.id} field={field} />
     </div>
