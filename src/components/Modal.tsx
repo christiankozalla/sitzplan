@@ -1,5 +1,4 @@
 import { Dispatch, FC, SetStateAction } from "react";
-import { ModalConfig } from "../lib/Model";
 import styles from "./Modal.module.css";
 
 interface ModalProps {

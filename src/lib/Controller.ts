@@ -332,7 +332,7 @@ export class Controller {
 
   private emitChange(
     id: string,
-    updatedValue: Field | TrashedField[] | string | ModalConfig
+    updatedValue: Field | TrashedField[] | ModalConfig | string
   ): void {
     this.roomObservers.forEach((observer) => {
       if (observer.id === id) {
