@@ -42,11 +42,10 @@ export const Square: FC<SquareProps> = ({ initialField }) => {
     zIndex: isOver ? 2 : 1,
   };
 
-  const handleMouseOver = (e: React.MouseEvent) => {
-    if (!e.ctrlKey) {
-      return;
-    } else {
-      !field.isTable && controller.toggleTable(field.id);
+  const handleMouseEnter = (e: React.MouseEvent) => {
+    if (!e.ctrlKey) return;
+    else {
+      return controller.toggleTable(field.id);
     }
   };
 
@@ -55,7 +54,7 @@ export const Square: FC<SquareProps> = ({ initialField }) => {
       ref={drop}
       style={squareStyles}
       className={styles.table}
-      onMouseOver={handleMouseOver}
+      onMouseEnter={handleMouseEnter}
       onDoubleClick={() => controller.toggleTable(field.id)}
     >
       <StudentComp key={field.id} field={field} />
