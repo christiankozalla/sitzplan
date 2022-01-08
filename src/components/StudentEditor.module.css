@@ -16,7 +16,7 @@
 
 .editorItem .description::before {
   display: inline-block;
-  content: " ";
+  content: ' ';
   width: 16px;
   height: 16px;
   margin-right: var(--space);
@@ -26,6 +26,16 @@
 .selectForbiddenNeighborsButton {
   width: 350px;
   margin-left: var(--space);
+}
+
+.selectForbiddenNeighborsButton[disabled] {
+  background-color: var(--color-primary-lighter);
+  cursor: not-allowed;
+}
+
+.selectForbiddenNeighborsButton[disabled]:focus,
+.selectForbiddenNeighborsButton[disabled]:active {
+  outline: none;
 }
 
 #name {

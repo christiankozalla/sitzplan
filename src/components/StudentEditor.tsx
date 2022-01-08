@@ -1,38 +1,43 @@
-import { FC, ChangeEvent, SetStateAction, Dispatch } from "react";
-import { controller } from "../App";
-import { Field, GenderTypes, RowTypes } from "../lib/Model";
-import styles from "./StudentEditor.module.css";
+import { FC, ChangeEvent, SetStateAction, Dispatch } from 'react';
+import { controller } from '../App';
+import { Field, GenderTypes, RowTypes } from '../lib/Model';
+import styles from './StudentEditor.module.css';
 
 interface StudentEditorProps {
   field: Field;
   selectNeighborsForId?: string;
-  setSelectNeighborsForId?: Dispatch<SetStateAction<Field["id"]>>;
+  setSelectNeighborsForId?: Dispatch<SetStateAction<Field['id']>>;
 }
 
 export const StudentEditor: FC<StudentEditorProps> = ({
   field,
   selectNeighborsForId,
-  setSelectNeighborsForId,
+  setSelectNeighborsForId
 }) => {
   const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
     field.student &&
       controller.setStudent(field.id, {
-        name: e.currentTarget.value,
+        name: e.currentTarget.value
       });
   };
 
   const handleChangeGender = (e: ChangeEvent<HTMLSelectElement>) => {
     field.student &&
       controller.setStudent(field.id, {
-        gender: e.currentTarget.value as GenderTypes,
+        gender: e.currentTarget.value as GenderTypes
       });
   };
 
   const handleChangeRow = (e: ChangeEvent<HTMLSelectElement>) => {
     field.student &&
       controller.setStudent(field.id, {
-        row: e.currentTarget.value as RowTypes,
+        row: e.currentTarget.value as RowTypes
       });
+  };
+
+  const handleChangeAlone = (e: ChangeEvent<HTMLInputElement>) => {
+    field.student &&
+      controller.setStudent(field.id, { alone: e.currentTarget.checked });
   };
 
   if (field.student) {
@@ -50,13 +55,13 @@ export const StudentEditor: FC<StudentEditorProps> = ({
           <tbody>
             <tr>
               <td>{field.student.name}</td>
-              <td>{field.student.row ?? "-"}</td>
+              <td>{field.student.row ?? '-'}</td>
               <td>
                 {field.student.gender
-                  ? field.student.gender === "male"
-                    ? "Junge"
-                    : "Mädchen"
-                  : "-"}
+                  ? field.student.gender === 'male'
+                    ? 'Junge'
+                    : 'Mädchen'
+                  : '-'}
               </td>
               <td>
                 {field.student.forbiddenNeighbors.length
@@ -65,7 +70,7 @@ export const StudentEditor: FC<StudentEditorProps> = ({
                         {name}
                       </span>
                     ))
-                  : "-"}
+                  : '-'}
               </td>
             </tr>
           </tbody>
@@ -113,28 +118,37 @@ export const StudentEditor: FC<StudentEditorProps> = ({
           </select>
         </div>
         <div className={styles.editorItem}>
+          <p className={styles.description}>Soll Schüler:in alleine sitzen?</p>
+          <input
+            type="checkbox"
+            defaultChecked={field.student.alone}
+            onChange={handleChangeAlone}
+          />
+        </div>
+        <div className={styles.editorItem}>
           <p className={styles.description}>
             Wähle aus, neben wem der Schüler:in nicht sitzen darf
           </p>
           <button
             className={styles.selectForbiddenNeighborsButton}
+            disabled={field.student.alone}
             onClick={() =>
               setSelectNeighborsForId &&
               setSelectNeighborsForId((prevId) =>
-                prevId === field.id ? "" : field.id
+                prevId === field.id ? '' : field.id
               )
             }
             dangerouslySetInnerHTML={{
               __html:
                 selectNeighborsForId === field.id
-                  ? "&times;"
-                  : "Verbotene Sitznachbarn wählen",
+                  ? '&times;'
+                  : 'Verbotene Sitznachbarn wählen'
             }}
             style={{
               backgroundColor:
                 selectNeighborsForId === field.id
-                  ? "var(--color-attention)"
-                  : "var(--color-primary-dark)",
+                  ? 'var(--color-attention)'
+                  : 'var(--color-primary-dark)'
             }}
           />
         </div>
