@@ -6,7 +6,8 @@ export const AddStudent: FC = () => {
   const [studentName, setStudentName] = useState("");
 
   const handleNewStudent = () => {
-    studentName && controller.assignNewStudent(studentName);
+    const trimmedName = studentName.trim();
+    trimmedName && controller.assignNewStudent(trimmedName);
     setStudentName("");
   };
 
