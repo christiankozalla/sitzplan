@@ -6,18 +6,20 @@ import { Controls } from "./components/Controls";
 import { Menu } from "./components/Menu";
 import { Modal } from "./components/Modal";
 import { RecycleBin } from "./components/RecycleBin";
+import { Conditions } from "./components/Conditions";
 import { Controller, getInitialDataFromUrl } from "./lib/Controller";
 import styles from "./App.module.css";
-import { StudentEditor } from "./components/StudentEditor";
+import { ModalConfig } from "./lib/Model";
 
-// Disable Contextmenu on right-click globally
+// Disable Contextmenu on right-click globally - only in prod
 // because right-click on a Student opens a Modal with StudentEditor
-window.addEventListener("contextmenu", (e) => e.preventDefault());
+import.meta.env.PROD &&
+  window.addEventListener("contextmenu", (e) => e.preventDefault());
 
 export const controller: Controller = getInitialDataFromUrl();
 
 export default function App() {
-  const [modalConfig, setModalConfig] = useState({
+  const [modalConfig, setModalConfig] = useState<ModalConfig>({
     isOpen: false,
     field: undefined,
   });
@@ -55,7 +57,12 @@ export default function App() {
         setOpen={handleModalOpen}
         title="Editor"
       >
-        {modalConfig.field && <StudentEditor field={modalConfig.field} />}
+        {modalConfig.field && (
+          <Conditions
+            setOpen={handleModalOpen}
+            initialField={modalConfig.field}
+          />
+        )}
       </Modal>
     </>
   );

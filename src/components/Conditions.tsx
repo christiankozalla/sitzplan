@@ -8,10 +8,13 @@ import { StudentEditor } from "./StudentEditor";
 
 interface ConditionsProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
+  initialField?: Field;
 }
 
-export const Conditions: FC<ConditionsProps> = ({ setOpen }) => {
-  const [selectedField, setSelectedField] = useState<Field>();
+export const Conditions: FC<ConditionsProps> = ({ setOpen, initialField }) => {
+  const [selectedField, setSelectedField] = useState<Field | undefined>(
+    initialField
+  );
   const [selectNeighborsForId, setSelectNeighborsForId] = useState("");
 
   useEffect(() => {
