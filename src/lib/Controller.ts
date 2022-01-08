@@ -7,23 +7,23 @@ import {
   StorageData,
   FieldWithStudent,
   FieldWithTable,
-  ModalConfig
-} from './Model';
+  ModalConfig,
+} from "./Model";
 
 export class Controller {
-  private room: { [id: Field['id']]: Field } = {};
+  private room: { [id: Field["id"]]: Field } = {};
   private bin: TrashedField[] = [];
   private classroomKey: string;
 
   private rows = 10;
   private columns = 10;
 
-  private roomName = '';
-  private className = '';
+  private roomName = "";
+  private className = "";
 
   constructor(
-    className = '',
-    roomName = '',
+    className = "",
+    roomName = "",
     rows = 10,
     columns = 10,
     fieldsData: Field[] = []
@@ -55,15 +55,15 @@ export class Controller {
     return this.className;
   }
 
-  public getDimension(direction: 'rows' | 'cols'): number {
-    return direction === 'rows' ? this.rows : this.columns;
+  public getDimension(direction: "rows" | "cols"): number {
+    return direction === "rows" ? this.rows : this.columns;
   }
 
   private generateRoom(
     rows: number,
     cols: number,
     fieldsData: Field[]
-  ): { [id: Field['id']]: Field } {
+  ): { [id: Field["id"]]: Field } {
     const fields: Field[] = [];
 
     // An existing room can be regenerated with a different number of rows or columns
@@ -79,7 +79,7 @@ export class Controller {
             id: this.generateId(),
             position: [x, y],
             isTable: field?.isTable || false,
-            student: field?.student
+            student: field?.student,
           })
         );
       }
@@ -105,18 +105,18 @@ export class Controller {
   }
 
   public openModal(field: Field) {
-    this.emitChange('appModal', { isOpen: true, field });
+    this.emitChange("appModal", { isOpen: true, field });
   }
 
   private generateId() {
-    return '_' + (Math.random() * 30).toString(36).slice(4, 16);
+    return "_" + (Math.random() * 30).toString(36).slice(4, 16);
   }
 
   public getFields() {
     return Object.values(this.room);
   }
 
-  public getFieldById(id: Field['id']): Field {
+  public getFieldById(id: Field["id"]): Field {
     return this.room[id];
   }
 
@@ -126,7 +126,7 @@ export class Controller {
     );
   }
 
-  public setStudent(id: Field['id'], newStudent: Partial<Student>) {
+  public setStudent(id: Field["id"], newStudent: Partial<Student>) {
     const field = this.room[id];
 
     if (field.student) {
@@ -134,8 +134,8 @@ export class Controller {
         ...field,
         student: {
           ...field.student,
-          ...newStudent
-        }
+          ...newStudent,
+        },
       };
 
       this.room[id] = newField;
@@ -154,7 +154,7 @@ export class Controller {
     if (index > -1) {
       this.roomObservers[index] = {
         id,
-        updateUi: [...this.roomObservers[index].updateUi, setStateAction]
+        updateUi: [...this.roomObservers[index].updateUi, setStateAction],
       };
     } else {
       this.roomObservers.push({ id, updateUi: [setStateAction] });
@@ -177,7 +177,7 @@ export class Controller {
 
   // MetaData are the name of the class and room, and number of rows and columns
   public updateMetaData(id: MetaKeys, newValue: string) {
-    if (id === 'className' || id === 'roomName') {
+    if (id === "className" || id === "roomName") {
       this[id] = newValue;
     } else {
       // regenerate the whole room and update the classroomKey to trigger re-render
@@ -186,22 +186,22 @@ export class Controller {
       ) as Field[];
 
       // Number of rows is updated
-      if (id === 'rows') {
+      if (id === "rows") {
         const newRows = Number(newValue);
 
         this.room = this.generateRoom(
           newRows,
-          this['columns'],
+          this["columns"],
           fieldsWithStudentsAndTables
         );
         this.updateClassroom();
 
         // Number of columns is updated
-      } else if (id === 'columns') {
+      } else if (id === "columns") {
         const newCols = Number(newValue);
 
         this.room = this.generateRoom(
-          this['rows'],
+          this["rows"],
           newCols,
           fieldsWithStudentsAndTables
         );
@@ -215,16 +215,16 @@ export class Controller {
 
   private updateClassroom() {
     this.classroomKey = this.generateId();
-    typeof this.classroomObserver === 'function' &&
+    typeof this.classroomObserver === "function" &&
       this.classroomObserver(this.classroomKey);
   }
   public moveStudent(
-    originId: Field['id'],
-    destinationId: Field['id'],
+    originId: Field["id"],
+    destinationId: Field["id"],
     moveTable = false
   ): void {
     const destinationField = {
-      ...this.room[destinationId]
+      ...this.room[destinationId],
     };
 
     this.room[destinationId] = {
@@ -232,7 +232,7 @@ export class Controller {
       student: this.room[originId].student,
       isTable: moveTable
         ? this.room[originId].isTable
-        : this.room[destinationId].isTable
+        : this.room[destinationId].isTable,
     };
 
     this.room[originId] = {
@@ -240,14 +240,14 @@ export class Controller {
       student: destinationField.student,
       isTable: moveTable
         ? destinationField.isTable
-        : this.room[originId].isTable
+        : this.room[originId].isTable,
     };
 
     this.emitChange(originId, this.room[originId]);
     this.emitChange(destinationId, this.room[destinationId]);
   }
 
-  public toggleTable(id: Field['id']) {
+  public toggleTable(id: Field["id"]) {
     const field = { ...this.room[id], isTable: !this.room[id].isTable };
     this.room[id] = { ...field };
     this.emitChange(field.id, field);
@@ -265,8 +265,8 @@ export class Controller {
           gender: undefined,
           forbiddenNeighbors: [],
           row: undefined,
-          alone: false
-        }
+          alone: false,
+        },
       });
 
       this.room[emptyField.id] = newField;
@@ -280,11 +280,11 @@ export class Controller {
     this.room[field.id] = {
       ...this.room[field.id],
       student: undefined,
-      isTable: false
+      isTable: false,
     };
 
     this.emitChange(field.id, this.room[field.id]);
-    this.emitChange('recycleBin', this.bin);
+    this.emitChange("recycleBin", this.bin);
   }
 
   public restoreField(field: TrashedField, destinationId?: string): void {
@@ -296,11 +296,11 @@ export class Controller {
       id,
       isTable: field.isTable,
       student: field.student,
-      position: this.room[id].position
+      position: this.room[id].position,
     };
 
     this.emitChange(id, this.room[id]);
-    this.emitChange('recycleBin', this.bin);
+    this.emitChange("recycleBin", this.bin);
   }
 
   private findTable(row?: number): Field | undefined {
@@ -350,7 +350,9 @@ export class Controller {
       roomName: this.roomName,
       rows: this.rows,
       columns: this.columns,
-      fields: this.getFields().filter((field) => field.isTable || field.student)
+      fields: this.getFields().filter(
+        (field) => field.isTable || field.student
+      ),
     });
   }
 
@@ -380,7 +382,7 @@ export class Controller {
         .sort(() => Math.random() - 0.5),
       remainingTables: fieldsWithTable
         .filter(({ position: [, y] }) => y !== lastRow && y !== firstRow)
-        .sort(() => Math.random() - 0.5)
+        .sort(() => Math.random() - 0.5),
     };
   }
 
@@ -396,9 +398,9 @@ export class Controller {
         remainingStudents: FieldWithStudent[];
       }>(
         (acc, currentField) => {
-          if (currentField.student?.row === 'first') {
+          if (currentField.student?.row === "first") {
             acc.studentsForFirstRow.push(currentField);
-          } else if (currentField.student?.row === 'last') {
+          } else if (currentField.student?.row === "last") {
             acc.studentsForLastRow.push(currentField);
           } else {
             acc.remainingStudents.push(currentField);
@@ -409,7 +411,7 @@ export class Controller {
         {
           studentsForFirstRow: [],
           studentsForLastRow: [],
-          remainingStudents: []
+          remainingStudents: [],
         }
       );
 
@@ -423,13 +425,13 @@ export class Controller {
       this.determineFirstAndLastRow(tables);
 
     if (tables.length < students.length) {
-      console.warn('Too few tables for students. Aborting...');
+      console.warn("Too few tables for students. Aborting...");
       return;
     } else if (tablesFirstRow.length < studentsForFirstRow.length) {
-      console.warn('Too few tables in first row for students. Aborting...');
+      console.warn("Too few tables in first row for students. Aborting...");
       return;
     } else if (tablesLastRow.length < studentsForLastRow.length) {
-      console.warn('Too few tables in last row for students. Aborting...');
+      console.warn("Too few tables in last row for students. Aborting...");
       return;
     }
 
@@ -448,7 +450,7 @@ export class Controller {
         if (index < studentsForLastRow.length)
           field.student = { ...studentsForLastRow[index].student };
         return field;
-      })
+      }),
     ];
 
     this.room = this.generateRoom(this.rows, this.columns, allFields);
@@ -459,14 +461,16 @@ export class Controller {
       roomName: this.roomName,
       rows: this.rows,
       columns: this.columns,
-      fields: this.getFields().filter((field) => field.isTable || field.student)
+      fields: this.getFields().filter(
+        (field) => field.isTable || field.student
+      ),
     });
   }
 }
 
 export function getInitialDataFromUrl(): Controller {
   const dataString: string | null = new URLSearchParams(location.search).get(
-    'state'
+    "state"
   );
 
   const data: StorageData | undefined = dataString
