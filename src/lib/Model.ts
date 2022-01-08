@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction } from "react";
 
 export type Position = [number, number];
 
@@ -11,14 +11,14 @@ export type Student = {
   alone: boolean;
 };
 
-export type GenderTypes = 'male' | 'female';
-export type RowTypes = 'first' | 'last';
+export type GenderTypes = "male" | "female";
+export type RowTypes = "first" | "last";
 
 export type Trashed = {
   trashed: boolean;
 };
 
-export type MetaKeys = 'roomName' | 'className' | 'columns' | 'rows';
+export type MetaKeys = "roomName" | "className" | "columns" | "rows";
 export type TrashedField = Field & Trashed;
 export type PositionObserver<T> = Dispatch<SetStateAction<T>> | null;
 
@@ -59,4 +59,4 @@ export type FieldWithTable = Field & {
   isTable: true;
 };
 
-export type ModalConfig = { isOpen: true; field?: Field };
+export type ModalConfig = { isOpen: boolean; field?: Field };
