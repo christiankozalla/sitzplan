@@ -25,7 +25,7 @@ export const StudentComp: FC<StudentCompProps> = ({ field }) => {
             : "transparent",
         }}
       >
-        {field.student?.name || null}
+        {!field.student ? null : field.student.name || "Name fehlt!"}
       </div>
     );
   } else {
