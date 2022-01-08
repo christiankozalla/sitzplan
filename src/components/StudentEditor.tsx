@@ -1,43 +1,44 @@
-import { FC, ChangeEvent, SetStateAction, Dispatch } from 'react';
-import { controller } from '../App';
-import { Field, GenderTypes, RowTypes } from '../lib/Model';
-import styles from './StudentEditor.module.css';
+import { FC, ChangeEvent, SetStateAction, Dispatch } from "react";
+import { controller } from "../App";
+import { Field, Student } from "../lib/Model";
+import styles from "./StudentEditor.module.css";
 
 interface StudentEditorProps {
   field: Field;
   selectNeighborsForId?: string;
-  setSelectNeighborsForId?: Dispatch<SetStateAction<Field['id']>>;
+  setSelectNeighborsForId?: Dispatch<SetStateAction<Field["id"]>>;
 }
 
 export const StudentEditor: FC<StudentEditorProps> = ({
   field,
   selectNeighborsForId,
-  setSelectNeighborsForId
+  setSelectNeighborsForId,
 }) => {
-  const handleChangeName = (e: ChangeEvent<HTMLInputElement>) => {
-    field.student &&
-      controller.setStudent(field.id, {
-        name: e.currentTarget.value
-      });
-  };
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+    propertyName: keyof Student
+  ) => {
+    const hasChecked = (
+      e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ): e is ChangeEvent<HTMLInputElement> =>
+      e.currentTarget.hasOwnProperty("checked");
 
-  const handleChangeGender = (e: ChangeEvent<HTMLSelectElement>) => {
-    field.student &&
-      controller.setStudent(field.id, {
-        gender: e.currentTarget.value as GenderTypes
-      });
-  };
-
-  const handleChangeRow = (e: ChangeEvent<HTMLSelectElement>) => {
-    field.student &&
-      controller.setStudent(field.id, {
-        row: e.currentTarget.value as RowTypes
-      });
-  };
-
-  const handleChangeAlone = (e: ChangeEvent<HTMLInputElement>) => {
-    field.student &&
-      controller.setStudent(field.id, { alone: e.currentTarget.checked });
+    if (field.student) {
+      if (hasChecked(e)) {
+        return controller.setStudent(field.id, {
+          [propertyName]: e.currentTarget.checked,
+        });
+      } else {
+        return controller.setStudent(field.id, {
+          [propertyName]: e.currentTarget.value,
+        });
+      }
+    }
+    controller.setStudent(field.id, {
+      [propertyName]: hasChecked(e)
+        ? e.currentTarget.checked
+        : e.currentTarget.value,
+    });
   };
 
   if (field.student) {
@@ -49,20 +50,22 @@ export const StudentEditor: FC<StudentEditorProps> = ({
               <th>Name</th>
               <th>m|w</th>
               <th>Reihe</th>
+              <th>Einzeln</th>
               <th>Verbotene Nachbarn</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td>{field.student.name}</td>
-              <td>{field.student.row ?? '-'}</td>
+              <td>{field.student.row ?? "-"}</td>
               <td>
                 {field.student.gender
-                  ? field.student.gender === 'male'
-                    ? 'Junge'
-                    : 'Mädchen'
-                  : '-'}
+                  ? field.student.gender === "male"
+                    ? "Junge"
+                    : "Mädchen"
+                  : "-"}
               </td>
+              <td>{field.student.alone ? "Ja" : "Nein"}</td>
               <td>
                 {field.student.forbiddenNeighbors.length
                   ? field.student.forbiddenNeighbors.map((name) => (
@@ -70,7 +73,7 @@ export const StudentEditor: FC<StudentEditorProps> = ({
                         {name}
                       </span>
                     ))
-                  : '-'}
+                  : "-"}
               </td>
             </tr>
           </tbody>
@@ -84,7 +87,7 @@ export const StudentEditor: FC<StudentEditorProps> = ({
             id="name"
             placeholder="Name"
             defaultValue={field.student.name}
-            onChange={handleChangeName}
+            onChange={(e) => handleChange(e, "name")}
           />
         </div>
         <div className={styles.editorItem}>
@@ -94,7 +97,7 @@ export const StudentEditor: FC<StudentEditorProps> = ({
           <select
             name="gender"
             id="gender"
-            onChange={handleChangeGender}
+            onChange={(e) => handleChange(e, "gender")}
             defaultValue={field.student.gender}
           >
             <option value={undefined}>Wähle m|w</option>
@@ -110,7 +113,7 @@ export const StudentEditor: FC<StudentEditorProps> = ({
             name="row"
             id="row"
             defaultValue={field.student.row}
-            onChange={handleChangeRow}
+            onChange={(e) => handleChange(e, "row")}
           >
             <option value={undefined}>Wähle Reihe</option>
             <option value="first">erste</option>
@@ -122,7 +125,7 @@ export const StudentEditor: FC<StudentEditorProps> = ({
           <input
             type="checkbox"
             defaultChecked={field.student.alone}
-            onChange={handleChangeAlone}
+            onChange={(e) => handleChange(e, "alone")}
           />
         </div>
         <div className={styles.editorItem}>
@@ -135,20 +138,20 @@ export const StudentEditor: FC<StudentEditorProps> = ({
             onClick={() =>
               setSelectNeighborsForId &&
               setSelectNeighborsForId((prevId) =>
-                prevId === field.id ? '' : field.id
+                prevId === field.id ? "" : field.id
               )
             }
             dangerouslySetInnerHTML={{
               __html:
                 selectNeighborsForId === field.id
-                  ? '&times;'
-                  : 'Verbotene Sitznachbarn wählen'
+                  ? "&times;"
+                  : "Verbotene Sitznachbarn wählen",
             }}
             style={{
               backgroundColor:
                 selectNeighborsForId === field.id
-                  ? 'var(--color-attention)'
-                  : 'var(--color-primary-dark)'
+                  ? "var(--color-attention)"
+                  : "var(--color-primary-dark)",
             }}
           />
         </div>
