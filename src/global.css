@@ -182,6 +182,16 @@ button:active {
   outline-color: var(--color-attention);
 }
 
+button[disabled] {
+  background-color: var(--text-grey-400);
+  cursor: not-allowed;
+}
+
+button[disabled]:focus,
+button[disabled]:active {
+  outline: none;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }
