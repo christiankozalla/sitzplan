@@ -133,7 +133,8 @@ input[type="checkbox"] {
   width: 50px;
   height: 32px;
   border-radius: 50px;
-  background-color: var(--color-primary-light);
+  background-color: var(--color-primary-lightest);
+  box-shadow: inset 0 0 6px var(--color-primary-light);
   overflow: hidden;
 }
 
@@ -143,7 +144,7 @@ input[type="checkbox"] {
   height: 22px;
   border-radius: 50%;
   transition: all 0.4s ease;
-  background-color: white;
+  background-color: var(--color-primary-light);
   position: absolute;
   z-index: 1;
 }
@@ -154,6 +155,7 @@ input[type="checkbox"]:not(:checked) + .checkbox-control {
 }
 
 input[type="checkbox"]:checked + .checkbox-control {
+  background-color: var(--color-primary-dark);
   top: 5px;
   left: 24px;
 }
