@@ -24,21 +24,14 @@ export const StudentEditor: FC<StudentEditorProps> = ({
       e.currentTarget.hasOwnProperty("checked");
 
     if (field.student) {
-      if (hasChecked(e)) {
-        return controller.setStudent(field.id, {
-          [propertyName]: e.currentTarget.checked,
-        });
-      } else {
-        return controller.setStudent(field.id, {
-          [propertyName]: e.currentTarget.value,
-        });
-      }
+      controller.setStudent(field.id, {
+        [propertyName]: hasChecked(e)
+          ? e.currentTarget.checked
+          : e.currentTarget.value !== "undefined"
+          ? e.currentTarget.value
+          : undefined,
+      });
     }
-    controller.setStudent(field.id, {
-      [propertyName]: hasChecked(e)
-        ? e.currentTarget.checked
-        : e.currentTarget.value,
-    });
   };
 
   if (field.student) {
@@ -57,7 +50,13 @@ export const StudentEditor: FC<StudentEditorProps> = ({
           <tbody>
             <tr>
               <td>{field.student.name}</td>
-              <td>{field.student.row ?? "-"}</td>
+              <td>
+                {field.student.row
+                  ? field.student.row === "first"
+                    ? "erste"
+                    : "letzte"
+                  : "-"}
+              </td>
               <td>
                 {field.student.gender
                   ? field.student.gender === "male"
@@ -100,7 +99,7 @@ export const StudentEditor: FC<StudentEditorProps> = ({
             onChange={(e) => handleChange(e, "gender")}
             defaultValue={field.student.gender}
           >
-            <option value={undefined}>Wähle m|w</option>
+            <option value="undefined">Wähle m|w</option>
             <option value="female">weiblich</option>
             <option value="male">männlich</option>
           </select>
@@ -115,7 +114,7 @@ export const StudentEditor: FC<StudentEditorProps> = ({
             defaultValue={field.student.row}
             onChange={(e) => handleChange(e, "row")}
           >
-            <option value={undefined}>Wähle Reihe</option>
+            <option value="undefined">Wähle Reihe</option>
             <option value="first">erste</option>
             <option value="last">letzte</option>
           </select>
