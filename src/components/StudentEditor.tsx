@@ -121,12 +121,19 @@ export const StudentEditor: FC<StudentEditorProps> = ({
           </select>
         </div>
         <div className={styles.editorItem}>
-          <p className={styles.description}>Soll Schüler:in alleine sitzen?</p>
-          <input
-            type="checkbox"
-            defaultChecked={field.student.alone}
-            onChange={(e) => handleChange(e, "alone")}
-          />
+          <label htmlFor="alone" className={styles.description}>
+            Soll Schüler:in alleine sitzen?
+          </label>
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              name="alone"
+              id="alone"
+              defaultChecked={field.student.alone}
+              onChange={(e) => handleChange(e, "alone")}
+            />
+            <span className="checkbox-control"></span>
+          </div>
         </div>
         <div className={styles.editorItem}>
           <p className={styles.description}>
