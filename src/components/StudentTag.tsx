@@ -43,7 +43,11 @@ export const StudentTag: FC<StudentTagProps> = ({
   }, [field.id]);
 
   return field.student ? (
-    <button className={styles.studentTag} onClick={handleClick}>
+    <button
+      className={styles.studentTag}
+      onClick={handleClick}
+      disabled={field.id === selectNeighborsForId}
+    >
       {field.student.name}
     </button>
   ) : null;
