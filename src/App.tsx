@@ -37,7 +37,6 @@ export default function App() {
   const handleModalOpen = (
     isOpen: boolean | ((prevOpen: boolean) => boolean)
   ) => {
-    console.log(isOpen);
     if (typeof isOpen === "boolean") {
       return setModalConfig({ isOpen, field: undefined });
     } else if (typeof isOpen === "function") {
