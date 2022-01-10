@@ -29,16 +29,6 @@
   margin-left: var(--space);
 }
 
-.selectForbiddenNeighborsButton[disabled] {
-  background-color: var(--color-primary-lighter);
-  cursor: not-allowed;
-}
-
-.selectForbiddenNeighborsButton[disabled]:focus,
-.selectForbiddenNeighborsButton[disabled]:active {
-  outline: none;
-}
-
 #name {
   padding: var(--space);
 }
