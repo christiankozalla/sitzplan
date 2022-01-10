@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
+    "builds3": "tsc && vite build --base=/app/",
     "serve": "vite preview",
     "lint": "npx eslint src/**/*.{ts,tsx}"
   },

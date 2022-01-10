@@ -28,13 +28,13 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v1
         with:
-          node-version: "16.x"
+          node-version: '16.x'
 
       # Runs a single command using the runners shell
       - name: Install npm packages
         run: npm ci
       - name: Build Site into dist
-        run: npm run build
+        run: npm run builds3
 
       # - name: Deploy with Node Script
       #   run: npm run deploy
