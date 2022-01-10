@@ -104,8 +104,8 @@ export class Controller {
     this.classroomObserver = o;
   }
 
-  public openModal(field: Field) {
-    this.emitChange("appModal", { isOpen: true, field });
+  public toggleModal(isOpen: boolean, field?: Field) {
+    this.emitChange("appModal", { isOpen, field });
   }
 
   private generateId() {

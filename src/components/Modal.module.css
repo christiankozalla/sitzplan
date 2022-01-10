@@ -37,6 +37,16 @@
   outline-color: var(--color-attention);
 }
 
+.backdrop {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  backdrop-filter: blur(1px);
+  z-index: 3;
+}
+
 @media screen and (max-width: 700px) {
   .dialog {
     width: calc(100vw - 2 * var(--space));

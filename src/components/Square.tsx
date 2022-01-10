@@ -51,7 +51,7 @@ export const Square: FC<SquareProps> = ({ initialField }) => {
 
   const handleRightMouseClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    field.student && controller.openModal(field);
+    field.student && controller.toggleModal(true, field);
   };
 
   return (

@@ -34,11 +34,15 @@ export default function App() {
     return () => controller.removeObserver("appModal", setModalConfig);
   }, [classroomKey]);
 
-  const handleModalOpen = (isOpen: boolean | ((prevOpen: boolean) => void)) => {
-    if (typeof isOpen === "boolean" && isOpen === false) {
+  const handleModalOpen = (
+    isOpen: boolean | ((prevOpen: boolean) => boolean)
+  ) => {
+    console.log(isOpen);
+    if (typeof isOpen === "boolean") {
       return setModalConfig({ isOpen, field: undefined });
     } else if (typeof isOpen === "function") {
-      return isOpen(modalConfig.isOpen);
+      const newOpen = isOpen(modalConfig.isOpen);
+      setModalConfig({ isOpen: newOpen, field: undefined });
     }
   };
 
@@ -47,7 +51,7 @@ export default function App() {
       <Menu key={classroomKey} />
       <DndProvider backend={HTML5Backend}>
         <div className={styles.layout}>
-          <Controls />
+          <Controls handleModalOpen={handleModalOpen} />
           <Classroom key={classroomKey} />
         </div>
         <RecycleBin />
@@ -57,12 +61,10 @@ export default function App() {
         setOpen={handleModalOpen}
         title="Editor"
       >
-        {modalConfig.field && (
-          <Conditions
-            setOpen={handleModalOpen}
-            initialField={modalConfig.field}
-          />
-        )}
+        <Conditions
+          setOpen={handleModalOpen}
+          initialField={modalConfig.field}
+        />
       </Modal>
     </>
   );

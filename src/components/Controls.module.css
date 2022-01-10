@@ -1,9 +1,11 @@
 .controls {
+  position: relative;
   width: 65px;
   box-shadow: var(--shadow-xl);
   padding: calc(1.5 * var(--space));
   border-radius: 0 var(--space) var(--space) 0;
   background-color: white;
+  z-index: 4;
 }
 
 .icon {
@@ -52,14 +54,14 @@
 }
 
 .addStudent {
-  padding: var(--space);
   position: absolute;
+  top: -60px;
+  left: 30px;
+  padding: var(--space);
   box-shadow: var(--shadow-xl);
   border-radius: var(--space);
   z-index: 10;
   background-color: white;
-  left: 20px;
-  top: 25vh;
 }
 
 @media screen and (max-width: 700px) {

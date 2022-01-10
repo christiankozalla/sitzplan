@@ -1,7 +1,5 @@
-import { FC, useState } from "react";
+import { FC, useState, Dispatch, SetStateAction } from "react";
 import { AddStudent } from "./AddStudent";
-import { Conditions } from "./Conditions";
-import { Modal } from "./Modal";
 import styles from "./Controls.module.css";
 
 import AddStudentIcon from "../assets/person-add-outline.svg";
@@ -9,9 +7,12 @@ import ClassDocumentIcon from "../assets/document-text-outline.svg";
 import SettingsIcon from "../assets/settings-outline.svg";
 import SaveIcon from "../assets/save-outline.svg";
 
-export const Controls: FC = () => {
+interface ControlsProps {
+  handleModalOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export const Controls: FC<ControlsProps> = ({ handleModalOpen }) => {
   const [showAddStudentDialog, setShowAddStudentDialog] = useState(false);
-  const [showConditions, setShowConditions] = useState(false);
 
   return (
     <div className={styles.controls}>
@@ -20,13 +21,6 @@ export const Controls: FC = () => {
           <AddStudent />
         </div>
       )}
-      <Modal
-        isOpen={showConditions}
-        setOpen={setShowConditions}
-        title="Schüler Editor"
-      >
-        <Conditions setOpen={setShowConditions} />
-      </Modal>
       <div className={styles.tooltip} data-tooltip="Füge einen Schüler hinzu">
         <img
           src={AddStudentIcon}
@@ -43,7 +37,7 @@ export const Controls: FC = () => {
           src={ClassDocumentIcon}
           alt="Sitzplan Info"
           className={styles.icon}
-          onClick={() => setShowConditions((prevShow) => !prevShow)}
+          onClick={() => handleModalOpen((prevOpen) => !prevOpen)}
         />
       </div>
       <div
