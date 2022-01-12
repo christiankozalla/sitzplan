@@ -9,11 +9,12 @@ import {
   FieldWithTable,
   ModalConfig,
 } from "./Model";
+import { generateDataUrl } from "./Utils";
 
 export class Controller {
   private room: { [id: Field["id"]]: Field } = {};
   private bin: TrashedField[] = [];
-  private classroomKey: string;
+  private classroomKey = "";
 
   private rows = 10;
   private columns = 10;
@@ -26,15 +27,19 @@ export class Controller {
     roomName = "",
     rows = 10,
     columns = 10,
-    fieldsData: Field[] = []
+    fields: Field[] = []
   ) {
-    this.room = this.generateRoom(rows, columns, fieldsData);
+    this.init({ className, roomName, rows, columns, fields });
+  }
 
-    // const data = this.generateRoom(rows, columns, fieldsData);
-
-    // data.forEach((field) => {
-    //   Object.assign(this.room, { [field.id]: field });
-    // });
+  public init({
+    className = "",
+    roomName = "",
+    rows = 10,
+    columns = 10,
+    fields,
+  }: StorageData) {
+    this.room = this.generateRoom(rows, columns, fields);
 
     this.rows = rows;
     this.columns = columns;
@@ -213,7 +218,7 @@ export class Controller {
     this.emitChange(id, newValue);
   }
 
-  private updateClassroom() {
+  public updateClassroom() {
     this.classroomKey = this.generateId();
     typeof this.classroomObserver === "function" &&
       this.classroomObserver(this.classroomKey);
@@ -249,7 +254,7 @@ export class Controller {
 
   public toggleTable(id: Field["id"]) {
     const field = { ...this.room[id], isTable: !this.room[id].isTable };
-    this.room[id] = { ...field };
+    this.room[id] = new Field({ ...field });
     this.emitChange(field.id, field);
   }
 
@@ -322,12 +327,7 @@ export class Controller {
   }
 
   private storeData(data: StorageData) {
-    const base64data = window.btoa(JSON.stringify(data));
-
-    const paramsString = `state=${base64data}`;
-    const searchParams = new URLSearchParams(paramsString);
-
-    const fullUrl = `${import.meta.env.BASE_URL}?${searchParams.toString()}`;
+    const fullUrl = generateDataUrl(data);
     history.pushState(data, document.title, fullUrl);
   }
 
@@ -374,19 +374,22 @@ export class Controller {
     return {
       firstRow,
       lastRow,
-      tablesFirstRow: fieldsWithTable
-        .filter(({ position: [, y] }) => y === firstRow)
-        .sort(() => Math.random() - 0.5),
-      tablesLastRow: fieldsWithTable
-        .filter(({ position: [, y] }) => y === lastRow)
-        .sort(() => Math.random() - 0.5),
-      remainingTables: fieldsWithTable
-        .filter(({ position: [, y] }) => y !== lastRow && y !== firstRow)
-        .sort(() => Math.random() - 0.5),
+      tablesFirstRow: fieldsWithTable.filter(
+        ({ position: [, y] }) => y === firstRow
+      ),
+      //.sort(() => Math.random() - 0.5),
+      tablesLastRow: fieldsWithTable.filter(
+        ({ position: [, y] }) => y === lastRow
+      ),
+      //.sort(() => Math.random() - 0.5),
+      remainingTables: fieldsWithTable.filter(
+        ({ position: [, y] }) => y !== lastRow && y !== firstRow
+      ),
+      //.sort(() => Math.random() - 0.5),
     };
   }
 
-  public rearrangeStudentsByConstraints(): void {
+  public async rearrangeStudentsByConstraints(): Promise<void> {
     const students = this.getFields()
       .filter((field) => field.student)
       .map((field) => new Field({ ...field })) as FieldWithStudent[];
@@ -435,22 +438,12 @@ export class Controller {
       return;
     }
 
+    const sort = await import("./Arrange").then((module) => module.default);
+
     const allFields = [
-      ...remainingTables.map((field, index) => {
-        if (index < remainingStudents.length)
-          field.student = { ...remainingStudents[index].student };
-        return field;
-      }),
-      ...tablesFirstRow.map((field, index) => {
-        if (index < studentsForFirstRow.length)
-          field.student = { ...studentsForFirstRow[index].student };
-        return field;
-      }),
-      ...tablesLastRow.map((field, index) => {
-        if (index < studentsForLastRow.length)
-          field.student = { ...studentsForLastRow[index].student };
-        return field;
-      }),
+      ...sort(tablesFirstRow, studentsForFirstRow),
+      ...sort(tablesLastRow, studentsForLastRow),
+      ...sort(remainingTables, remainingStudents),
     ];
 
     this.room = this.generateRoom(this.rows, this.columns, allFields);
@@ -465,27 +458,5 @@ export class Controller {
         (field) => field.isTable || field.student
       ),
     });
-  }
-}
-
-export function getInitialDataFromUrl(): Controller {
-  const dataString: string | null = new URLSearchParams(location.search).get(
-    "state"
-  );
-
-  const data: StorageData | undefined = dataString
-    ? JSON.parse(atob(decodeURIComponent(dataString)))
-    : undefined;
-
-  if (data) {
-    return new Controller(
-      data.className,
-      data.roomName,
-      data.rows,
-      data.columns,
-      data.fields
-    );
-  } else {
-    return new Controller();
   }
 }
