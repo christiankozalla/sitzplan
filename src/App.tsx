@@ -7,7 +7,8 @@ import { Menu } from "./components/Menu";
 import { Modal } from "./components/Modal";
 import { RecycleBin } from "./components/RecycleBin";
 import { Conditions } from "./components/Conditions";
-import { Controller, getInitialDataFromUrl } from "./lib/Controller";
+import { Controller } from "./lib/Controller";
+import { getInitialDataFromUrl } from "./lib/Utils";
 import styles from "./App.module.css";
 import { ModalConfig } from "./lib/Model";
 
@@ -17,6 +18,11 @@ import.meta.env.PROD &&
   window.addEventListener("contextmenu", (e) => e.preventDefault());
 
 export const controller: Controller = getInitialDataFromUrl();
+
+window.addEventListener("popstate", (e) => {
+  controller.init({ ...e.state });
+  controller.updateClassroom();
+});
 
 export default function App() {
   const [modalConfig, setModalConfig] = useState<ModalConfig>({
