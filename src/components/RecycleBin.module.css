@@ -43,9 +43,7 @@
   position: absolute;
   top: 0;
   right: 0;
-  border: none;
   min-width: 30px;
-  cursor: pointer;
 }
 
 @media screen and (max-width: 700px) {

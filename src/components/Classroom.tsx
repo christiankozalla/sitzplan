@@ -1,6 +1,6 @@
 import { FC, useEffect } from "react";
 import { Square } from "./Square";
-import { controller } from "../lib/Controller";
+import { controller } from "../App";
 import styles from "./Classroom.module.css";
 
 export const Classroom: FC = () => {

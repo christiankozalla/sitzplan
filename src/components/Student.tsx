@@ -19,9 +19,13 @@ export const StudentComp: FC<StudentCompProps> = ({ field }) => {
       <div
         ref={drag}
         className={styles.student}
-        style={{ backgroundColor: field.isTable ? "#38C793" : "transparent" }}
+        style={{
+          backgroundColor: field.isTable
+            ? "var(--color-primary-dark)"
+            : "transparent",
+        }}
       >
-        {field.student?.name || null}
+        {!field.student ? null : field.student.name.trim() || "Name fehlt!"}
       </div>
     );
   } else {

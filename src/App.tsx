@@ -4,29 +4,73 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { Classroom } from "./components/Classroom";
 import { Controls } from "./components/Controls";
 import { Menu } from "./components/Menu";
-import styles from "./App.module.css";
-import { controller } from "./lib/Controller";
+import { Modal } from "./components/Modal";
 import { RecycleBin } from "./components/RecycleBin";
+import { Conditions } from "./components/Conditions";
+import { Controller } from "./lib/Controller";
+import { getInitialDataFromUrl } from "./lib/Utils";
+import styles from "./App.module.css";
+import { ModalConfig } from "./lib/Model";
+
+// Disable Contextmenu on right-click globally - only in prod
+// because right-click on a Student opens a Modal with StudentEditor
+import.meta.env.PROD &&
+  window.addEventListener("contextmenu", (e) => e.preventDefault());
+
+export const controller: Controller = getInitialDataFromUrl();
+
+window.addEventListener("popstate", (e) => {
+  controller.init({ ...e.state });
+  controller.updateClassroom();
+});
 
 export default function App() {
+  const [modalConfig, setModalConfig] = useState<ModalConfig>({
+    isOpen: false,
+    field: undefined,
+  });
   const [classroomKey, setClassroomKey] = useState(
     controller.getClassroomKey()
   );
 
-  useEffect(
-    () => controller.observeClassroomKey(setClassroomKey),
-    [classroomKey]
-  );
+  useEffect(() => {
+    controller.observeClassroomKey(setClassroomKey);
+    controller.observe("appModal", setModalConfig);
+
+    return () => controller.removeObserver("appModal", setModalConfig);
+  }, [classroomKey]);
+
+  const handleModalOpen = (
+    isOpen: boolean | ((prevOpen: boolean) => boolean)
+  ) => {
+    if (typeof isOpen === "boolean") {
+      return setModalConfig({ isOpen, field: undefined });
+    } else if (typeof isOpen === "function") {
+      const newOpen = isOpen(modalConfig.isOpen);
+      setModalConfig({ isOpen: newOpen, field: undefined });
+    }
+  };
+
   return (
     <>
-      <Menu />
+      <Menu key={classroomKey} />
       <DndProvider backend={HTML5Backend}>
         <div className={styles.layout}>
-          <Controls />
+          <Controls handleModalOpen={handleModalOpen} />
           <Classroom key={classroomKey} />
         </div>
         <RecycleBin />
       </DndProvider>
+      <Modal
+        isOpen={modalConfig.isOpen}
+        setOpen={handleModalOpen}
+        title="Editor"
+      >
+        <Conditions
+          setOpen={handleModalOpen}
+          initialField={modalConfig.field}
+        />
+      </Modal>
     </>
   );
 }

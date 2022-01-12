@@ -1,11 +1,13 @@
 import { FC, useState, useEffect } from "react";
-import { controller } from "../lib/Controller";
+import { controller } from "../App";
 import styles from "./Menu.module.css";
 
 export const Menu: FC = () => {
   const [showMenu, setShowMenu] = useState(false);
-  const [roomName, setRoomName] = useState("");
-  const [classGroupName, setClassGroupName] = useState("");
+  const [roomName, setRoomName] = useState(controller.getRoomName());
+  const [classGroupName, setClassGroupName] = useState(
+    controller.getClassName()
+  );
   const [rows, setRows] = useState(controller.getDimension("rows").toString());
   const [cols, setCols] = useState(controller.getDimension("cols").toString());
 

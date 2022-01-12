@@ -1,12 +1,13 @@
 import { FC, useState } from "react";
-import { controller } from "../lib/Controller";
+import { controller } from "../App";
 import styles from "./AddStudent.module.css";
 
 export const AddStudent: FC = () => {
   const [studentName, setStudentName] = useState("");
 
   const handleNewStudent = () => {
-    studentName && controller.assignNewStudent(studentName);
+    const trimmedName = studentName.trim();
+    trimmedName && controller.assignNewStudent(trimmedName);
     setStudentName("");
   };
 
@@ -17,8 +18,8 @@ export const AddStudent: FC = () => {
       </label>
       <input
         id="addStudent"
-        className={styles.addStudentInput}
         value={studentName}
+        type="text"
         placeholder="Neue:r Schüler:in"
         autoFocus
         onChange={(e) => setStudentName(e.target.value)}

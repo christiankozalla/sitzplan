@@ -1,13 +1,18 @@
 import { Dispatch, SetStateAction } from "react";
 
-export type Dimensions = { columns: number; rows: number };
-
 export type Position = [number, number];
 
 export type Student = {
   id: string;
   name: string;
+  gender: GenderTypes | undefined;
+  row: RowTypes | undefined;
+  forbiddenNeighbors: string[];
+  alone: boolean;
 };
+
+export type GenderTypes = "male" | "female";
+export type RowTypes = "first" | "last";
 
 export type Trashed = {
   trashed: boolean;
@@ -24,6 +29,14 @@ type FieldProps = {
   student: Student | undefined;
 };
 
+export type StorageData = {
+  className: string;
+  roomName: string;
+  rows: number;
+  columns: number;
+  fields: Field[];
+};
+
 export class Field {
   id: string;
   position: Position;
@@ -37,3 +50,13 @@ export class Field {
     this.student = student;
   }
 }
+
+export type FieldWithStudent = Field & {
+  student: Student;
+};
+
+export type FieldWithTable = Field & {
+  isTable: true;
+};
+
+export type ModalConfig = { isOpen: boolean; field?: Field };

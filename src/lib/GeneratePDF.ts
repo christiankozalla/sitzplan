@@ -1,7 +1,7 @@
 import { jsPDF } from "jspdf";
-import { controller } from "../lib/Controller";
+import { controller } from "../App";
 
-export const generatePdf = () => {
+export function generatePdf() {
   const doc = new jsPDF({ orientation: "landscape", unit: "mm" });
   const today = new Date();
   const currentDate = `${today.getDate().toString().padStart(2, "0")}.${(
@@ -15,11 +15,6 @@ export const generatePdf = () => {
   const className = controller.getClassName();
   const roomName = controller.getRoomName();
   const fields = controller.getFields();
-
-  localStorage.setItem(
-    "sitzplanData",
-    JSON.stringify({ rows, columns, className, roomName, fields })
-  );
 
   const tableWidth = 280 / columns;
   const tableHeight = 200 / rows;
@@ -46,4 +41,4 @@ export const generatePdf = () => {
   doc.save(
     `Sitzplan-${className}-${roomName}-${currentDate.replaceAll(".", "-")}.pdf`
   );
-};
+}
