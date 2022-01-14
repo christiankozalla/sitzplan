@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, ReactElement, SetStateAction } from "react";
 
 export type Position = [number, number];
 
@@ -59,4 +59,9 @@ export type FieldWithTable = Field & {
   isTable: true;
 };
 
-export type ModalConfig = { isOpen: boolean; field?: Field };
+export type ModalConfig = {
+  isOpen: boolean;
+  title: string;
+  field?: Field;
+  component?: ReactElement;
+};

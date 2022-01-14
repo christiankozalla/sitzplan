@@ -110,7 +110,11 @@ export class Controller {
   }
 
   public toggleModal(isOpen: boolean, field?: Field) {
-    this.emitChange("appModal", { isOpen, field });
+    this.emitChange("appModal", {
+      isOpen,
+      title: "Editor",
+      field,
+    });
   }
 
   private generateId() {
@@ -377,15 +381,12 @@ export class Controller {
       tablesFirstRow: fieldsWithTable.filter(
         ({ position: [, y] }) => y === firstRow
       ),
-      //.sort(() => Math.random() - 0.5),
       tablesLastRow: fieldsWithTable.filter(
         ({ position: [, y] }) => y === lastRow
       ),
-      //.sort(() => Math.random() - 0.5),
       remainingTables: fieldsWithTable.filter(
         ({ position: [, y] }) => y !== lastRow && y !== firstRow
       ),
-      //.sort(() => Math.random() - 0.5),
     };
   }
 

@@ -9,8 +9,9 @@ import { RecycleBin } from "./components/RecycleBin";
 import { Conditions } from "./components/Conditions";
 import { Controller } from "./lib/Controller";
 import { getInitialDataFromUrl } from "./lib/Utils";
-import styles from "./App.module.css";
 import { ModalConfig } from "./lib/Model";
+import { TouchWarning } from "./components/TouchWarning";
+import styles from "./App.module.css";
 
 // Disable Contextmenu on right-click globally - only in prod
 // because right-click on a Student opens a Modal with StudentEditor
@@ -25,8 +26,9 @@ window.addEventListener("popstate", (e) => {
 });
 
 export default function App() {
-  const [modalConfig, setModalConfig] = useState<ModalConfig>({
+  const [modal, setModal] = useState<ModalConfig>({
     isOpen: false,
+    title: "",
     field: undefined,
   });
   const [classroomKey, setClassroomKey] = useState(
@@ -35,19 +37,36 @@ export default function App() {
 
   useEffect(() => {
     controller.observeClassroomKey(setClassroomKey);
-    controller.observe("appModal", setModalConfig);
+    controller.observe("appModal", setModal);
 
-    return () => controller.removeObserver("appModal", setModalConfig);
+    return () => controller.removeObserver("appModal", setModal);
   }, [classroomKey]);
+
+  useEffect(() => {
+    document.addEventListener("touchstart", () =>
+      setModal({
+        isOpen: true,
+        title: "Besser auf Desktop",
+        component: <TouchWarning />,
+      })
+    );
+  }, []);
 
   const handleModalOpen = (
     isOpen: boolean | ((prevOpen: boolean) => boolean)
   ) => {
     if (typeof isOpen === "boolean") {
-      return setModalConfig({ isOpen, field: undefined });
+      return setModal({
+        isOpen,
+        title: "Editor isOpen === boolean",
+      });
     } else if (typeof isOpen === "function") {
-      const newOpen = isOpen(modalConfig.isOpen);
-      setModalConfig({ isOpen: newOpen, field: undefined });
+      const newOpen = isOpen(modal.isOpen);
+      setModal({
+        isOpen: newOpen,
+        title: "Student Editor",
+        field: newOpen === true ? modal.field : undefined,
+      });
     }
   };
 
@@ -62,14 +81,13 @@ export default function App() {
         <RecycleBin />
       </DndProvider>
       <Modal
-        isOpen={modalConfig.isOpen}
+        isOpen={modal.isOpen}
         setOpen={handleModalOpen}
-        title="Editor"
+        title={modal.title}
       >
-        <Conditions
-          setOpen={handleModalOpen}
-          initialField={modalConfig.field}
-        />
+        {modal.component || (
+          <Conditions setOpen={handleModalOpen} initialField={modal.field} />
+        )}
       </Modal>
     </>
   );
