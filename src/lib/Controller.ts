@@ -83,7 +83,7 @@ export class Controller {
           new Field({
             id: this.generateId(),
             position: [x, y],
-            isTable: field?.isTable || false,
+            isTable: field?.isTable ?? false,
             student: field?.student,
           })
         );
@@ -432,7 +432,6 @@ export class Controller {
     // Better check on every emit , or in react component
     // disable the button on either of these conditions
     // refactor into function
-
     if (tables.length < students.length) {
       console.warn("Too few tables for students. Aborting...");
       return;
@@ -442,32 +441,22 @@ export class Controller {
     } else if (tablesLastRow.length < studentsForLastRow.length) {
       console.warn("Too few tables in last row for students. Aborting...");
       return;
-    } else if (remainingTables.length < remainingStudents.length) {
-      // remainingTables should be allTables, remainingStudents stays the same
-      console.warn("Too few remaining tables. Aborting...");
-      return;
     }
 
-    const sort = await import("./Arrange").then((module) => module.default);
-
-    const allFields = [
-      ...sort(tablesFirstRow, studentsForFirstRow),
-      ...sort(tablesLastRow, studentsForLastRow),
-      ...sort(remainingTables, remainingStudents),
+    const arrange = await import("./Arrange").then((module) => module.default);
+    const firstAndLastRowWithStudents = [
+      ...arrange(tablesFirstRow, studentsForFirstRow),
+      ...arrange(tablesLastRow, studentsForLastRow),
     ];
 
-    // const firstAndLastRowWithStudents = [
-    // ...sort(tablesFirstRow, studentsForFirstRow),
-    // ...sort(tablesLastRow, studentsForLastRow),
-    // ]
-
-    // const allFields = [ ...sort([ ...firstAndLastRowWithStudents, ...remainingTables], remainingStudents) ];
-    // Due to this ^^^^^^^^^^ line, empty seats in the first row can be filled with remainingStudents (that have no row-constraint)
-
-    // TODO:
-    // Problem: In order to fill first and last rows, the user has to *explicitly* choose row: "first" | "last"
-    // If the user does not do that (which they will), first and last rows remain empty...
-    // Solution: After first and last row students are placed, all fields should go through sort... => Update sort algorithm
+    const allFields = [
+      ...arrange(
+        [...firstAndLastRowWithStudents, ...remainingTables].sort(() =>
+          Math.random() > 0.5 ? 1 : -1
+        ),
+        remainingStudents
+      ),
+    ];
 
     this.room = this.generateRoom(this.rows, this.columns, allFields);
     this.updateClassroom();
