@@ -50,7 +50,10 @@ export default function (
       studentStore.splice(randIndex, 1); // impure
       currentIndex = currentIndex + 1;
     }
-  } while (arranged.length < tables.length || studentStore.length > 0);
+  } while (
+    (arranged.length < tables.length || studentStore.length > 0) &&
+    currentIndex < tables.length
+  );
 
   // TODO
   // Edge case: currentIndex points to the end of tables, but there are students left to place
