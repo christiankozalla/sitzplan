@@ -22,7 +22,7 @@ export type MetaKeys = "roomName" | "className" | "columns" | "rows";
 export type TrashedField = Field & Trashed;
 export type PositionObserver<T> = Dispatch<SetStateAction<T>> | null;
 
-type FieldProps = {
+export type FieldProps = {
   id: string;
   position: Position;
   isTable: boolean;
