@@ -7,43 +7,7 @@ import { Field } from "../src/lib/Model";
 import arrange from "../src/lib/Arrange";
 import { mockFields } from "./fields.mock";
 
-test("Class Field returns only a shallow copy", () => {
-  // arrange
-  const field = new Field({
-    id: "gef",
-    position: [1, 2],
-    isTable: false,
-    student: {
-      id: "csx",
-      name: "Christian",
-      gender: "male",
-      alone: false,
-      row: undefined,
-      forbiddenNeighbors: [],
-    } as Student,
-  });
-
-  // act
-  const newField = new Field(field);
-
-  // change properties of newField
-  newField.id = "newid";
-  if (newField.student) {
-    newField.student.name = "Robert";
-    newField.student.alone = true;
-  }
-
-  // assert
-  expect(field.id).toBe("gef"); // the id stays the same
-  expect(field.student && field.student.name).toBe("Robert"); // but nested properties
-  expect(field.student && field.student.alone).toBe(true); // are mutated too! (side-effect from mutating newField.student)
-
-  expect(newField.id).toBe("newid");
-  expect(newField.student && newField.student.name).toBe("Robert");
-  expect(newField.student && newField.student.alone).toBe(true);
-});
-
-test("Deep copy a field object", () => {
+test("Class Field produces a deep copy of field", () => {
   // arrange
   const field = new Field({
     id: "gef",
@@ -60,7 +24,7 @@ test("Deep copy a field object", () => {
   });
 
   // act - generate a deep copy of field
-  const newField = JSON.parse(JSON.stringify(field));
+  const newField = new Field(field);
 
   // change properties of newField
   newField.id = "newid";

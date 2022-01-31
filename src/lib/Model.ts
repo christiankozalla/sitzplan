@@ -26,7 +26,7 @@ export type FieldProps = {
   id: string;
   position: Position;
   isTable: boolean;
-  student: Student | undefined;
+  student?: Student;
 };
 
 export type StorageData = {
@@ -47,7 +47,7 @@ export class Field {
     this.id = id;
     this.position = position;
     this.isTable = isTable;
-    this.student = student;
+    this.student = student ? { ...student } : undefined;
   }
 }
 
