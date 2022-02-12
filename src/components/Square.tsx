@@ -11,6 +11,7 @@ export interface SquareProps {
 }
 
 export const Square: FC<SquareProps> = ({ initialField }) => {
+  const [lastTime, setLastTime] = useState<number>(Date.now());
   const [field, setField] = useState<Field>(initialField);
   useEffect(() => {
     controller.observe(field.id, setField);
@@ -49,12 +50,21 @@ export const Square: FC<SquareProps> = ({ initialField }) => {
     }
   };
 
+  const handleDoubleTouch = () => {
+    const newDate = Date.now();
+    if (newDate - lastTime < 300) {
+      controller.toggleTable(field.id);
+    }
+    setLastTime(newDate);
+  };
+
   return (
     <div
       ref={drop}
       style={squareStyles}
       className={styles.table}
       onMouseEnter={handleMouseEnter}
+      onTouchStart={handleDoubleTouch}
       onDoubleClick={() => controller.toggleTable(field.id)}
     >
       <StudentComp key={field.id} field={field} />
