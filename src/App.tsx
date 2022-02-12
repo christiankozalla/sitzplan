@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { DndProvider } from "react-dnd";
-import { HTML5Backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
 import { Classroom } from "./components/Classroom";
 import { Controls } from "./components/Controls";
 import { Menu } from "./components/Menu";
@@ -10,7 +10,6 @@ import { Conditions } from "./components/Conditions";
 import { Controller } from "./lib/Controller";
 import { getInitialDataFromUrl } from "./lib/Utils";
 import { ModalConfig } from "./lib/Model";
-import { TouchWarning } from "./components/TouchWarning";
 import styles from "./App.module.css";
 
 // Disable Contextmenu on right-click globally - only in prod
@@ -42,16 +41,6 @@ export default function App() {
     return () => controller.removeObserver("appModal", setModal);
   }, [classroomKey]);
 
-  useEffect(() => {
-    document.addEventListener("touchstart", () =>
-      setModal({
-        isOpen: true,
-        title: "Besser auf Desktop",
-        component: <TouchWarning />,
-      })
-    );
-  }, []);
-
   const handleModalOpen = (
     isOpen: boolean | ((prevOpen: boolean) => boolean)
   ) => {
@@ -73,7 +62,7 @@ export default function App() {
   return (
     <>
       <Menu key={classroomKey} />
-      <DndProvider backend={HTML5Backend}>
+      <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
         <div className={styles.layout}>
           <Controls handleModalOpen={handleModalOpen} />
           <Classroom key={classroomKey} />
