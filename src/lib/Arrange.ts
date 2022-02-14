@@ -13,7 +13,10 @@ export default function (
   let tries = 0;
   const arranged: FieldWithTable[] = []; // Result
 
-  do {
+  while (
+    (arranged.length < tables.length || studentStore.length > 0) &&
+    currentIndex < tables.length
+  ) {
     const currentTable = tables[currentIndex];
     const prevTable = arranged.length
       ? arranged[arranged.length - 1]
@@ -50,14 +53,11 @@ export default function (
       studentStore.splice(randIndex, 1); // impure
       currentIndex = currentIndex + 1;
     }
-  } while (
-    (arranged.length < tables.length || studentStore.length > 0) &&
-    currentIndex < tables.length
-  );
+  }
 
   // TODO
   // Edge case: currentIndex points to the end of tables, but there are students left to place
-  // in this case, the loop would never end, because studentStore.length would stay > 0
+  // in this case, the loop would never end, because studentStore.length would stay > 0 -> updated while condition fixes that
   // workaround: check if (currentIndex > tables.length - 1)
   // then grab all empty tables from arranged, and invoke sort(emptyTables, remainingStudents)
   return arranged;
