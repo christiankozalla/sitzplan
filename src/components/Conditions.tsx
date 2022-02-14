@@ -16,6 +16,7 @@ export const Conditions: FC<ConditionsProps> = ({ setOpen, initialField }) => {
     initialField
   );
   const [selectNeighborsForId, setSelectNeighborsForId] = useState("");
+  const [mixed, setMixed] = useState(false);
 
   useEffect(() => {
     if (selectedField) {
@@ -60,12 +61,23 @@ export const Conditions: FC<ConditionsProps> = ({ setOpen, initialField }) => {
       <div id={styles.footer}>
         <button
           onClick={() => {
-            controller.rearrangeStudentsByConstraints();
+            controller.rearrangeStudentsByConstraints(mixed);
             setOpen(false);
           }}
         >
           Neu Anordnen
         </button>
+        <label htmlFor="mixed">Bunte Reihe: </label>
+        <div className="checkbox-container">
+          <input
+            type="checkbox"
+            name="mixed"
+            id="mixed"
+            checked={mixed}
+            onChange={() => setMixed((prevState) => !prevState)}
+          />
+          <span className="checkbox-control"></span>
+        </div>
         <AddStudent />
       </div>
     </div>

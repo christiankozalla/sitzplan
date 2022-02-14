@@ -1,9 +1,10 @@
-import type { FieldWithTable, FieldWithStudent } from "./Model";
+import type { FieldWithTable, FieldWithStudent, Student } from "./Model";
 import { TryLimit } from "./Constants";
 
 export default function (
   tables: FieldWithTable[],
-  students: FieldWithStudent[]
+  students: FieldWithStudent[],
+  mixed = false
 ): FieldWithTable[] {
   if (!students.length) {
     return tables;
@@ -36,7 +37,8 @@ export default function (
       student &&
       prevTable?.student &&
       (prevTable.student.forbiddenNeighbors.includes(student.name) || // a pair of students ain't allowed to sit next each other
-        student.forbiddenNeighbors.includes(prevTable.student.name))
+        student.forbiddenNeighbors.includes(prevTable.student.name) ||
+        (mixed && areSameGender(student, prevTable.student))) // "Bunte Reihe" same gender must not sit next each other
     ) {
       if (tries < TryLimit) {
         tries = tries + 1; // continue with a new random student
@@ -65,3 +67,10 @@ export default function (
 
 // Returns a ranom index for randomIndex(array.length) and -1 if array.length is 0
 export const randomIndex = (max: number) => Math.ceil(Math.random() * max) - 1;
+
+const areSameGender = (student: Student, prevStudent: Student): boolean => {
+  return (
+    (student.gender === "male" && prevStudent.gender === "male") ||
+    (student.gender === "female" && prevStudent.gender === "female")
+  );
+};

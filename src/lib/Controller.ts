@@ -390,7 +390,7 @@ export class Controller {
     };
   }
 
-  public async rearrangeStudentsByConstraints(): Promise<void> {
+  public async rearrangeStudentsByConstraints(mixed = false): Promise<void> {
     const students = this.getFields()
       .filter((field) => field.student)
       .map((field) => new Field({ ...field })) as FieldWithStudent[];
@@ -445,16 +445,19 @@ export class Controller {
 
     const arrange = await import("./Arrange").then((module) => module.default);
     const firstAndLastRowWithStudents = [
-      ...arrange(tablesFirstRow, studentsForFirstRow),
-      ...arrange(tablesLastRow, studentsForLastRow),
+      ...arrange(tablesFirstRow, studentsForFirstRow, mixed),
+      ...arrange(tablesLastRow, studentsForLastRow, mixed),
     ];
 
     const allFields = [
       ...arrange(
-        [...firstAndLastRowWithStudents, ...remainingTables].sort(() =>
-          Math.random() > 0.5 ? 1 : -1
-        ),
-        remainingStudents
+        mixed
+          ? [...firstAndLastRowWithStudents, ...remainingTables]
+          : [...firstAndLastRowWithStudents, ...remainingTables].sort(() =>
+              Math.random() > 0.5 ? 1 : -1
+            ),
+        remainingStudents,
+        mixed
       ),
     ];
 
