@@ -1,5 +1,6 @@
 import { FC, ChangeEvent, SetStateAction, Dispatch } from "react";
 import { controller } from "../App";
+import { CheckboxSwitch } from "./CheckboxSwitch";
 import { Field, Student } from "../lib/Model";
 import styles from "./StudentEditor.module.css";
 
@@ -123,16 +124,13 @@ export const StudentEditor: FC<StudentEditorProps> = ({
           <label htmlFor="alone" className={styles.description}>
             Soll Schüler:in alleine sitzen?
           </label>
-          <div className="checkbox-container">
-            <input
-              type="checkbox"
-              name="alone"
-              id="alone"
-              defaultChecked={field.student.alone}
-              onChange={(e) => handleChange(e, "alone")}
-            />
-            <span className="checkbox-control"></span>
-          </div>
+          <CheckboxSwitch
+            name="alone"
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              handleChange(e, "alone")
+            }
+            checked={field.student.alone}
+          />
         </div>
         <div className={styles.editorItem}>
           <p className={styles.description}>

@@ -5,6 +5,7 @@ import styles from "./Conditions.module.css";
 import { StudentTag } from "./StudentTag";
 import { Field } from "../lib/Model";
 import { StudentEditor } from "./StudentEditor";
+import { CheckboxSwitch } from "./CheckboxSwitch";
 
 interface ConditionsProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -67,16 +68,13 @@ export const Conditions: FC<ConditionsProps> = ({ setOpen, initialField }) => {
         >
           Neu Anordnen
         </button>
-        <label htmlFor="mixed">Bunte Reihe: </label>
-        <div className="checkbox-container">
-          <input
-            type="checkbox"
+        <div>
+          <label htmlFor="mixed">Bunte Reihe</label>
+          <CheckboxSwitch
             name="mixed"
-            id="mixed"
             checked={mixed}
             onChange={() => setMixed((prevState) => !prevState)}
           />
-          <span className="checkbox-control"></span>
         </div>
         <AddStudent />
       </div>
