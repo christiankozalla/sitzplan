@@ -83,7 +83,7 @@ export class Controller {
           new Field({
             id: this.generateId(),
             position: [x, y],
-            isTable: field?.isTable || false,
+            isTable: field?.isTable ?? false,
             student: field?.student,
           })
         );
@@ -390,7 +390,7 @@ export class Controller {
     };
   }
 
-  public async rearrangeStudentsByConstraints(): Promise<void> {
+  public async rearrangeStudentsByConstraints(mixed = false): Promise<void> {
     const students = this.getFields()
       .filter((field) => field.student)
       .map((field) => new Field({ ...field })) as FieldWithStudent[];
@@ -428,6 +428,10 @@ export class Controller {
     const { tablesFirstRow, tablesLastRow, remainingTables } =
       this.determineFirstAndLastRow(tables);
 
+    // TODO:
+    // Better check on every emit , or in react component
+    // disable the button on either of these conditions
+    // refactor into function
     if (tables.length < students.length) {
       console.warn("Too few tables for students. Aborting...");
       return;
@@ -439,12 +443,22 @@ export class Controller {
       return;
     }
 
-    const sort = await import("./Arrange").then((module) => module.default);
+    const arrange = await import("./Arrange").then((module) => module.default);
+    const firstAndLastRowWithStudents = [
+      ...arrange(tablesFirstRow, studentsForFirstRow, mixed),
+      ...arrange(tablesLastRow, studentsForLastRow, mixed),
+    ];
 
     const allFields = [
-      ...sort(tablesFirstRow, studentsForFirstRow),
-      ...sort(tablesLastRow, studentsForLastRow),
-      ...sort(remainingTables, remainingStudents),
+      ...arrange(
+        mixed
+          ? [...firstAndLastRowWithStudents, ...remainingTables]
+          : [...firstAndLastRowWithStudents, ...remainingTables].sort(() =>
+              Math.random() > 0.5 ? 1 : -1
+            ),
+        remainingStudents,
+        mixed
+      ),
     ];
 
     this.room = this.generateRoom(this.rows, this.columns, allFields);

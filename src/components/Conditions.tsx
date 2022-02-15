@@ -5,6 +5,7 @@ import styles from "./Conditions.module.css";
 import { StudentTag } from "./StudentTag";
 import { Field } from "../lib/Model";
 import { StudentEditor } from "./StudentEditor";
+import { CheckboxSwitch } from "./CheckboxSwitch";
 
 interface ConditionsProps {
   setOpen: Dispatch<SetStateAction<boolean>>;
@@ -16,6 +17,7 @@ export const Conditions: FC<ConditionsProps> = ({ setOpen, initialField }) => {
     initialField
   );
   const [selectNeighborsForId, setSelectNeighborsForId] = useState("");
+  const [mixed, setMixed] = useState(false);
 
   useEffect(() => {
     if (selectedField) {
@@ -60,12 +62,20 @@ export const Conditions: FC<ConditionsProps> = ({ setOpen, initialField }) => {
       <div id={styles.footer}>
         <button
           onClick={() => {
-            controller.rearrangeStudentsByConstraints();
+            controller.rearrangeStudentsByConstraints(mixed);
             setOpen(false);
           }}
         >
           Neu Anordnen
         </button>
+        <div>
+          <label htmlFor="mixed">Bunte Reihe</label>
+          <CheckboxSwitch
+            name="mixed"
+            checked={mixed}
+            onChange={() => setMixed((prevState) => !prevState)}
+          />
+        </div>
         <AddStudent />
       </div>
     </div>

@@ -1,59 +1,76 @@
-import type { Field, FieldWithTable, FieldWithStudent } from "./Model";
+import type { FieldWithTable, FieldWithStudent, Student } from "./Model";
 import { TryLimit } from "./Constants";
 
-export default function sort(
+export default function (
   tables: FieldWithTable[],
-  students: FieldWithStudent[]
-): Field[] {
+  students: FieldWithStudent[],
+  mixed = false
+): FieldWithTable[] {
   if (!students.length) {
     return tables;
   }
   const studentStore = [...students];
   let currentIndex = 0;
   let tries = 0;
-  const sorted: Field[] = []; // Result
+  const arranged: FieldWithTable[] = []; // Result
 
-  do {
+  while (
+    (arranged.length < tables.length || studentStore.length > 0) &&
+    currentIndex < tables.length
+  ) {
     const currentTable = tables[currentIndex];
-    const prevField = sorted.length ? sorted[sorted.length - 1] : undefined;
-    const randIndex = studentStore.length
-      ? randomIndex(studentStore.length)
-      : -1;
+    const prevTable = arranged.length
+      ? arranged[arranged.length - 1]
+      : undefined;
+    const randIndex = randomIndex(studentStore.length);
     const { student } =
       randIndex > -1 ? studentStore[randIndex] : { student: undefined };
 
-    if (
-      student === undefined || // all students already placed
-      (prevField?.student &&
-        (prevField.student.forbiddenNeighbors.includes(student.name) || // a pair of students ain't allowed to sit next each other
-          student.forbiddenNeighbors.includes(prevField.student.name)))
+    if (currentTable.student) {
+      arranged.push(currentTable);
+      currentIndex = currentIndex + 1;
+    } else if (student === undefined) {
+      // all students already placed -> push all remaining tables into result
+      arranged.push(currentTable);
+      currentIndex = currentIndex + 1;
+    } else if (
+      student &&
+      prevTable?.student &&
+      (prevTable.student.forbiddenNeighbors.includes(student.name) || // a pair of students ain't allowed to sit next each other
+        student.forbiddenNeighbors.includes(prevTable.student.name) ||
+        (mixed && areSameGender(student, prevTable.student))) // "Bunte Reihe" same gender must not sit next each other
     ) {
       if (tries < TryLimit) {
         tries = tries + 1; // continue with a new random student
       } else {
-        // students are forbidden, tried {TryLimit} different random students
-        sorted.push(currentTable); // push empty table
+        // students are forbidden, tried {TryLimit} random students
+        arranged.push(currentTable); // push empty table
         currentIndex = currentIndex + 1;
         tries = 0;
       }
     } else {
       // students are allowed
       currentTable.student = { ...student };
-      sorted.push(currentTable);
-      studentStore.splice(randIndex, 1);
+      arranged.push(currentTable);
+      studentStore.splice(randIndex, 1); // impure
       currentIndex = currentIndex + 1;
     }
-  } while (sorted.length < tables.length || studentStore.length > 0);
+  }
 
   // TODO
   // Edge case: currentIndex points to the end of tables, but there are students left to place
-  // in this case, the loop would never end, because studentStore.length would stay > 0
+  // in this case, the loop would never end, because studentStore.length would stay > 0 -> updated while condition fixes that
   // workaround: check if (currentIndex > tables.length - 1)
-  // then grab all empty tables from sorted, and invoke sort(emptyTables, remainingStudents)
-
-  return sorted;
+  // then grab all empty tables from arranged, and invoke sort(emptyTables, remainingStudents)
+  return arranged;
 }
 
-export function randomIndex(length: number): number {
-  return Math.floor(Math.random() * (length - 1));
-}
+// Returns a ranom index for randomIndex(array.length) and -1 if array.length is 0
+export const randomIndex = (max: number) => Math.ceil(Math.random() * max) - 1;
+
+const areSameGender = (student: Student, prevStudent: Student): boolean => {
+  return (
+    (student.gender === "male" && prevStudent.gender === "male") ||
+    (student.gender === "female" && prevStudent.gender === "female")
+  );
+};
