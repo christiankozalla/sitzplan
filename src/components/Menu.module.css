@@ -8,6 +8,7 @@
   border-radius: 0 0 4px 0;
   background-color: white;
   z-index: 4;
+  max-width: 300px;
 }
 
 .firstLine {
@@ -19,6 +20,7 @@
 }
 
 .menuButton {
+  flex-shrink: 0;
   padding: var(--space);
   height: calc(4 * var(--space));
   width: calc(4 * var(--space));
@@ -45,7 +47,8 @@
 }
 
 .input {
-  width: 80px;
+  min-width: 80px;
+  flex-grow: 1;
 }
 
 .expandedMenu {
@@ -55,8 +58,13 @@
 .expandedMenu li {
   display: flex;
   justify-content: space-between;
+  align-items: baseline;
   padding: var(--space);
   border-top: 1px solid var(--text-grey-300);
+}
+
+.expandedMenu li select {
+  min-width: unset;
 }
 
 .expandedMenu li:last-child {

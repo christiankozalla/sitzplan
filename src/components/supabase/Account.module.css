@@ -1,0 +1,32 @@
+.account form > * {
+  margin-bottom: 1rem;
+}
+
+label + input {
+  margin-left: var(--space);
+  height: 2.5rem;
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  gap: calc(2 * var(--space));
+}
+
+.buttons button {
+  flex-grow: 1;
+}
+
+.logout {
+  background-color: var(--color-warning);
+}
+
+@media screen and (max-width: 700px) {
+  .buttons {
+    flex-wrap: wrap;
+  }
+
+  .buttons button {
+    width: 100%;
+  }
+}

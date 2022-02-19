@@ -1,0 +1,68 @@
+.description {
+  position: relative;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.description img {
+  width: 150px;
+  position: absolute;
+  right: -30px;
+  top: -50px;
+  transform: rotate(12deg);
+  z-index: -1;
+}
+
+.description span::before {
+  display: inline-block;
+  content: " ";
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-right: var(--space);
+  background: url("data:image/svg+xml;utf8,<svg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'><circle cx='50' cy='50' r='50' fill='%2380ced5' /></svg>");
+}
+
+.form {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+.form input {
+  height: 2.5rem;
+  flex-grow: 3;
+  margin-right: var(--space);
+}
+
+.form button {
+  flex-grow: 2;
+}
+
+.success {
+  padding: calc(2 * var(--space));
+  background-color: var(--color-primary-dark);
+  font-size: 1.1rem;
+  letter-spacing: 0.5px;
+  color: white;
+  border-radius: var(--space);
+  box-shadow: var(--shadow-md);
+  margin: 1rem auto;
+}
+
+@media screen and (max-width: 700px) {
+  .form {
+    display: block;
+  }
+  .form > * {
+    display: block;
+    width: 100%;
+    margin: calc(2 * var(--space)) 0;
+  }
+
+  .description img {
+    height: 100%;
+    top: 0;
+    right: 0;
+  }
+}

@@ -7,9 +7,13 @@ import { Menu } from "./components/Menu";
 import { Modal } from "./components/Modal";
 import { RecycleBin } from "./components/RecycleBin";
 import { Conditions } from "./components/Conditions";
+import { Login } from "./components/supabase/Login";
+import { Account } from "./components/supabase/Account";
 import { Controller } from "./lib/Controller";
 import { getInitialDataFromUrl } from "./lib/Utils";
 import { ModalConfig } from "./lib/Model";
+import { Session } from "@supabase/supabase-js";
+import { supabase } from "./lib/supabase";
 import styles from "./App.module.css";
 
 // Disable Contextmenu on right-click globally - only in prod
@@ -25,6 +29,7 @@ window.addEventListener("popstate", (e) => {
 });
 
 export default function App() {
+  const [session, setSession] = useState<Session | null>(null);
   const [modal, setModal] = useState<ModalConfig>({
     isOpen: false,
     title: "",
@@ -33,6 +38,14 @@ export default function App() {
   const [classroomKey, setClassroomKey] = useState(
     controller.getClassroomKey()
   );
+
+  useEffect(() => {
+    setSession(supabase.auth.session());
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
 
   useEffect(() => {
     controller.observeClassroomKey(setClassroomKey);
@@ -47,7 +60,7 @@ export default function App() {
     if (typeof isOpen === "boolean") {
       return setModal({
         isOpen,
-        title: "Editor isOpen === boolean",
+        title: "Student Editor",
       });
     } else if (typeof isOpen === "function") {
       const newOpen = isOpen(modal.isOpen);
@@ -61,7 +74,39 @@ export default function App() {
 
   return (
     <>
-      <Menu key={classroomKey} />
+      <Menu key={classroomKey}>
+        <li>
+          {session ? (
+            <button
+              className={styles.menuButton}
+              onClick={() =>
+                setModal({
+                  isOpen: true,
+                  title: "Seaty Account",
+                  component: (
+                    <Account session={session} setOpen={handleModalOpen} />
+                  ),
+                })
+              }
+            >
+              Account
+            </button>
+          ) : (
+            <button
+              className={styles.menuButton}
+              onClick={() =>
+                setModal({
+                  isOpen: true,
+                  title: "Seaty Log In",
+                  component: <Login setOpen={handleModalOpen} />,
+                })
+              }
+            >
+              Log In
+            </button>
+          )}
+        </li>
+      </Menu>
       <DndProvider backend={TouchBackend} options={{ enableMouseEvents: true }}>
         <div className={styles.layout}>
           <Controls handleModalOpen={handleModalOpen} />

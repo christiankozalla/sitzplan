@@ -6,6 +6,8 @@ interface ImportMetaEnv {
   PROD: boolean;
   DEV: boolean;
   SSR: boolean;
+  VITE_SUPABASE_ANON_KEY: string;
+  VITE_SUPABASE_URL: string;
 }
 
 interface ImportMeta {

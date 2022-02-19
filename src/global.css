@@ -105,7 +105,8 @@ h3 {
   outline-offset: 2px;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="email"] {
   border: none;
   padding: 0 4px;
   color: var(--text-grey-700);
@@ -114,7 +115,8 @@ input[type="text"] {
   border-radius: var(--space);
 }
 
-input[type="text"]::placeholder {
+input[type="text"]::placeholder,
+input[type="email"]::placeholder {
   color: var(--text-grey-400);
 }
 

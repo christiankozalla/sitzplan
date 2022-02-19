@@ -2,7 +2,7 @@ import { FC, useState, useEffect } from "react";
 import { controller } from "../App";
 import styles from "./Menu.module.css";
 
-export const Menu: FC = () => {
+export const Menu: FC = ({ children }) => {
   const [showMenu, setShowMenu] = useState(false);
   const [roomName, setRoomName] = useState(controller.getRoomName());
   const [classGroupName, setClassGroupName] = useState(
@@ -90,6 +90,7 @@ export const Menu: FC = () => {
                 <option value="12">12</option>
               </select>
             </li>
+            {children}
           </ul>
         </div>
       )}
