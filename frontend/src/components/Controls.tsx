@@ -18,7 +18,7 @@ export const Controls: FC<ControlsProps> = ({ handleModalOpen }) => {
     <div className={styles.controls}>
       {showAddStudentDialog && (
         <div className={styles.addStudent}>
-          <AddStudent />
+          <AddStudent setOpen={setShowAddStudentDialog} />
         </div>
       )}
       <div className={styles.tooltip} data-tooltip="Füge einen Schüler hinzu">

@@ -1,13 +1,18 @@
-import { FC, useState } from "react";
+import { FC, useState, Dispatch, SetStateAction } from "react";
 import { controller } from "../App";
 import styles from "./AddStudent.module.css";
 
-export const AddStudent: FC = () => {
+interface AddStudentProps {
+  setOpen: Dispatch<SetStateAction<boolean>>
+}
+
+
+export const AddStudent: FC<AddStudentProps> = ({ setOpen 
+}) => {
   const [studentName, setStudentName] = useState("");
 
   const handleNewStudent = () => {
-    const trimmedName = studentName.trim();
-    trimmedName && controller.assignNewStudent(trimmedName);
+    controller.assignNewStudent(studentName.trim());
     setStudentName("");
   };
 
@@ -24,6 +29,7 @@ export const AddStudent: FC = () => {
         autoFocus
         onChange={(e) => setStudentName(e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleNewStudent()}
+        onBlur={() => setOpen(false)}
       />
       <button className={styles.addStudentButton} onClick={handleNewStudent}>
         +
