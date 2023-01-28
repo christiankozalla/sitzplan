@@ -28,7 +28,7 @@ export const AddStudent: FC<AddStudentProps> = ({ setOpen
         placeholder="Neue:r Schüler:in"
         autoFocus
         onChange={(e) => setStudentName(e.target.value)}
-        onKeyDown={(e) => e.key === "Enter" && handleNewStudent()}
+        onKeyUp={(e) => e.key === "Enter" && handleNewStudent()}
         onBlur={() => setOpen(false)}
       />
       <button className={styles.addStudentButton} onClick={handleNewStudent}>
