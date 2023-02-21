@@ -14,7 +14,7 @@
   display: flex;
 }
 
-.firstLine > * {
+.firstLine>* {
   margin: 0 var(--space);
 }
 
@@ -55,6 +55,7 @@
 .expandedMenu li {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: var(--space);
   border-top: 1px solid var(--text-grey-300);
 }
