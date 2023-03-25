@@ -65,13 +65,23 @@ func (q *Queries) CreateTribe(ctx context.Context, name sql.NullString) (Tribe, 
 }
 
 const createUser = `-- name: CreateUser :one
-INSERT INTO users (name) VALUES ($1) RETURNING id, name, role
+INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id, email
 `
 
-func (q *Queries) CreateUser(ctx context.Context, name string) (User, error) {
-	row := q.db.QueryRowContext(ctx, createUser, name)
-	var i User
-	err := row.Scan(&i.ID, &i.Name, &i.Role)
+type CreateUserParams struct {
+	Email        string
+	PasswordHash string
+}
+
+type CreateUserRow struct {
+	ID    int64
+	Email string
+}
+
+func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (CreateUserRow, error) {
+	row := q.db.QueryRowContext(ctx, createUser, arg.Email, arg.PasswordHash)
+	var i CreateUserRow
+	err := row.Scan(&i.ID, &i.Email)
 	return i, err
 }
 
@@ -135,13 +145,19 @@ func (q *Queries) GetTribe(ctx context.Context, id int64) (Tribe, error) {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, name, role FROM users WHERE id = $1
+SELECT id, email, password_hash FROM users WHERE email = $1
 `
 
-func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
-	row := q.db.QueryRowContext(ctx, getUser, id)
-	var i User
-	err := row.Scan(&i.ID, &i.Name, &i.Role)
+type GetUserRow struct {
+	ID           int64
+	Email        string
+	PasswordHash string
+}
+
+func (q *Queries) GetUser(ctx context.Context, email string) (GetUserRow, error) {
+	row := q.db.QueryRowContext(ctx, getUser, email)
+	var i GetUserRow
+	err := row.Scan(&i.ID, &i.Email, &i.PasswordHash)
 	return i, err
 }
 

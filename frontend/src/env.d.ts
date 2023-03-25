@@ -6,6 +6,7 @@ interface ImportMetaEnv {
   PROD: boolean;
   DEV: boolean;
   SSR: boolean;
+  VITE_BACKEND_BASE_URL: string;
 }
 
 interface ImportMeta {

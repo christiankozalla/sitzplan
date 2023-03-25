@@ -76,7 +76,7 @@ export const Conditions: FC<ConditionsProps> = ({ setOpen, initialField }) => {
             onChange={() => setMixed((prevState) => !prevState)}
           />
         </div>
-        <AddStudent />
+        <AddStudent setOpen={setOpen} />
       </div>
     </div>
   );

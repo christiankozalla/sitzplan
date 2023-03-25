@@ -1,18 +1,21 @@
 all:
 	@awk -F'[ :]' '!/^all:/ && /^([A-z_-]+):/ {print "make " $$1}' Makefile
 
-generate-db:
-	sqlc generate -f ./server/models/sqlc/sqlc.yaml
+db-generate:
+	sqlc generate -f ./server/models/db/sqlc.yaml
 
-bootstrap:
+client-bootstrap:
 	rm -rf frontend/node_modules
 	cd frontend && npm install
 
-start-db:
+db-start:
 	./server/start-dev-db.sh
 
-run-server:
+server-run:
 	cd server && go run main.go
 
-run-client:
+client-run:
 	cd frontend && npm run dev
+
+# Access running container db
+#  docker exec -it sitzplan-dev /usr/bin/psql -U postgres -d sitzplan_dev

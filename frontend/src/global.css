@@ -2,9 +2,12 @@
   --columns: 10;
   --rows: 10;
   --space: 8px;
-  --color-primary-lightest: rgb(224, 243, 245); /* #e0f3f5 */
-  --color-primary-lighter: rgb(205, 236, 238); /* #cdecee*/
-  --color-primary-light: rgb(128, 206, 213); /* #80ced5*/
+  --color-primary-lightest: rgb(224, 243, 245);
+  /* #e0f3f5 */
+  --color-primary-lighter: rgb(205, 236, 238);
+  /* #cdecee*/
+  --color-primary-light: rgb(128, 206, 213);
+  /* #80ced5*/
   --color-primary-dark: rgb(49, 181, 212);
   --color-warning: rgb(243, 194, 39);
   --color-attention: rgb(236, 71, 26);
@@ -191,6 +194,12 @@ button[disabled] {
 button[disabled]:focus,
 button[disabled]:active {
   outline: none;
+}
+
+button.secondary {
+  background-color: white;
+  color: var(--color-primary-dark);
+  border: 1px solid var(--color-primary-dark);
 }
 
 ::-webkit-scrollbar {

@@ -3,12 +3,10 @@ import { controller } from "../App";
 import styles from "./AddStudent.module.css";
 
 interface AddStudentProps {
-  setOpen: Dispatch<SetStateAction<boolean>>
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-
-export const AddStudent: FC<AddStudentProps> = ({ setOpen 
-}) => {
+export const AddStudent: FC<AddStudentProps> = ({ setOpen }) => {
   const [studentName, setStudentName] = useState("");
 
   const handleNewStudent = () => {

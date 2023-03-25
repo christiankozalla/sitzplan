@@ -27,7 +27,7 @@ export class Controller {
     roomName = "",
     rows = 10,
     columns = 10,
-    fields: Field[] = [],
+    fields: Field[] = []
   ) {
     this.init({ className, roomName, rows, columns, fields });
   }
@@ -67,7 +67,7 @@ export class Controller {
   private generateRoom(
     rows: number,
     cols: number,
-    fieldsData: Field[],
+    fieldsData: Field[]
   ): { [id: Field["id"]]: Field } {
     const fields: Field[] = [];
 
@@ -76,7 +76,7 @@ export class Controller {
     for (let y = 0; y < rows; y++) {
       for (let x = 0; x < cols; x++) {
         const field = fieldsData.find(
-          ({ position: [fieldX, fieldY] }) => fieldX === x && fieldY === y,
+          ({ position: [fieldX, fieldY] }) => fieldX === x && fieldY === y
         );
 
         fields.push(
@@ -85,7 +85,7 @@ export class Controller {
             position: [x, y],
             isTable: field?.isTable ?? false,
             student: field?.student,
-          }),
+          })
         );
       }
     }
@@ -131,7 +131,7 @@ export class Controller {
 
   public getFieldByRow(row: number): Field | undefined {
     return this.getFields().find(
-      (field) => field.position[1] === row && field.isTable && !field.student,
+      (field) => field.position[1] === row && field.isTable && !field.student
     );
   }
 
@@ -154,10 +154,10 @@ export class Controller {
 
   public observe(
     id: string,
-    setStateAction: PositionObserver<any>,
+    setStateAction: PositionObserver<any>
   ): () => void {
     const index = this.roomObservers.findIndex(
-      (observer) => observer.id === id,
+      (observer) => observer.id === id
     );
 
     if (index > -1) {
@@ -178,7 +178,7 @@ export class Controller {
     this.roomObservers.forEach((observer) => {
       if (observer.id === id) {
         observer.updateUi = observer.updateUi.filter(
-          (updateAction) => updateAction !== setStateAction,
+          (updateAction) => updateAction !== setStateAction
         );
       }
     });
@@ -191,7 +191,7 @@ export class Controller {
     } else {
       // regenerate the whole room and update the classroomKey to trigger re-render
       const fieldsWithStudentsAndTables = this.getFields().filter(
-        (field) => field.student || field.isTable,
+        (field) => field.student || field.isTable
       ) as Field[];
 
       // Number of rows is updated
@@ -201,7 +201,7 @@ export class Controller {
         this.room = this.generateRoom(
           newRows,
           this["columns"],
-          fieldsWithStudentsAndTables,
+          fieldsWithStudentsAndTables
         );
         this.updateClassroom();
 
@@ -212,7 +212,7 @@ export class Controller {
         this.room = this.generateRoom(
           this["rows"],
           newCols,
-          fieldsWithStudentsAndTables,
+          fieldsWithStudentsAndTables
         );
         this.updateClassroom();
       }
@@ -230,7 +230,7 @@ export class Controller {
   public moveStudent(
     originId: Field["id"],
     destinationId: Field["id"],
-    moveTable = false,
+    moveTable = false
   ): void {
     const destinationField = {
       ...this.room[destinationId],
@@ -321,14 +321,13 @@ export class Controller {
     const hasTableAndNoStudent = (field: Field) =>
       field.isTable && !field.student;
 
-    const emptyTable = row !== undefined
-      ? allFields.find(hasTableInRow)
-      : undefined;
+    const emptyTable =
+      row !== undefined ? allFields.find(hasTableInRow) : undefined;
 
     return (
       emptyTable ??
-        allFields.find(hasTableAndNoStudent) ??
-        allFields.find((firstField) => !firstField.student)
+      allFields.find(hasTableAndNoStudent) ??
+      allFields.find((firstField) => !firstField.student)
     );
   }
 
@@ -339,7 +338,7 @@ export class Controller {
 
   private emitChange(
     id: string,
-    updatedValue: Field | TrashedField[] | ModalConfig | string,
+    updatedValue: Field | TrashedField[] | ModalConfig | string
   ): void {
     this.roomObservers.forEach((observer) => {
       if (observer.id === id) {
@@ -357,7 +356,7 @@ export class Controller {
       rows: this.rows,
       columns: this.columns,
       fields: this.getFields().filter(
-        (field) => field.isTable || field.student,
+        (field) => field.isTable || field.student
       ),
     });
   }
@@ -372,7 +371,7 @@ export class Controller {
     // firstRow has the smallest currentY of a table - i.e. the Y coordinate of the table "highest up" on the plan
     // lastRow has the largest currentY of a table - i.e. the Y coordinate of the table most "down below" on the plan
     const yCoordinates: number[] = fieldsWithTable.map(
-      ({ position: [, y] }) => y,
+      ({ position: [, y] }) => y
     );
     const firstRow = Math.max(...yCoordinates);
     const lastRow = Math.min(...yCoordinates);
@@ -381,13 +380,13 @@ export class Controller {
       firstRow,
       lastRow,
       tablesFirstRow: fieldsWithTable.filter(
-        ({ position: [, y] }) => y === firstRow,
+        ({ position: [, y] }) => y === firstRow
       ),
       tablesLastRow: fieldsWithTable.filter(
-        ({ position: [, y] }) => y === lastRow,
+        ({ position: [, y] }) => y === lastRow
       ),
       remainingTables: fieldsWithTable.filter(
-        ({ position: [, y] }) => y !== lastRow && y !== firstRow,
+        ({ position: [, y] }) => y !== lastRow && y !== firstRow
       ),
     };
   }
@@ -418,17 +417,17 @@ export class Controller {
           studentsForFirstRow: [],
           studentsForLastRow: [],
           remainingStudents: [],
-        },
+        }
       );
 
     const tables = this.getFields()
       .filter((field) => field.isTable)
       .map(
-        (field) => new Field({ ...field, student: undefined }),
+        (field) => new Field({ ...field, student: undefined })
       ) as FieldWithTable[];
 
-    const { tablesFirstRow, tablesLastRow, remainingTables } = this
-      .determineFirstAndLastRow(tables);
+    const { tablesFirstRow, tablesLastRow, remainingTables } =
+      this.determineFirstAndLastRow(tables);
 
     // TODO:
     // Better check on every emit , or in react component
@@ -456,10 +455,10 @@ export class Controller {
         mixed
           ? [...firstAndLastRowWithStudents, ...remainingTables]
           : [...firstAndLastRowWithStudents, ...remainingTables].sort(() =>
-            Math.random() > 0.5 ? 1 : -1
-          ),
+              Math.random() > 0.5 ? 1 : -1
+            ),
         remainingStudents,
-        mixed,
+        mixed
       ),
     ];
 
@@ -472,7 +471,7 @@ export class Controller {
       rows: this.rows,
       columns: this.columns,
       fields: this.getFields().filter(
-        (field) => field.isTable || field.student,
+        (field) => field.isTable || field.student
       ),
     });
   }

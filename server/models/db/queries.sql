@@ -1,8 +1,8 @@
 -- name: CreateUser :one
-INSERT INTO users (name) VALUES ($1) RETURNING id, name, role;
+INSERT INTO users (email, password_hash) VALUES ($1, $2) RETURNING id, email;
 
 -- name: GetUser :one
-SELECT id, name, role FROM users WHERE id = $1;
+SELECT id, email, password_hash FROM users WHERE email = $1;
 
 -- name: CreateTribe :one
 INSERT INTO tribes (name) VALUES ($1) RETURNING *;

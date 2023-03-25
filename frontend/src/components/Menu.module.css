@@ -25,7 +25,8 @@
   background-color: var(--text-grey-300);
 }
 
-.menuButton::before {
+.menuButton::before,
+.menuButton::after {
   display: block;
   content: " ";
   height: 2px;
@@ -35,12 +36,6 @@
 }
 
 .menuButton::after {
-  display: block;
-  content: " ";
-  height: 2px;
-  border-radius: 3px;
-  width: 100%;
-  background-color: var(--text-grey-700);
   margin-top: 4px;
 }
 
@@ -62,4 +57,14 @@
 
 .expandedMenu li:last-child {
   border-bottom: 1px solid var(--text-grey-300);
+}
+
+.expandedMenu form {
+  width: 100%;
+}
+
+.expandedMenu form>* {
+  display: block;
+  width: 100%;
+  margin-top: calc(var(--space) * 0.5);
 }

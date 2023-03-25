@@ -65,3 +65,9 @@ export type ModalConfig = {
   field?: Field;
   component?: ReactElement;
 };
+
+export type User = {
+  ID?: number;
+  Email: string;
+  Password?: string;
+};

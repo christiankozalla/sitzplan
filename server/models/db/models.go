@@ -44,7 +44,8 @@ type Tribe struct {
 }
 
 type User struct {
-	ID   int64
-	Name string
-	Role sql.NullString
+	ID           int64
+	Email        string
+	PasswordHash string
+	Role         sql.NullString
 }
