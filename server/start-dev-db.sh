@@ -17,5 +17,5 @@ else
   docker exec -i $CONTAINER_ID psql -U postgres -f /db/create-db.sql
 
   # run sql script to create the tables
-  docker exec -i $CONTAINER_ID psql -U postgres -d sitzplan_dev -a -f /db/schema.sql
+  docker exec -i $CONTAINER_ID psql -U postgres -d sitzplan_dev -a -f /db/schema-v2.sql
 fi
