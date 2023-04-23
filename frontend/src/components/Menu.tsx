@@ -5,6 +5,7 @@ import { controller } from "../App";
 import styles from "./Menu.module.css";
 
 export const Menu: FC = () => {
+  const [isAuthenticated, setIsAuthenticated] = useState<Partial<User> | null>(null); // this state should be in a context
   const [showForm, setShowForm] = useState<null | "login" | "signup">(null);
   const [showMenu, setShowMenu] = useState(false);
   const [roomName, setRoomName] = useState(controller.getRoomName());
@@ -27,18 +28,49 @@ export const Menu: FC = () => {
     e.preventDefault();
     if (!showForm) return;
     const formData = new FormData(e.target as HTMLFormElement);
-    // @ts-ignore
-    const user = Object.fromEntries(formData.entries()) as User;
+    const user = Object.fromEntries(formData.entries()) as unknown as User;
     if (showForm === "login") {
-      backend.loginUser(user).then((user) => {
-        console.log(user);
-      });
+      backend.loginUser(user).then((res) => res?.error ? setIsAuthenticated(null) : setIsAuthenticated(res?.data || null));
     } else {
-      backend.createUser(user).then((user) => {
-        console.log(user);
-      });
+      backend.createUser(user).then((res) => res?.error ? setIsAuthenticated(null) : setIsAuthenticated(res?.data || null));
     }
   };
+
+  const handleLogout = () => {
+    backend.logoutUser().then((res) => res?.status === 200 && setIsAuthenticated(null));
+  };
+
+  const notAuthenticated = showForm ? (
+    <form onSubmit={sendForm}>
+      <label htmlFor="email">Email</label>
+      <input type="email" id="email" name="email" required />
+      <label htmlFor="password">Passwort</label>
+      <input type="password" id="password" name="password" required />
+      <button type="submit">
+        {showForm && showForm === "login" ? "Login" : "Signup"}
+      </button>
+    </form>
+  ) : (
+    <>
+      <button
+        className="secondary"
+        onClick={() => setShowForm("login")}
+      >
+        Login
+      </button>
+      <button onClick={() => setShowForm("signup")}>Signup</button>
+    </>
+  )
+
+  const authenticated = <><p>Welcome {isAuthenticated?.Email}</p><button className="secondary" onClick={handleLogout}>Logout</button></>;
+
+  useEffect(() => {
+    if (showMenu) {
+      backend.isAuthenticated().then((res) => {
+        setIsAuthenticated(res)
+        if (res === null) setShowForm(null);
+      });
+  }}, [showMenu]);
 
   return (
     <div className={styles.menu}>
@@ -114,27 +146,7 @@ export const Menu: FC = () => {
               </select>
             </li>
             <li>
-              {showForm ? (
-                <form onSubmit={sendForm}>
-                  <label htmlFor="email">Email</label>
-                  <input type="email" id="email" name="email" />
-                  <label htmlFor="password">Passwort</label>
-                  <input type="password" id="password" name="password" />
-                  <button type="submit">
-                    {showForm && showForm === "login" ? "Login" : "Signup"}
-                  </button>
-                </form>
-              ) : (
-                <>
-                  <button
-                    className="secondary"
-                    onClick={() => setShowForm("login")}
-                  >
-                    Login
-                  </button>
-                  <button onClick={() => setShowForm("signup")}>Signup</button>
-                </>
-              )}
+              {isAuthenticated ? authenticated : notAuthenticated}
             </li>
           </ul>
         </div>
